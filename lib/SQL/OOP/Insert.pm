@@ -96,9 +96,20 @@ SQL::OOP::Insert
 
 SQL::OOP::Insert class represents Insert commands.
 
-=head1 METHODS
+=head1 SQL::OOP::Insert CLASS
 
-=head2 new
+=head2 SQL::OOP::Insert->new(%clause)
+
+Constractor. It takes argsuments in hash. The Hash keys are provided by
+following methods. They can call either class method or instance method.
+    
+    ARG_TABLE
+    ARG_DATASET
+    ARG_SELECT
+
+=head2 $instance->set(%clause)
+
+This method resets the clause data. It takes same argument as constructor.
 
 =head1 CONSTANTS
 

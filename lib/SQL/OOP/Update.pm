@@ -87,7 +87,7 @@ SQL::OOP::Update
         $update->ARG_WHERE      => 'a = c',
     );
     
-    # retset clauses using objects
+    # reset clauses using objects
     $update->set(
         $select->ARG_TABLE      => SQL::OOP::ID->new('some_table'),
         $update->ARG_DATASET    => SQL::OOP::Dataset->new(%data),
@@ -100,11 +100,21 @@ SQL::OOP::Update
 
 SQL::OOP::Select class represents Select commands.
 
-=head1 METHODS
+=head1 SQL::OOP::Update CLASS
 
-=head2 new
+=head2 SQL::OOP::Update->new(%clause)
 
-=head2 set
+Constractor. It takes argsuments in hash. The Hash keys are provided by
+following methods. They can call either class method or instance method.
+    
+    ARG_TABLE
+    ARG_DATASET
+    ARG_FROM
+    ARG_WHERE
+
+=head2 $instance->set(%clause)
+
+This method resets the clause data. It takes same argument as constructor.
 
 =head2 to_string
 

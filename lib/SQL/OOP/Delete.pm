@@ -93,11 +93,19 @@ SQL::OOP::Delete
 
 SQL::OOP::Delete class represents Delete commands.
 
-=head1 METHODS
+=head1 SQL::OOP::Delete CLASS
 
-=head2 new
+=head2 SQL::OOP::Delete->new(%clause)
 
-=head2 set
+Constractor. It takes argsuments in hash. The Hash keys are provided by
+following methods. They can call either class method or instance method.
+    
+    ARG_TABLE
+    ARG_WHERE
+
+=head2 $instance->set(%clause)
+
+This method resets the clause data. It takes same argument as constructor.
 
 =head2 to_string
 

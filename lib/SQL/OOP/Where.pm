@@ -189,47 +189,47 @@ clauses.
 
 =head1 METHODS
 
-=head2 new
+=head2 SQL::OOP::Where->new
 
 Returns SQL::OOP::Where instance.
 
-=head2 cmp
+=head2 $instance->cmp($operator, $fieldname, $value)
 
 Generates 1 oprator expression
 
-=head2 cmp_nested
+=head2 $instance->cmp_nested($fieldname, $object)
 
 Generates 1 oprator expression with sub query in value
 
-=head2 in
+=head2 $instance->in($fieldname, $array_ref)
 
 Generates IN clause
 
-=head2 between
+=head2 $instance->between($fieldname, $upper, $lower)
 
 Generates BETWEEN clause
 
-=head2 is_not_null
+=head2 $instance->is_not_null($fieldname)
 
 Generates IS NOT NULL clause
 
-=head2 is_null
+=head2 $instance->is_null($fieldname)
 
 Generates IS NULL clause
 
-=head2 or
+=head2 $instance->or(@array)
 
 Generates OR expression in SQL::OOP::Array
 
-=head2 or_hash
+=head2 $instance->or_hash(%hash_ref)
 
 Generates OR expression in SQL::OOP::Array by hash
 
-=head2 and
+=head2 $instance->and(@array)
 
 Generates AND expression in SQL::OOP::Array
 
-=head2 and_hash
+=head2 $instance->and_hash(%hash_ref)
 
 Generates AND expression in SQL::OOP::Array by hash
 

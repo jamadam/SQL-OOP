@@ -317,297 +317,122 @@ __END__
 
 =head1 NAME
 
-SQL::OOP - SQL utilities
+SQL::OOP - SQL Generator base class
 
 =head1 SYNOPSIS
-	
-	use SQL::OOP::Select;
-	use SQL::OOP::Insert;
-	use SQL::OOP::Update;
-	use SQL::OOP::Delete;
-	use SQL::OOP::Dataset;
-	use SQL::OOP::Where;
-	
-	my $select = SQL::OOP::Select->new;
-	my $insert = SQL::OOP::Insert->new;
-	my $update = SQL::OOP::Update->new;
-	my $delete = SQL::OOP::Delete->new;
-	
-	$select->set(%args);
-	$insert->set(%args);
-	$upadte->set(%args);
-	$delete->set(%args);
-	
-	### Returns SQL::Abstract style values that can be thrown at DBI methods.
-	my $sql  = $select->to_string;
-	my @bind = $select->bind;
-
-	### where factory for convinient
-	my $where_fac = SQL::OOP::Where->new;
-	
-	### where elements
-	my $where_obj1 = $where_fac->cmp('=', $col, $value);
-	my $where_obj2 = $where_fac->is_null($col);
-	my $where_obj3 = $where_fac->is_not_null($col);
-	my $where_obj4 = $where_fac->between($col, $low, $high);
-	
-	### where element array
-	my $where_and = $where_fac->and($sql_obj1, $sql_obj2, ...);
-	my $where_or  = $where_fac->or($sql_obj1, $sql_obj2, ...);
-	
-	### array can be nested
-	my $where_total = $where_fac->and($where_and, $where_or, ...);
-	
-	### field
-	my $field_obj = SQL::OOP::ID->new(@path_to_field); # ex. "tbl"."col"
-	
-	### from
-	my $from_obj = SQL::OOP::ID->new(@path_to_table); # ex. "schema"."tbl"
-	
-	### All argument names are provided by upper case methods
-	$select->set(
-		$select->FIELD => $field_obj,
-		$select->FROM  => $from_obj,
-		$select->WHERE => $where_total,
-	);
-	
-	### Any SQL::OOP instance is capable of to_string()
-	$sql = $where_obj1->to_string;
-	$sql = $where_and->to_string;
-	$sql = $where_total->to_string;
-	$sql = $field_obj->to_string;
-	
-	### Any SQL::OOP instance can be part of others.
-	my $select2 = SQL::OOP::Select->new;
-	$select2->set(
-		$select->FIELD => $field_obj,
-		$select->FROM  => $select, ### sub query
-	);
-	
-	### Argument can be set with annonymos subs
-	$select->set($name => sub {return $sql_obj});
+    
+    my $sql = SQL::OOP->new;
+    
+    ### Returns SQL::Abstract style values that can be thrown at DBI methods.
+    my $sql  = $select->to_string;
+    my @bind = $select->bind;
+    
+    ### field
+    my $field_obj = SQL::OOP::ID->new(@path_to_field); # e.g. "tbl"."col"
+    
+    ### from
+    my $from_obj = SQL::OOP::ID->new(@path_to_table); # e.g. "schema"."tbl"
 
 =head1 DESCRIPTION
 
-This module provides you an object oriented interface to generate SQL statement.
-This does not require any complex syntaxed hash structure. All you have to do is
-to call well-readable methods.
+This module provides you an object oriented interface to generate SQL
+statements. This doesn't require any complex syntaxed hash structure. All you
+have to do is to call well-readable OOP methods.
 
-This module includes some libs. SQL::OOP is the base class of them.
+SQL::OOP distibution includes some modules. This is the base class of them.
+    
+    SQL::OOP [abstract]
+        SQL::OOP::Array [abstract]
+            SQL::OOP::ID
+                SQL::OOP::IDArray
+            SQL::OOP::Order
+            SQL::OOP::Dataset
+            SQL::OOP::Command [abstract]
+                SQL::OOP::Select
+                SQL::OOP::Insert
+                SQL::OOP::Update
+                SQL::OOP::Delete
+            SQL::OOP::Order
+    SQL::OOP::Where [factory]
 
-	SQL::OOP
-		SQL::OOP::Array [abstract]
-			SQL::OOP::ID
-				SQL::OOP::IDArray
-			SQL::OOP::Order
-			SQL::OOP::Dataset
-			SQL::OOP::Command [abstract]
-				SQL::OOP::Select
-				SQL::OOP::Insert
-				SQL::OOP::Update
-				SQL::OOP::Delete
-		SQL::OOP::ID::Part [abstract]
-		SQL::OOP::Order
-	SQL::OOP::Where [factory]
-	SQL::OOP::Util
+Any instace returned by each class are capable of to_string() and bind(). These
+methods returns similar values as SQL::Abstract. 
 
-SQL::OOP also has a factory class SQL::OOP::Where for core libruary. This
-implements many constractors which returns a instance of SQL::OOP or its
-sub classes.
-
-Any instace returned by this module capable of to_string() and bind(). These
-methods returns similar values as SQL::Abstract.
-
-=head1 USAGE
-
-=head2 SQL::OOP CLASS
+=head1 SQL::OOP CLASS
 
 This class represents SQLs or SQL snippets.
 
-This class is extended by following classes
-
-	SQL::OOP::ID, SQL::OOP::IDArray, SQL::OOP::Select, SQL::OOP::Insert,
-	SQL::OOP::Update, SQL::OOP::Delete, SQL::OOP::Order, SQL::OOP::Dataset, 
-
-=head3 SQL::OOP->new($str, $array_ref)
+=head2 SQL::OOP->new($str, $array_ref)
 	
 Constractor. It takes String and array ref.
 
-	my $sql = SQL::OOP->new('a = ? and b = ?', [10,20]);
+    my $sql = SQL::OOP->new('a = ? and b = ?', [10,20]);
 
-=head3 $instance->to_string()
+=head2 $instance->to_string()
 
 This method returns the SQL string.
 
-	$sql->to_string # 'a = ? and b = ?'
+    $sql->to_string # 'a = ? and b = ?'
 
-=head3 $instance->bind()
+=head2 $instance->bind()
 
 This method returns binded values in array.
 
-	$sql->bind      # [10,20]
+    $sql->bind      # [10,20]
 
-=head2 SQL::OOP::Array CLASS
+=head1 SQL::OOP::Array CLASS
 
-This is an abstract class that extends SQL::OOP and is extended by following
-classes.
+This is an abstract class that extends SQL::OOP
 
-	SQL::OOP::ID, SQL::OOP::IDArray, SQL::OOP::Select, SQL::OOP::Insert,
-	SQL::OOP::Update, SQL::OOP::Delete, SQL::OOP::Order, SQL::OOP::Dataset, 
-
-=head3 $instance->append(@elements)
+=head2 $instance->append(@elements)
 
 This method appends elements to the instance and returns $self;
 
-=head2 SQL::OOP::ID::Parts CLASS
-
-This is an abstract class that repesents IDs for SQL such as table name,
-schema, field name, etc.
-
-=head2 SQL::OOP::ID CLASS
+=head1 SQL::OOP::ID CLASS
 
 This class represents IDs such as table names, field names.
 
-=head3 $instance->new(@ids)
+=head2 $instance->new(@ids)
 
-=head3 $instance->as($str)
+=head2 $instance->as($str)
 
 Here is some examples.
+    
+    my $id_obj = SQL::OOP::ID->new('public', 'tbl1'); 
+    $id_obj->to_string; # "public"."tbl1"
+    
+    $id_obj->as('TMP');
+    $id_obj->to_string; # "public"."tbl1" AS TMP
 
-	my $id_obj = SQL::OOP::ID->new('public', 'tbl1'); 
-	$id_obj->to_string; # "public"."tbl1"
-	
-	$id_obj->as('TMP');
-	$id_obj->to_string; # "public"."tbl1" AS TMP
-
-=head2 SQL::OOP::IDArray CLASS
+=head1 SQL::OOP::IDArray CLASS
 
 This class represents ID arrays such as field lists in SELECT or table lists
 in FROM clause.
 
-=head3 $instance->new(@ids)
+=head2 $instance->new(@ids)
 
-=head3 $instance->new(@id_objects)
+=head2 $instance->new(@id_objects)
 
 Here is some examples.
+    
+    my $id_obj1 = SQL::OOP::ID->new('public', 'tbl1');
+    my $id_obj2 = SQL::OOP::ID->new('public', 'tbl2');
+    my $id_obj3 = SQL::OOP::ID->new('public', 'tbl3');
+    
+    my $id_list = SQL::OOP::IDArray->new($id_obj1, $id_obj2, $id_obj3);
+    
+    $id_list->to_string; # "public"."tbl1", "public"."tbl2", "public"."tbl3"
 
-	my $id_obj1 = SQL::OOP::ID->new('public', 'tbl1');
-	my $id_obj2 = SQL::OOP::ID->new('public', 'tbl2');
-	my $id_obj3 = SQL::OOP::ID->new('public', 'tbl3');
-	
-	my $id_list = SQL::OOP::IDArray->new($id_obj1, $id_obj2, $id_obj3);
-	
-	$id_list->to_string; # "public"."tbl1", "public"."tbl2", "public"."tbl3"
+=head1 SEE ALSO
 
-=head2 SQL::OOP::Command CLASS
-
-This is an abstract class that represents SQL commands auch as SELECT.
-The sub classes of it must have set() method for interface.
-
-=head2 SQL::OOP::Order CLASS
-
-This class represents ORDER clause.
-
-=head3 SQL::OOP::Order->new();
-
-=head3 $instance->append_asc($key);
-
-=head3 $instance->append_desc($key);
-
-	my $order = SQL::OOP::Order->new;
-	$order->append_asc('age');
-	$order->append_desc('addres');
-	$order->to_string; # "age", "address" DESC
-
-=head2 SQL::OOP::Select CLASS
-
-This class represents SELECT commands.
-
-=head3 SQL::OOP::Select->new(%clause)
-
-Constractor. It takes argsuments in hash. The Hash keys are provided by
-following methods. They can call either class method or instance method.
-	
-	ARG_FIELDS
-	ARG_FROM
-	ARG_WHERE
-	ARG_GROUPBY
-	ARG_ORDERBY
-	ARG_LIMIT
-	ARG_OFFSET
-
-=head3 $instance->set(%clause)
-
-This method resets the clause data. It takes same argument as
-SQL::OOP::Select->new().
-
-=head2 SQL::OOP::Insert CLASS
-
-=head3 SQL::OOP::Insert->new(%clause)
-
-Constractor. It takes argsuments in hash. The Hash keys are provided by
-following methods. They can call either class method or instance method.
-	
-	ARG_TABLE
-	ARG_DATASET
-	ARG_COLUMNS
-	ARG_SELECT
-
-=head3 $instance->set(%clause)
-
-This method resets the clause data. It takes same argument as constructor.
-
-=head2 SQL::OOP::Update CLASS
-
-=head3 SQL::OOP::Update->new(%clause)
-
-Constractor. It takes argsuments in hash. The Hash keys are provided by
-following methods. They can call either class method or instance method.
-	
-	ARG_TABLE
-	ARG_DATASET
-	ARG_FROM
-	ARG_WHERE
-
-=head3 $instance->set(%clause)
-
-This method resets the clause data. It takes same argument as constructor.
-
-=head2 SQL::OOP::Delete CLASS
-
-=head3 SQL::OOP::Delete->new(%clause)
-
-Constractor. It takes argsuments in hash. The Hash keys are provided by
-following methods. They can call either class method or instance method.
-	
-	ARG_TABLE
-	ARG_WHERE
-
-=head3 $instance->set(%clause)
-
-This method resets the clause data. It takes same argument as constructor.
-
-=head2 SQL::OOP::Dataset CLASS
-
-=head2 SQL::OOP::Where CLASS
-
-=head1 EXAMPLE
-
-Here is a complehensive example for SELECT. You also can find some examples in
-test scripts.
-
-	my $select = SQL::OOP::Select->new();
-	$select->set(
-		$select->ARG_FIELDS => '*',
-		$select->ARG_FROM   => 'table',
-		$select->ARG_WHERE  => sub {
-			my $where = SQL::OOP::Where->new;
-			return $where->and(
-				$where->cmp('=', 'a', 1),
-				$where->cmp('=', 'b', 1),
-			)
-		},
-	);
+L<SQL::OOP::Order>
+L<SQL::OOP::Dataset>
+L<SQL::OOP::Command>
+L<SQL::OOP::Select>
+L<SQL::OOP::Insert>
+L<SQL::OOP::Update>
+L<SQL::OOP::Delete>
+L<SQL::OOP::Where>
 
 =head1 AUTHOR
 
