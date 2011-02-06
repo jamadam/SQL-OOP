@@ -218,6 +218,36 @@ EOF
     my @bind = $select->bind;
 }
 
+sub subquery_in_from : Test(1) {
+    
+    my $expected = compress_sql(<<EOF);
+SELECT
+    *
+FROM
+    (
+		SELECT
+			"col1", "col2"
+		FROM
+			"table1"
+	)
+EOF
+    
+    my $select = SQL::OOP::Select->new();
+    my $select2 = SQL::OOP::Select->new();
+	
+    $select2->set(
+		$select2->ARG_FIELDS => q("col1", "col2"),
+		$select2->ARG_FROM   => q("table1"),
+	);
+    $select->set(
+        $select->ARG_FIELDS => '*',
+        $select->ARG_FROM   => $select2,
+	);
+    
+    is($select->to_string, $expected);
+    my @bind = $select->bind;
+}
+
 sub compress_sql {
     
     my $sql = shift;
