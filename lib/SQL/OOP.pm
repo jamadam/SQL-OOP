@@ -380,9 +380,9 @@ This method returns binded values in array.
 
     $sql->bind      # [10,20]
 
-=head2 generate
+=head2 $instance->generate()
 
-=head2 quote
+=head2 NT::SQL->quote()
 
 =head1 SQL::OOP::Array CLASS
 

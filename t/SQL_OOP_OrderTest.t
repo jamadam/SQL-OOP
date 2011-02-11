@@ -55,6 +55,18 @@ sub order_abstract : Test(3) {
     }
 }
 
+sub order_abstract_scalar_for_asc : Test(3) {
+    
+    {
+        my $sql = SQL::OOP::Order->abstract([['col1', 1], 'col2']);
+        is($sql->to_string, q{"col1" DESC, "col2"});
+    }
+    {
+        my $sql = SQL::OOP::Order->abstract(['col1', ['col2', 1]]);
+        is($sql->to_string, q{"col1", "col2" DESC});
+    }
+}
+
 sub compress_sql {
     
     my $sql = shift;

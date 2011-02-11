@@ -94,10 +94,14 @@ use base qw(SQL::OOP::Array);
         my ($class, $array_ref) = @_;
         my $self = $class->SUPER::new()->set_sepa(', ');
         foreach my $rec_ref (@{$array_ref}) {
-            if ($rec_ref->[1]) {
-                $self->append_desc($rec_ref->[0]);
+            if (ref $rec_ref) {
+                if ($rec_ref->[1]) {
+                    $self->append_desc($rec_ref->[0]);
+                } else {
+                    $self->append_asc($rec_ref->[0]);
+                }
             } else {
-                $self->append_asc($rec_ref->[0]);
+                $self->append_asc($rec_ref);
             }
         }
         return $self;
@@ -265,9 +269,9 @@ Get binded values in array
 
 This class represents ORDER clause.
 
-=head2 SQL::OOP::Order->new();
+=head2 SQL::OOP::Order->new(@array);
 
-Constractor
+Constractor.
 
 =head2 $instance->append_asc($key);
 
@@ -278,10 +282,21 @@ Constractor
     $order->append_desc('address');
     $order->to_string; # "age", "address" DESC
 
+=head2 SQL::OOP::Order->new_asc();
+
+Constractor for ASC expression. This returns SQL::OOP::Order::Expression
+instance which can be thrown at SQL::OOP::Order class constractor or instances.
+
+=head2 SQL::OOP::Order->new_desc();
+
+Constractor for DESC expression. This returns SQL::OOP::Order::Expression
+instance which can be thrown at SQL::OOP::Order class constractor or instances.
+
 =head2 abstract
 
 Constract by array ref
 
+    SQL::OOP::Order->abstract([['col1', 1], 'col2']);   # "col1" DESC, "col2"
     SQL::OOP::Order->abstract([['col1', 1], ['col2']]); # "col1" DESC, "col2"
 
 =head2 append_asc
