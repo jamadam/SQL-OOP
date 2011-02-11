@@ -177,7 +177,8 @@ WHERE
         a = b
         OR
         a = b
-        OR c = ? ?
+        OR
+        c = ? ?
         OR
         "price"
         BETWEEN ? AND ?
@@ -208,18 +209,6 @@ EXPECTED
                         SQL::OOP->new('a = b'),
                         'a = b',
                         SQL::OOP->new('c = ? ?', ['code1', 'code2']),
-                        sub {
-                            $NT::QUERY->{ac} = '';
-                            if (my $val = $NT::QUERY->{ac}) {
-                                my $op = {1 => '<=', 2 => '>='}->{$NT::QUERY->{ac}};
-                                my $val = $val * 1000;
-                                return $where->or(
-                                    $where->cmp($op, '特価', $val),
-                                    $where->cmp($op, '定価', $val),
-                                );
-                            }
-                            return;
-                        },
                         $where->between('price', 10, 20),
                     ),
                     $where->or(

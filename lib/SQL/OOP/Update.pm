@@ -122,6 +122,10 @@ This method resets the clause data. It takes same argument as constructor.
 
 =head1 CONSTANTS
 
+=head2 KEYS
+
+=head2 PREFIXES
+
 =head2 ARG_TABLE
 
 argument key for TABLE(=1)

@@ -111,6 +111,20 @@ SELECT, INSERT, UPDATE etc.
 
 =head1 METHODS
 
+=head2 generate
+
+=head2 keys_to_idx
+
+=head2 new
+
+=head2 set
+
+=head1 Constants
+
+=head2 KEYS
+
+=head2 PREFIXES
+
 =head1 AUTHOR
 
 Sugama Keita, E<lt>sugama@jamadam.comE<gt>

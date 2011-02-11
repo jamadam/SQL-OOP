@@ -109,9 +109,17 @@ following methods. They can call either class method or instance method.
 
 =head2 $instance->set(%clause)
 
+=head2 $instance->bind
+
+=head2 $instance->to_string
+
 This method resets the clause data. It takes same argument as constructor.
 
 =head1 CONSTANTS
+
+=head2 KEYS
+
+=head2 PREFIXES
 
 =head2 ARG_TABLE
 

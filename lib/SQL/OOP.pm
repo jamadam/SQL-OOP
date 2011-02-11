@@ -380,6 +380,10 @@ This method returns binded values in array.
 
     $sql->bind      # [10,20]
 
+=head2 generate
+
+=head2 quote
+
 =head1 SQL::OOP::Array CLASS
 
 This is an abstract class that extends SQL::OOP

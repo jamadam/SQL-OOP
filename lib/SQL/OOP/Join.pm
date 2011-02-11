@@ -85,6 +85,32 @@ SQL::OOP::Join [EXPERIMENTAL]
 
 =head2 new
 
+=head2 bind
+
+=head2 set
+
+=head2 to_string
+
+=head1 Constants
+
+=head2 ARG_DIRECTION
+
+=head2 ARG_DIRECTION_INNER
+
+=head2 ARG_DIRECTION_LEFT
+
+=head2 ARG_DIRECTION_RIGHT
+
+=head2 ARG_ON
+
+=head2 ARG_TABLE1
+
+=head2 ARG_TABLE2
+
+=head2 KEYS
+
+=head2 PREFIXES
+
 =head1 AUTHOR
 
 Sugama Keita, E<lt>sugama@jamadam.comE<gt>

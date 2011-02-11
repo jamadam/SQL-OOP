@@ -292,6 +292,10 @@ Append ASC entry
 
 Append DESC entry
 
+=head2 KEYS
+
+=head2 PREFIXES
+
 =head1 CONSTANTS
 
 =head2 ARG_FIELDS
