@@ -257,11 +257,11 @@ following methods. They can call as either class or instance method.
 This method resets the clause data. It takes same argument as
 SQL::OOP::Select->new().
 
-=head2 to_string
+=head2 $instance->to_string
 
 Get SQL snippet in string
 
-=head2 bind
+=head2 $instance->bind
 
 Get binded values in array
 
@@ -307,11 +307,11 @@ Append ASC entry
 
 Append DESC entry
 
+=head1 CONSTANTS
+
 =head2 KEYS
 
 =head2 PREFIXES
-
-=head1 CONSTANTS
 
 =head2 ARG_FIELDS
 

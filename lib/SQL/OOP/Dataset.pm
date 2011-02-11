@@ -88,9 +88,15 @@ __END__
 
 =head1 NAME
 
-SQL::OOP::Dataset
+SQL::OOP::Dataset - Dataset class for INSERT or UPDATE commands
 
 =head1 SYNOPSIS
+
+    my $dataset = SQL::OOP::Dataset->new(field1 => $value2, field2 => $value2);
+    
+    $dataset->append(field3 => $value3, field4 => $value4);
+    or
+    $dataset->append({field3 => $value3, field4 => $value4});
 
 =head1 DESCRIPTION
 
@@ -98,15 +104,25 @@ SQL::OOP::Dataset is a class which represents data sets for INSERT or UPDATE
 
 =head1 METHODS
 
-=head2 new
+=head2 SQL::OOP->new(%data)
 
-=head2 append
+Constractor.
 
-=head2 generate
+=head2 $instance->append(%data)
 
-=head2 to_string_for_insert
+Append data entry.
 
-=head2 to_string_for_update
+=head2 $instance->generate
+
+This method called from inside the command subclasses.
+
+=head2 $instance->to_string_for_insert
+
+This method called from inside the command subclasses.
+
+=head2 $instance->to_string_for_update
+
+This method called from inside the command subclasses.
 
 =head1 CONSTANTS
 
