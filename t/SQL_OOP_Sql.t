@@ -26,6 +26,53 @@ use SQL::OOP::Where;
         is($sql->to_string, q{a,b,c});
     }
     
+    sub array_include_undef : Test {
+        
+        my $sql = SQL::OOP::Array->new('a', undef, 'c')->set_sepa(',');
+        is($sql->to_string, q{a,c});
+    }
+    
+    sub array_basic : Test(5) {
+        
+        my $sql1 = SQL::OOP->new('a', ['a']);
+        my $sql2 = SQL::OOP->new('b', ['b']);
+        my $sql3 = SQL::OOP->new('c', ['c']);
+        my $sql = SQL::OOP::Array->new($sql1, $sql2, $sql3)->set_sepa(',');
+        is($sql->to_string, q{a,b,c});
+        my @bind = $sql->bind;
+        is(scalar @bind, 3);
+        is(shift @bind, 'a');
+        is(shift @bind, 'b');
+        is(shift @bind, 'c');
+    }
+    
+    sub array_basic_include_undef : Test(5) {
+        
+        my $sql1 = SQL::OOP->new('a', ['a']);
+        my $sql2 = SQL::OOP->new('b', [undef]);
+        my $sql3 = SQL::OOP->new('c', ['c']);
+        my $sql = SQL::OOP::Array->new($sql1, $sql2, $sql3)->set_sepa(',');
+        is($sql->to_string, q{a,b,c});
+        my @bind = $sql->bind;
+        is(scalar @bind, 3);
+        is(shift @bind, 'a');
+        is(shift @bind, undef);
+        is(shift @bind, 'c');
+    }
+    
+    sub array_basic_include_undef2 : Test(5) {
+        
+        my $sql1 = SQL::OOP->new('a', ['a']);
+        my $sql2 = SQL::OOP->new('b', undef);
+        my $sql3 = SQL::OOP->new('c', ['c']);
+        my $sql = SQL::OOP::Array->new($sql1, $sql2, $sql3)->set_sepa(',');
+        is($sql->to_string, q{a,b,c});
+        my @bind = $sql->bind;
+        is(scalar @bind, 2);
+        is(shift @bind, 'a');
+        is(shift @bind, 'c');
+    }
+    
     sub quote : Test {
         
         my $sql = SQL::OOP::ID->new('a');

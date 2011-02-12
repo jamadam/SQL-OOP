@@ -8,7 +8,6 @@ use SQL::OOP::Join;
 use SQL::OOP::Where;
 use SQL::OOP::Update;
 use SQL::OOP::Dataset;
-use SQL::OOP::Insert;
 
 	__PACKAGE__->runtests;
 	
