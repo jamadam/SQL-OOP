@@ -242,7 +242,7 @@ This class represents SQL SELECT command
 =head2 SQL::OOP::Select->new(%clause)
 
 Constractor. It takes argsuments in hash. The Hash keys are provided by
-following methods. They can call as either class or instance method.
+following methods. They can be called as either class or instance method.
     
     ARG_FIELDS
     ARG_FROM
@@ -267,7 +267,7 @@ Get binded values in array
 
 =head1 SQL::OOP::Order CLASS
 
-This class represents ORDER clause.
+This class represents ORDER BY clause.
 
 =head2 SQL::OOP::Order->new(@array);
 

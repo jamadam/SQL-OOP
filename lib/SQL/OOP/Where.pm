@@ -195,7 +195,7 @@ Returns SQL::OOP::Where instance.
 
 =head2 $instance->cmp($operator, $fieldname, $value)
 
-Generates 1 oprator expression
+Generates 1 oprator expression.
 
 =head2 $instance->cmp_nested($fieldname, $object)
 
