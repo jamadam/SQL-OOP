@@ -2,144 +2,144 @@ package SQL::OOP::Where;
 use strict;
 use warnings;
 our $VERSION = '0.03';
-	
-	### ---
-	### Constractor
-	### ---
-	sub new {
-		
-		my $class = shift;
-		return bless {}, $class;
-	}
+    
+    ### ---
+    ### Constractor
+    ### ---
+    sub new {
+        
+        my $class = shift;
+        return bless {}, $class;
+    }
 
-	### ---
-	### SQL::Abstract style AND factory
-	### ---
-	sub and_hash {
+    ### ---
+    ### SQL::Abstract style AND factory
+    ### ---
+    sub and_hash {
         
         my ($class, $hash_ref, $op) = @_;
-		return _append_hash($class->and, $hash_ref, $op || '=');
-	}
-	
-	### ---
-	### SQL::Abstract style OR factory
-	### ---
-	sub or_hash {
+        return _append_hash($class->and, $hash_ref, $op || '=');
+    }
+    
+    ### ---
+    ### SQL::Abstract style OR factory
+    ### ---
+    sub or_hash {
         
         my ($class, $hash_ref, $op) = @_;
-		return _append_hash($class->or, $hash_ref, $op || '=');
-	}
-	
-	### ---
-	### SQL::Abstract style AND factory backend
-	### ---
-	sub _append_hash {
-		
-		my ($obj, $hash_ref, $op) = @_;
-		while (my ($key, $val) = each(%$hash_ref)) {
-			$obj->append(__PACKAGE__->cmp($op || '=', $key, $val));
-		}
-		return $obj;
-	}
-	
-	### ---
-	### AND factory
-	### ---
-	sub and {
-		
+        return _append_hash($class->or, $hash_ref, $op || '=');
+    }
+    
+    ### ---
+    ### SQL::Abstract style AND factory backend
+    ### ---
+    sub _append_hash {
+        
+        my ($obj, $hash_ref, $op) = @_;
+        while (my ($key, $val) = each(%$hash_ref)) {
+            $obj->append(__PACKAGE__->cmp($op || '=', $key, $val));
+        }
+        return $obj;
+    }
+    
+    ### ---
+    ### AND factory
+    ### ---
+    sub and {
+        
         my ($class, @array) = @_;
-		return SQL::OOP::Array->new(@array)->set_sepa(' AND ');
-	}
-	
-	### ---
-	### OR factory
-	### ---
-	sub or {
-		
+        return SQL::OOP::Array->new(@array)->set_sepa(' AND ');
+    }
+    
+    ### ---
+    ### OR factory
+    ### ---
+    sub or {
+        
         my ($class, @array) = @_;
-		return SQL::OOP::Array->new(@array)->set_sepa(' OR ');
-	}
-	
-	### ---
-	### binary operator expression factory
-	### ---
-	sub cmp {
-		
-		my ($self, $op, $key, $val) = @_;
-		if ($key && defined $val) {
-			my $quoted = SQL::OOP::ID->new($key);
-			return SQL::OOP->new($quoted->to_string. qq( $op ?), [$val]);
-		}
-	}
-	
-	### ---
-	### binary operator expression factory with sub query in value
-	### ---
-	sub cmp_nested {
-		
-		my ($self, $op, $key, $val) = @_;
-		if ($key && defined $val) {
-			my $quoted = SQL::OOP::ID->new($key);
-			return SQL::OOP::Array->new($quoted->to_string, $val)->set_sepa(" $op ");
-		}
-	}
+        return SQL::OOP::Array->new(@array)->set_sepa(' OR ');
+    }
+    
+    ### ---
+    ### binary operator expression factory
+    ### ---
+    sub cmp {
+        
+        my ($self, $op, $key, $val) = @_;
+        if ($key && defined $val) {
+            my $quoted = SQL::OOP::ID->new($key);
+            return SQL::OOP->new($quoted->to_string. qq( $op ?), [$val]);
+        }
+    }
+    
+    ### ---
+    ### binary operator expression factory with sub query in value
+    ### ---
+    sub cmp_nested {
+        
+        my ($self, $op, $key, $val) = @_;
+        if ($key && defined $val) {
+            my $quoted = SQL::OOP::ID->new($key);
+            return SQL::OOP::Array->new($quoted->to_string, $val)->set_sepa(" $op ");
+        }
+    }
 
-	### ---
-	### IS NULL factory
-	### ---
-	sub is_null {
-		
-		my ($self, $key) = @_;
-		if ($key) {
-			my $quoted = SQL::OOP::ID->new($key);
-			return SQL::OOP->new($quoted->to_string. qq( IS NULL));
-		}
-	}
+    ### ---
+    ### IS NULL factory
+    ### ---
+    sub is_null {
+        
+        my ($self, $key) = @_;
+        if ($key) {
+            my $quoted = SQL::OOP::ID->new($key);
+            return SQL::OOP->new($quoted->to_string. qq( IS NULL));
+        }
+    }
 
-	### ---
-	### IS NOT NULL factory
-	### ---
-	sub is_not_null {
-		
-		my ($self, $key) = @_;
-		if ($key) {
-			my $quoted = SQL::OOP::ID->new($key);
-			return SQL::OOP->new($quoted->to_string. qq( IS NOT NULL));
-		}
-	}
-	
-	### ---
-	### BETWEEN ? AND ? factory
-	### ---
-	sub between {
-		
-		my ($self, $key, $val1, $val2) = @_;
-		if ($key) {
-			if (defined $val1 and defined $val2) {
-				my $quoted = SQL::OOP::ID->new($key)->to_string;
-				my $str = $quoted. qq( BETWEEN ? AND ?);
-				return SQL::OOP->new($str, [$val1, $val2]);
-			} elsif (defined $val1) {
-				return $self->cmp('>=', $key, $val1);
-			} else {
-				return $self->cmp('<=', $key, $val2);
-			}
-		}
-	}
-	
-	### ---
-	### IN factory
-	### ---
-	sub in {
-		
-		my ($self, $key, $array_ref) = @_;
-		if ($key) {
-			my $placeholder = '?, ' x scalar @$array_ref;
-			$placeholder = substr($placeholder, 0, -2);
-			my $quoted = SQL::OOP::ID->new($key)->to_string;
-			return SQL::OOP->new("$quoted IN ($placeholder)", $array_ref);
-		}
-	}
+    ### ---
+    ### IS NOT NULL factory
+    ### ---
+    sub is_not_null {
+        
+        my ($self, $key) = @_;
+        if ($key) {
+            my $quoted = SQL::OOP::ID->new($key);
+            return SQL::OOP->new($quoted->to_string. qq( IS NOT NULL));
+        }
+    }
+    
+    ### ---
+    ### BETWEEN ? AND ? factory
+    ### ---
+    sub between {
+        
+        my ($self, $key, $val1, $val2) = @_;
+        if ($key) {
+            if (defined $val1 and defined $val2) {
+                my $quoted = SQL::OOP::ID->new($key)->to_string;
+                my $str = $quoted. qq( BETWEEN ? AND ?);
+                return SQL::OOP->new($str, [$val1, $val2]);
+            } elsif (defined $val1) {
+                return $self->cmp('>=', $key, $val1);
+            } else {
+                return $self->cmp('<=', $key, $val2);
+            }
+        }
+    }
+    
+    ### ---
+    ### IN factory
+    ### ---
+    sub in {
+        
+        my ($self, $key, $array_ref) = @_;
+        if ($key) {
+            my $placeholder = '?, ' x scalar @$array_ref;
+            $placeholder = substr($placeholder, 0, -2);
+            my $quoted = SQL::OOP::ID->new($key)->to_string;
+            return SQL::OOP->new("$quoted IN ($placeholder)", $array_ref);
+        }
+    }
 
 1;
 
@@ -155,11 +155,11 @@ SQL::OOP::Where
     
     my $where = SQL::OOP::Where->new();
     my $cond1 = $where->cmp($operator, $field, $value);
-    my $cond5 = $where->is_null('some_field');
-    my $cond6 = $where->is_not_null('some_field');
+    my $cond2 = $where->is_null('some_field');
+    my $cond3 = $where->is_not_null('some_field');
     my $cond4 = $where->between('some_field', 1, 2);
-	my $cond3 = $where->in('some_field', [1, 2, 3]);
-    my $cond2 = $where->cmp_nested($operator, $field, $select_obj);
+    my $cond5 = $where->in('some_field', [1, 2, 3]);
+    my $cond6 = $where->cmp_nested($operator, $field, $select_obj);
     
     my $sql  = $cond1->to_string;
     my @bind = $cond1->bind;
@@ -167,10 +167,10 @@ SQL::OOP::Where
     # combine conditions
     my $cond7 = $where->or($cond1, $cond2);
     $cond7->append($cond3);
-    my $cond9 = $where->and($cond7, $where->and($cond4, $cond5));
+    my $cond8 = $where->and($cond7, $where->and($cond4, $cond5));
     
-    my $sql  = $cond9->to_string;
-    my @bind = $cond9->bind;
+    my $sql  = $cond8->to_string;
+    my @bind = $cond8->bind;
     
     # SQL::Abstract style
     my %seed = (a => 'b', c => 'd');

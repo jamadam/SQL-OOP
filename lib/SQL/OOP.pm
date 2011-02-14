@@ -5,90 +5,90 @@ use Scalar::Util qw(blessed);
 use base qw(Class::Data::Inheritable);
 use 5.005;
 our $VERSION = '0.06';
-	
-	### ---
-	### default quote character
-	### ---
-	__PACKAGE__->mk_classdata(quote_char => q("));
-	
-	### ---
-	### Constractor
-	### ---
-	sub new {
-		
-		my ($class, $str, $bind_ref) = @_;
-		if (ref $str && (ref($str) eq 'CODE')) {
-			$str = $str->();
-		}
-		if (blessed($str) && $str->isa(__PACKAGE__)) {
-			return $str;
-		} elsif ($str) {
-			return bless {
-				str 	=> $str,
-				gen 	=> undef,
-				bind 	=> ($bind_ref || [])
-			}, $class;
-		}
-		return;
-	}
-	
-	### ---
-	### Get SQL snippet
-	### ---
-	sub to_string {
-		
-		my ($self, $prefix) = @_;
-		if (! defined $self->{gen}) {
-			$self->generate;
-		}
-		if ($self->{gen} && $prefix) {
-			return $prefix. ' '. $self->{gen};
-		} else {
-			return $self->{gen};
-		}
-	}
-	
-	### ---
-	### Get binded values in array
-	### ---
-	sub bind {
-		
-		my ($self) = @_;
-		return @{$self->{bind} || []} if (wantarray);
-		return scalar @{$self->{bind} || []};
-	}
-	
-	### ---
-	### initialize generated SQL
-	### ---
-	sub _init_gen {
-		
-		my ($self) = @_;
-		$self->{gen} = undef;
-	}
+    
+    ### ---
+    ### default quote character
+    ### ---
+    __PACKAGE__->mk_classdata(quote_char => q("));
+    
+    ### ---
+    ### Constractor
+    ### ---
+    sub new {
+        
+        my ($class, $str, $bind_ref) = @_;
+        if (ref $str && (ref($str) eq 'CODE')) {
+            $str = $str->();
+        }
+        if (blessed($str) && $str->isa(__PACKAGE__)) {
+            return $str;
+        } elsif ($str) {
+            return bless {
+                str     => $str,
+                gen     => undef,
+                bind    => ($bind_ref || [])
+            }, $class;
+        }
+        return;
+    }
+    
+    ### ---
+    ### Get SQL snippet
+    ### ---
+    sub to_string {
+        
+        my ($self, $prefix) = @_;
+        if (! defined $self->{gen}) {
+            $self->generate;
+        }
+        if ($self->{gen} && $prefix) {
+            return $prefix. ' '. $self->{gen};
+        } else {
+            return $self->{gen};
+        }
+    }
+    
+    ### ---
+    ### Get binded values in array
+    ### ---
+    sub bind {
+        
+        my ($self) = @_;
+        return @{$self->{bind} || []} if (wantarray);
+        return scalar @{$self->{bind} || []};
+    }
+    
+    ### ---
+    ### initialize generated SQL
+    ### ---
+    sub _init_gen {
+        
+        my ($self) = @_;
+        $self->{gen} = undef;
+    }
 
-	### ---
-	### Generate SQL snippet
-	### ---
-	sub generate {
-		
-		my ($self) = @_;
-		$self->{gen} = $self->{str} || '';
-		return $self;
-	}
-	
-	### ---
-	### quote
-	### ---
-	sub quote {
-		
-		my ($class, $val, $with) = @_;
-		if (blessed($class)) {
-			$class = blessed($class);
-		}
-		$with ||= $class->quote_char;
-		return $with. $val. $with;
-	}
+    ### ---
+    ### Generate SQL snippet
+    ### ---
+    sub generate {
+        
+        my ($self) = @_;
+        $self->{gen} = $self->{str} || '';
+        return $self;
+    }
+    
+    ### ---
+    ### quote
+    ### ---
+    sub quote {
+        
+        my ($class, $val, $with) = @_;
+        if (blessed($class)) {
+            $class = blessed($class);
+        }
+        $with ||= $class->quote_char;
+        return $with. $val. $with;
+    }
 
 ### ---
 ### Array of SQL snippets
@@ -98,94 +98,94 @@ use strict;
 use warnings;
 use Scalar::Util qw(blessed);
 use base qw(SQL::OOP);
-	
-	### ---
-	### constractor
-	### ---
-	sub new {
-		
-		my ($class, @array) = @_;
-		my $self = bless {
-			sepa	=> ' ',
-			gen 	=> undef,
-			array 	=> undef,
-		}, $class;
-		
+    
+    ### ---
+    ### constractor
+    ### ---
+    sub new {
+        
+        my ($class, @array) = @_;
+        my $self = bless {
+            sepa    => ' ',
+            gen     => undef,
+            array   => undef,
+        }, $class;
+        
         return $self->append(@array);
-	}
-	
-	### ---
-	### Set separator for join array
-	### ---
-	sub set_sepa {
-		
-		my ($self, $sepa) = @_;
-		$self->{sepa} = $sepa;
-		return $self;
-	}
-	
-	### ---
-	### Append snippet
-	### ---
-	sub append {
-		
-		my ($self, @array) = @_;
-		$self->_init_gen;
-		foreach my $elem (@array) {
-			if ($elem) {
-				push(@{$self->{array}}, SQL::OOP->new($elem));
-			}
-		}
-		return $self;
-	}
-	
-	### ---
-	### generate SQL snippet
-	### ---
-	sub generate {
-		
-		my $self = shift;
-		my @array = map {
-			if ($_->to_string && (scalar @{$self->{array}}) >= 2) {
-				$self->fix_element_in_list_context($_);
-			} else {
-				$_->to_string
-			}
-		} @{$self->{array}};
-		#$self->{gen} = smart_join($self->{sepa}, @array);
-		$self->{gen} = join($self->{sepa}, grep {$_} @array);
-		
-		return $self;
-	}
-	
-	### ---
-	### fix generated string in list context
-	### ---
-	sub fix_element_in_list_context {
-		
-		my ($self, $obj) = @_;
-		if ($obj->isa(__PACKAGE__)) {
-			return '('. $obj->to_string. ')';
-		}
-		return $obj->to_string;
-	}
-	
-	### ---
-	### Get binded values in array
-	### ---
-	sub bind {
-		
-		my $self = shift;
-		my @out = map {
-			my @a;
-			if ($_) {
-				@a = $_->bind;
-			}
-			@a;
-		} @{$self->{array}};
-		return @out if (wantarray);
-		return scalar @out;
-	}
+    }
+    
+    ### ---
+    ### Set separator for join array
+    ### ---
+    sub set_sepa {
+        
+        my ($self, $sepa) = @_;
+        $self->{sepa} = $sepa;
+        return $self;
+    }
+    
+    ### ---
+    ### Append snippet
+    ### ---
+    sub append {
+        
+        my ($self, @array) = @_;
+        $self->_init_gen;
+        foreach my $elem (@array) {
+            if ($elem) {
+                push(@{$self->{array}}, SQL::OOP->new($elem));
+            }
+        }
+        return $self;
+    }
+    
+    ### ---
+    ### generate SQL snippet
+    ### ---
+    sub generate {
+        
+        my $self = shift;
+        my @array = map {
+            if ($_->to_string && (scalar @{$self->{array}}) >= 2) {
+                $self->fix_element_in_list_context($_);
+            } else {
+                $_->to_string
+            }
+        } @{$self->{array}};
+        #$self->{gen} = smart_join($self->{sepa}, @array);
+        $self->{gen} = join($self->{sepa}, grep {$_} @array);
+        
+        return $self;
+    }
+    
+    ### ---
+    ### fix generated string in list context
+    ### ---
+    sub fix_element_in_list_context {
+        
+        my ($self, $obj) = @_;
+        if ($obj->isa(__PACKAGE__)) {
+            return '('. $obj->to_string. ')';
+        }
+        return $obj->to_string;
+    }
+    
+    ### ---
+    ### Get binded values in array
+    ### ---
+    sub bind {
+        
+        my $self = shift;
+        my @out = map {
+            my @a;
+            if ($_) {
+                @a = $_->bind;
+            }
+            @a;
+        } @{$self->{array}};
+        return @out if (wantarray);
+        return scalar @out;
+    }
 
 ### ---
 ### Class for Identifier such as table, field schema
@@ -194,16 +194,16 @@ package SQL::OOP::ID::Parts;
 use strict;
 use warnings;
 use base qw(SQL::OOP);
-	
-	### ---
-	### Generate SQL snippet
-	### ---
-	sub generate {
-		
-		my $self = shift;
-		$self->SUPER::generate(@_);
-		$self->{gen} = $self->quote($self->{gen});
-	}
+    
+    ### ---
+    ### Generate SQL snippet
+    ### ---
+    sub generate {
+        
+        my $self = shift;
+        $self->SUPER::generate(@_);
+        $self->{gen} = $self->quote($self->{gen});
+    }
 
 ### ---
 ### Class for dot-chained Identifier ex) "public"."table"."colmun1"
@@ -213,57 +213,57 @@ use strict;
 use warnings;
 use base qw(SQL::OOP::Array);
 #use SQL::OOP::Util qw(smart_join);
-	
-	### ---
-	### constractor
-	### ---
-	sub new {
-		
-		my ($class, @array) = @_;
-		return $class->SUPER::new(@array)->set_sepa('.');
-	}
-	
-	### ---
-	### Append ID
-	### ---
-	sub append {
-		
-		my ($self, @array) = @_;
-		$self->_init_gen;
-		for my $elem (@array) {
-			if ($elem) {
-				push(@{$self->{array}}, SQL::OOP::ID::Parts->new($elem));
-			}
-		}
-		return $self;
-	}
-	
-	### ---
-	### "field AS foo" syntax
-	### ---
-	sub as {
-		
-		my ($self, $as) = (@_);
-		$self->{as} = $as;
-		return $self;
-	}
-	
-	### ---
-	### Generate SQL snippet
-	### ---
-	sub generate {
-		
-		my $self = shift;
-		my @array = map {$_->to_string} @{$self->{array}};
-		#$self->{gen} = smart_join($self->{sepa}, @array);
-		$self->{gen} = join($self->{sepa}, grep {$_} @array);
+    
+    ### ---
+    ### constractor
+    ### ---
+    sub new {
+        
+        my ($class, @array) = @_;
+        return $class->SUPER::new(@array)->set_sepa('.');
+    }
+    
+    ### ---
+    ### Append ID
+    ### ---
+    sub append {
+        
+        my ($self, @array) = @_;
+        $self->_init_gen;
+        for my $elem (@array) {
+            if ($elem) {
+                push(@{$self->{array}}, SQL::OOP::ID::Parts->new($elem));
+            }
+        }
+        return $self;
+    }
+    
+    ### ---
+    ### "field AS foo" syntax
+    ### ---
+    sub as {
+        
+        my ($self, $as) = (@_);
+        $self->{as} = $as;
+        return $self;
+    }
+    
+    ### ---
+    ### Generate SQL snippet
+    ### ---
+    sub generate {
+        
+        my $self = shift;
+        my @array = map {$_->to_string} @{$self->{array}};
+        #$self->{gen} = smart_join($self->{sepa}, @array);
+        $self->{gen} = join($self->{sepa}, grep {$_} @array);
 
-		if ($self->{as}) {
-			$self->{gen} .= ' AS '. $self->quote($self->{as});
-		}
-		
-		return $self;
-	}
+        if ($self->{as}) {
+            $self->{gen} .= ' AS '. $self->quote($self->{as});
+        }
+        
+        return $self;
+    }
 
 ### ---
 ### Class for array of identifier ex) "tbl1"."col1", "tbl1"."col2"...
@@ -273,44 +273,44 @@ use strict;
 use warnings;
 use Scalar::Util qw(blessed);
 use base qw(SQL::OOP::Array);
-	
-	### ---
-	### constractor
-	### ---
-	sub new {
-		
-		my ($class, @array) = @_;
-		my $self = $class->SUPER::new(@array)->set_sepa(', ');
-	}
-	
-	### ---
-	### Append ID
-	### ---
-	sub append {
-		
-		my ($self, @array) = @_;
-		$self->_init_gen;
-		foreach my $elem (@array) {
-			if (blessed($elem) && $elem->isa('SQL::OOP')) {
-				push(@{$self->{array}}, $elem);
-			} elsif ($elem) {
-				push(@{$self->{array}}, SQL::OOP::ID->new($elem));
-			}
-		}
-		return $self;
-	}
-	
-	### ---
-	### parenthisize sub query 
-	### ---
-	sub fix_element_in_list_context {
-		
-		my ($self, $obj) = @_;
-		if ($obj->isa('SQL::OOP::Command')) {
-			return '('. $obj->to_string. ')';
-		}
-		return $obj->to_string;
-	}
+    
+    ### ---
+    ### constractor
+    ### ---
+    sub new {
+        
+        my ($class, @array) = @_;
+        my $self = $class->SUPER::new(@array)->set_sepa(', ');
+    }
+    
+    ### ---
+    ### Append ID
+    ### ---
+    sub append {
+        
+        my ($self, @array) = @_;
+        $self->_init_gen;
+        foreach my $elem (@array) {
+            if (blessed($elem) && $elem->isa('SQL::OOP')) {
+                push(@{$self->{array}}, $elem);
+            } elsif ($elem) {
+                push(@{$self->{array}}, SQL::OOP::ID->new($elem));
+            }
+        }
+        return $self;
+    }
+    
+    ### ---
+    ### parenthisize sub query 
+    ### ---
+    sub fix_element_in_list_context {
+        
+        my ($self, $obj) = @_;
+        if ($obj->isa('SQL::OOP::Command')) {
+            return '('. $obj->to_string. ')';
+        }
+        return $obj->to_string;
+    }
 
 1;
 __END__
@@ -363,7 +363,7 @@ methods returns similar values as SQL::Abstract.
 This class represents SQLs or SQL snippets.
 
 =head2 SQL::OOP->new($str, $array_ref)
-	
+    
 Constractor. It takes String and array ref.
 
     my $sql = SQL::OOP->new('a = ? and b = ?', [10,20]);

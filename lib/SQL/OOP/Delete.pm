@@ -5,61 +5,61 @@ use SQL::OOP;
 use SQL::OOP::Where;
 use base qw(SQL::OOP::Command);
 
-	sub ARG_TABLE() {1} ## no critic
-	sub ARG_WHERE() {2} ## no critic
-	
-	### ---
-	### Get Names of set arguments in array ref
-	### ---
-	sub KEYS {
-		
-		return [ARG_TABLE, ARG_WHERE];
-	}
-	
-	### ---
-	### Get prefixes for each clause in hash ref
-	### ---
-	sub PREFIXES {
-		
-		return {
-			ARG_TABLE() => 'DELETE FROM',
-			ARG_WHERE() => 'WHERE',
-		}
-	}
-	
-	### ---
-	### Constractor
-	### ---
-	sub new {
-		
-		my ($class, %hash) = @_;
-		return $class->SUPER::new(%hash);
-	}
-	
-	### ---
-	### Set elements
-	### ---
-	sub set {
-		
-		my ($class, %hash) = @_;
-		return $class->SUPER::set(%hash);
-	}
-	
-	### ---
-	### Get SQL snippet
-	### ---
-	sub to_string {
-		
-		return shift->SUPER::to_string(@_);
-	}
-	
-	### ---
-	### Get binded values in array
-	### ---
-	sub bind {
-		
-		return shift->SUPER::bind(@_);
-	}
+    sub ARG_TABLE() {1} ## no critic
+    sub ARG_WHERE() {2} ## no critic
+    
+    ### ---
+    ### Get Names of set arguments in array ref
+    ### ---
+    sub KEYS {
+        
+        return [ARG_TABLE, ARG_WHERE];
+    }
+    
+    ### ---
+    ### Get prefixes for each clause in hash ref
+    ### ---
+    sub PREFIXES {
+        
+        return {
+            ARG_TABLE() => 'DELETE FROM',
+            ARG_WHERE() => 'WHERE',
+        }
+    }
+    
+    ### ---
+    ### Constractor
+    ### ---
+    sub new {
+        
+        my ($class, %hash) = @_;
+        return $class->SUPER::new(%hash);
+    }
+    
+    ### ---
+    ### Set elements
+    ### ---
+    sub set {
+        
+        my ($class, %hash) = @_;
+        return $class->SUPER::set(%hash);
+    }
+    
+    ### ---
+    ### Get SQL snippet
+    ### ---
+    sub to_string {
+        
+        return shift->SUPER::to_string(@_);
+    }
+    
+    ### ---
+    ### Get binded values in array
+    ### ---
+    sub bind {
+        
+        return shift->SUPER::bind(@_);
+    }
 
 1;
 
