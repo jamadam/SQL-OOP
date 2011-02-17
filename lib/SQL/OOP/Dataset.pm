@@ -104,7 +104,7 @@ SQL::OOP::Dataset is a class which represents data sets for INSERT or UPDATE
 
 =head1 METHODS
 
-=head2 SQL::OOP->new(%data)
+=head2 SQL::OOP::Dataset->new(%data)
 
 Constractor.
 

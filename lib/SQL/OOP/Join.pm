@@ -83,13 +83,13 @@ SQL::OOP::Join [EXPERIMENTAL]
 
 =head1 METHODS
 
-=head2 new
+=head2 SQL::OOP::Join->new
 
-=head2 bind
+=head2 $instance->bind
 
-=head2 set
+=head2 $instance->set
 
-=head2 to_string
+=head2 $instance->to_string
 
 =head1 Constants
 

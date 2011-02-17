@@ -107,9 +107,9 @@ following methods. They can call either class method or instance method.
 
 This method resets the clause data. It takes same argument as constructor.
 
-=head2 to_string
+=head2 $instance->to_string
 
-=head2 bind
+=head2 $instance->bind
 
 =head1 CONSTANTS
 

@@ -152,7 +152,6 @@ use base qw(SQL::OOP);
                 $_->to_string
             }
         } @{$self->{array}};
-        #$self->{gen} = smart_join($self->{sepa}, @array);
         $self->{gen} = join($self->{sepa}, grep {$_} @array);
         
         return $self;
@@ -212,7 +211,6 @@ package SQL::OOP::ID;
 use strict;
 use warnings;
 use base qw(SQL::OOP::Array);
-#use SQL::OOP::Util qw(smart_join);
     
     ### ---
     ### constractor
@@ -255,7 +253,6 @@ use base qw(SQL::OOP::Array);
         
         my $self = shift;
         my @array = map {$_->to_string} @{$self->{array}};
-        #$self->{gen} = smart_join($self->{sepa}, @array);
         $self->{gen} = join($self->{sepa}, grep {$_} @array);
 
         if ($self->{as}) {
@@ -396,7 +393,7 @@ This method appends elements to the instance and returns $self;
 
 This class represents IDs such as table names, field names.
 
-=head2 $instance->new(@ids)
+=head2 SQL::OOP::ID->new(@ids)
 
 =head2 $instance->as($str)
 
@@ -413,9 +410,13 @@ Here is some examples.
 This class represents ID arrays such as field lists in SELECT or table lists
 in FROM clause.
 
-=head2 $instance->new(@ids)
+=head2 SQL::OOP::IDArray->new(@ids)
 
-=head2 $instance->new(@id_objects)
+    my $id_list = SQL::OOP::IDArray->new('tbl1', 'tbl2', 'tbl3');
+    
+    $id_list->to_string; # "tbl1", "tbl2", "tbl3"    
+
+=head2 SQL::OOP::IDArray->new(@id_objects)
 
 Here is some examples.
     

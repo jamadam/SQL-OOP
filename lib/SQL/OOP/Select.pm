@@ -292,18 +292,18 @@ instance which can be thrown at SQL::OOP::Order class constractor or instances.
 Constractor for DESC expression. This returns SQL::OOP::Order::Expression
 instance which can be thrown at SQL::OOP::Order class constractor or instances.
 
-=head2 abstract
+=head2 SQL::OOP::Order->abstract
 
 Constract by array ref
 
     SQL::OOP::Order->abstract([['col1', 1], 'col2']);   # "col1" DESC, "col2"
     SQL::OOP::Order->abstract([['col1', 1], ['col2']]); # "col1" DESC, "col2"
 
-=head2 append_asc
+=head2 $instance->append_asc
 
 Append ASC entry
 
-=head2 append_desc
+=head2 $instance->append_desc
 
 Append DESC entry
 
