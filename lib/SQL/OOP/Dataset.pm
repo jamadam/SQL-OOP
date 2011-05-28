@@ -3,7 +3,6 @@ use strict;
 use warnings;
 use SQL::OOP;
 use base qw(SQL::OOP);
-our $VERSION = '0.03';
     
     sub MODE_INSERT() {1} ## no critic
     sub MODE_UPDATE() {2} ## no critic

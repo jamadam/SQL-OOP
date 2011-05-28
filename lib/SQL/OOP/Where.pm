@@ -1,7 +1,6 @@
 package SQL::OOP::Where;
 use strict;
 use warnings;
-our $VERSION = '0.03';
     
     ### ---
     ### Constractor
@@ -138,6 +137,20 @@ our $VERSION = '0.03';
             $placeholder = substr($placeholder, 0, -2);
             my $quoted = SQL::OOP::ID->new($key)->to_string;
             return SQL::OOP->new("$quoted IN ($placeholder)", $array_ref);
+        }
+    }
+    
+    ### ---
+    ### NOT IN factory
+    ### ---
+    sub not_in {
+        
+        my ($self, $key, $array_ref) = @_;
+        if ($key) {
+            my $placeholder = '?, ' x scalar @$array_ref;
+            $placeholder = substr($placeholder, 0, -2);
+            my $quoted = SQL::OOP::ID->new($key)->to_string;
+            return SQL::OOP->new("$quoted NOT IN ($placeholder)", $array_ref);
         }
     }
 
