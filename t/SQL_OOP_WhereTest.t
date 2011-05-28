@@ -10,6 +10,18 @@ use Tie::IxHash;
 	
 	__PACKAGE__->runtests;
 	
+	sub not_in : Test(5) {
+		
+		my $where = SQL::OOP::Where->new();
+		my $in = $where->not_in('col', [1, 2, 3]);
+		is($in->to_string, q{"col" NOT IN (?, ?, ?)});
+		my @bind = $in->bind;
+		is(scalar @bind, 3);
+		is(shift @bind, '1');
+		is(shift @bind, '2');
+		is(shift @bind, '3');
+	}
+	
 	sub in : Test(5) {
 		
 		my $where = SQL::OOP::Where->new();

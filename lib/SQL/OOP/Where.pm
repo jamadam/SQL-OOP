@@ -218,6 +218,10 @@ Generates 1 oprator expression with sub query in value
 
 Generates IN clause
 
+=head2 $instance->not_in($fieldname, $array_ref)
+
+Generates NOT IN clause
+
 =head2 $instance->between($fieldname, $upper, $lower)
 
 Generates BETWEEN clause
