@@ -2,6 +2,7 @@ package SQL::OOP::Dataset;
 use strict;
 use warnings;
 use SQL::OOP;
+use Scalar::Util qw(blessed);
 use base qw(SQL::OOP);
     
     sub MODE_INSERT() {1} ## no critic
@@ -16,9 +17,9 @@ use base qw(SQL::OOP);
         my $data_hash_ref = (scalar @_ == 1) ? shift @_ : {@_};
         my $self = bless {
             gen     => undef,
+            source  => [],
             field   => [],
             value   => [],
-            bind    => [],
         }, $class;
         
         return $self->append($data_hash_ref);
@@ -34,11 +35,30 @@ use base qw(SQL::OOP);
         $self->_init_gen;
         
         for my $key (keys %$data_hash_ref) {
-            push(@{$self->{field}}, (SQL::OOP::ID->new($key)->to_string));
-            push(@{$self->{bind}}, $data_hash_ref->{$key});
+            push(@{$self->{source}}, [
+                SQL::OOP::ID->new($key)->to_string,
+                $data_hash_ref->{$key},
+            ]);
         }
         
         return $self;
+    }
+    
+    ### ---
+    ### Get binded values in array
+    ### ---
+    sub bind {
+        
+        my $self = shift;
+        my @out = map {
+            if (blessed($_)) {
+                $_->bind;
+            } else {
+                $_;
+            }
+        } map {$_->[1]} @{$self->{source}};
+        return @out if (wantarray);
+        return scalar @out;
     }
     
     ### ---
@@ -69,14 +89,21 @@ use base qw(SQL::OOP);
     sub generate {
         
         my ($self, $type) = @_;
+        
+        my @key = map {$_->[0]} @{$self->{source}};
+        my @val = map {$_->[1]} @{$self->{source}};
+        
         if ($type eq MODE_INSERT) {
-            $self->{gen} = '(';
-            $self->{gen} .= join(', ', grep {$_} @{$self->{field}});
-            $self->{gen} .= ') VALUES (';
-            $self->{gen} .= join(', ', map {'?'} @{$self->{field}});
-            $self->{gen} .= ')';
+            $self->{gen} = sprintf('(%s) VALUES (%s)',
+                join(', ', @key),
+                join(', ', map {blessed($_) ? $_->to_string : '?'} @val));
         } elsif ($type eq MODE_UPDATE) {
-            $self->{gen} = join(', ', map {$_. ' = ?'} @{$self->{field}});
+            $self->{gen} = '';
+            for my $idx (0 .. (scalar @key) - 1) {
+                $self->{gen} .= ', '. sprintf('%s = %s', $key[$idx],
+                            blessed($val[$idx]) ? $val[$idx]->to_string : '?');
+            }
+            $self->{gen} =~ s{^, }{};
         }
         return $self;
     }
@@ -122,6 +149,10 @@ This method called from inside the command subclasses.
 =head2 $instance->to_string_for_update
 
 This method called from inside the command subclasses.
+
+=head2 $instance->bind
+
+Returns binded values.
 
 =head1 CONSTANTS
 

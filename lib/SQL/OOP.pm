@@ -4,7 +4,7 @@ use warnings;
 use Scalar::Util qw(blessed);
 use base qw(Class::Data::Inheritable);
 use 5.005;
-our $VERSION = '0.07';
+our $VERSION = '0.08';
     
     ### ---
     ### default quote character
@@ -149,7 +149,7 @@ use base qw(SQL::OOP);
             if ($_->to_string && (scalar @{$self->{array}}) >= 2) {
                 $self->fix_element_in_list_context($_);
             } else {
-                $_->to_string
+                $_->to_string;
             }
         } @{$self->{array}};
         $self->{gen} = join($self->{sepa}, grep {$_} @array);
