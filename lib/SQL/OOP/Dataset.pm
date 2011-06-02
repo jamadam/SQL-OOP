@@ -18,8 +18,6 @@ use base qw(SQL::OOP);
         my $self = bless {
             gen     => undef,
             source  => [],
-            field   => [],
-            value   => [],
         }, $class;
         
         return $self->append($data_hash_ref);
