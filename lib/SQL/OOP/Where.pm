@@ -65,6 +65,9 @@ use warnings;
     sub cmp {
         
         my ($self, $op, $key, $val) = @_;
+		if (scalar @_ != 4) {
+			die 'Not enough args given';
+		}
         if ($key && defined $val) {
             my $quoted = SQL::OOP::ID->new($key);
             return SQL::OOP->new($quoted->to_string. qq( $op ?), [$val]);
@@ -77,6 +80,9 @@ use warnings;
     sub cmp_nested {
         
         my ($self, $op, $key, $val) = @_;
+		if (scalar @_ != 4) {
+			die 'Not enough args given';
+		}
         if ($key && defined $val) {
             my $quoted = SQL::OOP::ID->new($key);
             return SQL::OOP::Array->new($quoted->to_string, $val)->set_sepa(" $op ");
