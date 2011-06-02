@@ -23,6 +23,9 @@ our $VERSION = '0.08';
         if (blessed($str) && $str->isa(__PACKAGE__)) {
             return $str;
         } elsif ($str) {
+            if ($bind_ref && ! ref $bind_ref) {
+                die '$bind_ref must be an Array ref';
+            }
             return bless {
                 str     => $str,
                 gen     => undef,
