@@ -97,6 +97,14 @@ use SQL::OOP::Select;
         is($id->to_string, q{"public"."table"."c1"});
     }
     
+    sub id_is_escaped : Test(2) {
+        
+        my $id_part = SQL::OOP::ID::Parts->new('test"test');
+        is($id_part->to_string, q{"test""test"});
+        my $id = SQL::OOP::ID->new('table"1', 'column"1');
+        is($id->to_string, q{"table""1"."column""1"});
+    }
+    
     sub compress_sql {
         
         my $sql = shift;

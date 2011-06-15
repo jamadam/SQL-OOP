@@ -12,6 +12,15 @@ our $VERSION = '0.08';
     __PACKAGE__->mk_classdata(quote_char => q("));
     
     ### ---
+    ### escape_code_ref for col names
+    ### ---
+    __PACKAGE__->mk_classdata(escape_code_ref => sub {
+        my ($str, $quote_char) = @_;
+        $str =~ s{$quote_char}{$quote_char$quote_char}g;
+        return $str;
+    });
+    
+    ### ---
     ### Constractor
     ### ---
     sub new {
@@ -90,6 +99,7 @@ our $VERSION = '0.08';
             $class = blessed($class);
         }
         $with ||= $class->quote_char;
+        $val = $class->escape_code_ref->($val, $with);
         return $with. $val. $with;
     }
 
