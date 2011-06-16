@@ -6,5 +6,6 @@ Revision history for SQL-OOP
 0.07 2011/02/05
   - not_in added
 
-0.08 2011/06/02
+0.08 2011/06/16
   - Dataset got capable of sub expression
+  - Experimental feature to_string_embeded added
