@@ -108,10 +108,12 @@ our $VERSION = '0.08';
     sub quote {
         
         my ($class, $val, $with) = @_;
-        if (blessed($class)) {
-            $class = blessed($class);
+        if (! $with) {
+            if (blessed($class)) {
+                $class = blessed($class);
+            }
+            $with = $class->quote_char;
         }
-        $with ||= $class->quote_char;
         $val = $class->escape_code_ref->($val, $with);
         return $with. $val. $with;
     }
