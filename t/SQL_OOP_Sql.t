@@ -82,8 +82,10 @@ use SQL::OOP::Where;
     sub set_quote : Test {
         
         my $id = SQL::OOP::ID->new('a');
+        my $backup = SQL::OOP->quote_char;
         SQL::OOP->quote_char(q(`));
         is($id->to_string, q{`a`});
+        SQL::OOP->quote_char($backup);
     }
     
     sub arrayed_construction : Test(4) {
@@ -114,6 +116,15 @@ EOF
             is(scalar @bind, 1);
             is(shift @bind, 'b');
         }
+    }
+    
+    sub to_string_embeded : Test(2) {
+        my $cond = SQL::OOP::Where->cmp('=', 'a', 'b');
+        my $sql = SQL::OOP::Array->new(
+            'SELECT', '*', 'FROM', 'tbl1', 'WHERE', $cond);
+        my @bind = $sql->bind;
+        is($sql->to_string_embeded, q{SELECT * FROM tbl1 WHERE "a" = 'b'});
+        is($sql->to_string_embeded(q{`}), q{SELECT * FROM tbl1 WHERE "a" = `b`});
     }
     
     sub compress_sql {

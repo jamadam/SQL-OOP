@@ -61,6 +61,19 @@ our $VERSION = '0.08';
     }
     
     ### ---
+    ### Get SQL snippet with values embeded [EXPERIMENTAL]
+    ### ---
+    sub to_string_embeded {
+        
+        my ($self, $quote_with) = @_;
+        $quote_with ||= q{'};
+        my $format = $self->to_string;
+        $format =~ s{\?}{%s}g;
+        return
+        sprintf($format, map {$self->quote($_, $quote_with)} @{[$self->bind]});
+    }
+    
+    ### ---
     ### Get binded values in array
     ### ---
     sub bind {
@@ -378,11 +391,22 @@ Constractor. It takes String and array ref.
 
     my $sql = SQL::OOP->new('a = ? and b = ?', [10,20]);
 
+=head2 SQL::OOP->quote_char($quote_char)
+
+=head2 SQL::OOP->escape_code_ref($code_ref)
+
 =head2 $instance->to_string()
 
 This method returns the SQL string.
 
     $sql->to_string # 'a = ? and b = ?'
+
+=head2 $instance->to_string_embeded() [EXPERIMENTAL]
+
+This method returns the SQL string with binded values enbeded. This method aimed
+at use of debugging.
+
+    $sql->to_string_embeded # a = 'value' and b = 'value'
 
 =head2 $instance->bind()
 
