@@ -216,6 +216,10 @@ Returns SQL::OOP::Where instance.
 
 Generates 1 oprator expression.
 
+	my $where = SQL::OOP::Where->new;
+	$where->cmp('=', 'col1', 'value') # "col1" = ?
+	$where->cmp('=', ['table', 'col1'], 'value') # "table"."col1" = ?
+	
 =head2 $instance->cmp_nested($fieldname, $object)
 
 Generates 1 oprator expression with sub query in value
@@ -224,21 +228,44 @@ Generates 1 oprator expression with sub query in value
 
 Generates IN clause
 
+	my $where = SQL::OOP::Where->new;
+	$where->in('col1', ['candidate1', 'candidate2']) # "col1" IN (?, ?)
+	$where->in(
+		['table', 'col1'],
+		['candidate1', 'candidate2']) # "table"."col1" IN (?, ?)
+
 =head2 $instance->not_in($fieldname, $array_ref)
 
 Generates NOT IN clause
+
+	my $where = SQL::OOP::Where->new;
+	$where->not_in('col1', ['val1', 'val2']) # "col1" NOT IN (?, ?)
+	$where->not_in(
+		['table', 'col1'], ['val1', 'val2']) # "table"."col1" NOT IN (?, ?)
 
 =head2 $instance->between($fieldname, $upper, $lower)
 
 Generates BETWEEN clause
 
+	my $where = SQL::OOP::Where->new;
+	$where->between('col1', 5, 10]) # "col1" BETWEEN ? AND ?
+	$where->between(['table', 'col1'], 5, 10) # "table"."col1" BETWEEN ? AND ?
+
 =head2 $instance->is_not_null($fieldname)
 
 Generates IS NOT NULL clause
 
+	my $where = SQL::OOP::Where->new;
+	$where->is_not_null('col1') # "col1" IS NOT NULL
+	$where->is_not_null(['table', 'col1']) # "table"."col1" IS NOT NULL
+
 =head2 $instance->is_null($fieldname)
 
 Generates IS NULL clause
+
+	my $where = SQL::OOP::Where->new;
+	$where->is_null('col1') # "col1" IS NULL
+	$where->is_null(['table', 'col1']) # "table"."col1" IS NULL
 
 =head2 $instance->or(@array)
 
