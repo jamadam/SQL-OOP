@@ -83,7 +83,17 @@ use base qw(SQL::OOP::Array);
     sub new {
         
         my ($class, @array) = @_;
-        return $class->SUPER::new(@array)->set_sepa(', ');
+        return $class->SUPER::new(
+                            map {SQL::OOP::ID->new($_)} @array)->set_sepa(', ');
+    }
+    
+    ### ---
+    ### fix generated string in list context
+    ### ---
+    sub fix_element_in_list_context {
+        
+        my ($self, $obj) = @_;
+        return $obj->to_string;
     }
     
     ### ---
@@ -159,7 +169,7 @@ use base qw(SQL::OOP);
         
         my ($class, $key) = @_;
         if ($key) {
-            return $class->SUPER::new(SQL::OOP::ID->quote($key));
+            return $class->SUPER::new(SQL::OOP::ID->new($key));
         }
     }
     
@@ -170,7 +180,8 @@ use base qw(SQL::OOP);
         
         my ($class, $key) = @_;
         if ($key) {
-            return $class->SUPER::new(SQL::OOP::ID->quote($key). " DESC");
+            return $class->SUPER::new(
+                                SQL::OOP::ID->new($key)->to_string. " DESC");
         }
     }
 

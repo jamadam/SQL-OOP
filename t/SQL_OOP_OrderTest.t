@@ -11,7 +11,7 @@ use SQL::OOP::Select;
     sub order_by : Test {
         
         my $orderby = SQL::OOP::Order->new('a', 'b');
-        is($orderby->to_string, "a, b");
+        is($orderby->to_string, q{"a", "b"});
     }
     
     sub order_append : Test {
@@ -64,6 +64,29 @@ use SQL::OOP::Select;
             my $sql = SQL::OOP::Order->abstract(['col1', ['col2', 1]]);
             is($sql->to_string, q{"col1", "col2" DESC});
         }
+    }
+    
+    sub new_with_key_in_array_ref : Test(1) {
+        my $sql = SQL::OOP::Order->new(['a','b'],['c','d']);
+        is($sql->to_string, q{"a"."b", "c"."d"});
+    }
+    
+    sub new_asc_with_key_in_array_ref : Test(1) {
+        my $sql = SQL::OOP::Order->new_asc(['a','b']);
+        is($sql->to_string, q{"a"."b"});
+    }
+    
+    sub new_desc_with_key_in_array_ref : Test(1) {
+        my $sql = SQL::OOP::Order->new_desc(['a','b']);
+        is($sql->to_string, q{"a"."b" DESC});
+    }
+    
+    sub append_with_key_in_array_ref : Test(2) {
+        my $sql = SQL::OOP::Order->new;
+        $sql->append_asc(['a','b']);
+        is($sql->to_string, q{"a"."b"});
+        $sql->append_desc(['c','d']);
+        is($sql->to_string, q{"a"."b", "c"."d" DESC});
     }
     
     sub compress_sql {

@@ -10,4 +10,5 @@ Revision history for SQL-OOP
   - Dataset got capable of sub expression
   - Experimental feature to_string_embeded added
   - append method got capable of array refs
-  - where methods got capable of array refs for key
+  - where methods got capable of array refs for keys
+  - Order class got capable of array refs for keys
