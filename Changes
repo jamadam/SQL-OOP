@@ -6,7 +6,8 @@ Revision history for SQL-OOP
 0.07 2011/02/05
   - not_in added
 
-0.08 2011/06/16
+0.08 2011/06/20
   - Dataset got capable of sub expression
   - Experimental feature to_string_embeded added
   - append method got capable of array refs
+  - where methods got capable of array refs for key
