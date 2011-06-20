@@ -126,6 +126,12 @@ use Tie::IxHash;
 		is($where->to_string, q{"public"."table"."c1" = ?});
 	}
 	
+	sub cmp_key_by_array_ref : Test(2) {
+		
+		my $where = SQL::OOP::Where->cmp('=', ['public','table','c1'], 'val');
+		is($where->to_string, q{"public"."table"."c1" = ?});
+	}
+	
 	sub is_null : Test(2) {
 		
 		my $where = SQL::OOP::Where->is_null('col1');

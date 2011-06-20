@@ -9,3 +9,4 @@ Revision history for SQL-OOP
 0.08 2011/06/16
   - Dataset got capable of sub expression
   - Experimental feature to_string_embeded added
+  - append method got capable of array refs
