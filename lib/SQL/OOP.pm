@@ -4,7 +4,7 @@ use warnings;
 use Scalar::Util qw(blessed);
 use base qw(Class::Data::Inheritable);
 use 5.005;
-our $VERSION = '0.08';
+our $VERSION = '0.09';
     
     ### ---
     ### default quote character

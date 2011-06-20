@@ -11,4 +11,6 @@ Revision history for SQL-OOP
   - Experimental feature to_string_embeded added
   - append method got capable of array refs
   - where methods got capable of array refs for keys
+
+0.09 2011/06/20
   - Order class got capable of array refs for keys
