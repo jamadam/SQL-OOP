@@ -159,6 +159,9 @@ use base qw(SQL::OOP);
         
         my ($self, @array) = @_;
         $self->_init_gen;
+        if (ref $array[0] && ref $array[0] eq 'ARRAY') {
+            @array = @{$array[0]};
+        }
         foreach my $elem (@array) {
             if ($elem) {
                 push(@{$self->{array}}, SQL::OOP->new($elem));
@@ -256,6 +259,9 @@ use base qw(SQL::OOP::Array);
         
         my ($self, @array) = @_;
         $self->_init_gen;
+        if (ref $array[0] && ref $array[0] eq 'ARRAY') {
+            @array = @{$array[0]};
+        }
         for my $elem (@array) {
             if ($elem) {
                 push(@{$self->{array}}, SQL::OOP::ID::Parts->new($elem));
@@ -315,6 +321,9 @@ use base qw(SQL::OOP::Array);
         
         my ($self, @array) = @_;
         $self->_init_gen;
+        if (ref $array[0] && ref $array[0] eq 'ARRAY') {
+            @array = @{$array[0]};
+        }
         foreach my $elem (@array) {
             if (blessed($elem) && $elem->isa('SQL::OOP')) {
                 push(@{$self->{array}}, $elem);

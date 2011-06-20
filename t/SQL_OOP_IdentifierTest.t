@@ -105,6 +105,12 @@ use SQL::OOP::Select;
         is($id->to_string, q{"table""1"."column""1"});
     }
     
+    sub id_suplied_in_ref :Test(1) {
+        
+        my $id = SQL::OOP::ID->new(['schema', 'table', 'col']);
+        is($id->to_string, q{"schema"."table"."col"});
+    }
+    
     sub compress_sql {
         
         my $sql = shift;
