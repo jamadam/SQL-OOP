@@ -427,7 +427,7 @@ This method returns binded values in array.
 
 =head2 $instance->generate()
 
-=head2 NT::SQL->quote()
+=head2 SQL::OOP->quote()
 
 =head1 SQL::OOP::Array CLASS
 
