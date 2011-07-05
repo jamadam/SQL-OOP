@@ -36,7 +36,7 @@ use base qw(SQL::OOP::Command);
     }
     
     ### ---
-    ### Constractor
+    ### Constructor
     ### ---
     sub new {
         

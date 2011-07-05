@@ -40,7 +40,7 @@ use base qw(SQL::OOP::Command);
     }
     
     ### ---
-    ### Constractor
+    ### Constructor
     ### ---
     sub new {
         
@@ -78,7 +78,7 @@ use SQL::OOP::Base;
 use base qw(SQL::OOP::Array);
     
     ### ---
-    ### Constractor
+    ### Constructor
     ### ---
     sub new {
         
@@ -97,7 +97,7 @@ use base qw(SQL::OOP::Array);
     }
     
     ### ---
-    ### Constract ORER BY clause by array
+    ### Construct ORER BY clause by array
     ### ---
     sub abstract {
         
@@ -163,7 +163,7 @@ use warnings;
 use base qw(SQL::OOP::Base);
 
     ### ---
-    ### Constractor
+    ### Constructor
     ### ---
     sub new {
         
@@ -174,7 +174,7 @@ use base qw(SQL::OOP::Base);
     }
     
     ### ---
-    ### DESC Constractor
+    ### DESC Constructor
     ### ---
     sub new_desc {
         
@@ -252,7 +252,7 @@ This class represents SQL SELECT command
 
 =head2 SQL::OOP::Select->new(%clause)
 
-Constractor. It takes argsuments in hash. The Hash keys are provided by
+Constructor. It takes arguments in hash. The Hash keys are provided by
 following methods. They can be called as either class or instance method.
     
     ARG_FIELDS
@@ -282,7 +282,7 @@ This class represents ORDER BY clause.
 
 =head2 SQL::OOP::Order->new(@array);
 
-Constractor.
+Constructor.
 
 =head2 $instance->append_asc($key);
 
@@ -295,17 +295,17 @@ Constractor.
 
 =head2 SQL::OOP::Order->new_asc();
 
-Constractor for ASC expression. This returns SQL::OOP::Order::Expression
-instance which can be thrown at SQL::OOP::Order class constractor or instances.
+Constructor for ASC expression. This returns SQL::OOP::Order::Expression
+instance which can be thrown at SQL::OOP::Order class constructor or instances.
 
 =head2 SQL::OOP::Order->new_desc();
 
-Constractor for DESC expression. This returns SQL::OOP::Order::Expression
-instance which can be thrown at SQL::OOP::Order class constractor or instances.
+Constructor for DESC expression. This returns SQL::OOP::Order::Expression
+instance which can be thrown at SQL::OOP::Order class Constructor or instances.
 
 =head2 SQL::OOP::Order->abstract
 
-Constract by array ref
+Construct by array ref
 
     SQL::OOP::Order->abstract([['col1', 1], 'col2']);   # "col1" DESC, "col2"
     SQL::OOP::Order->abstract([['col1', 1], ['col2']]); # "col1" DESC, "col2"
@@ -354,7 +354,7 @@ argument key for OFFSET clause(=7)
 
 =head1 EXAMPLE
 
-Here is a complehensive example for SELECT. You also can find some examples in
+Here is a comprehensive example for SELECT. You also can find some examples in
 test scripts.
 
     my $select = SQL::OOP::Select->new();

@@ -8,7 +8,7 @@ use Scalar::Util qw(blessed);
 use base qw(SQL::OOP::Base);
     
     ### ---
-    ### constractor
+    ### Constructor
     ### ---
     sub new {
         

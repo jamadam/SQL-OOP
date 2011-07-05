@@ -29,7 +29,7 @@ use base qw(SQL::OOP::Command);
 	}
 	
 	### ---
-	### Constractor
+	### Constructor
 	### ---
 	sub new {
 		
@@ -100,7 +100,7 @@ SQL::OOP::Insert class represents Insert commands.
 
 =head2 SQL::OOP::Insert->new(%clause)
 
-Constractor. It takes argsuments in hash. The Hash keys are provided by
+Constructor. It takes arguments in hash. The Hash keys are provided by
 following methods. They can call either class method or instance method.
     
     ARG_TABLE

@@ -118,13 +118,13 @@ EOF
         }
     }
     
-    sub to_string_embeded : Test(2) {
+    sub to_string_embedded : Test(2) {
         my $cond = SQL::OOP::Where->cmp('=', 'a', 'b');
         my $sql = SQL::OOP::Array->new(
             'SELECT', '*', 'FROM', 'tbl1', 'WHERE', $cond);
         my @bind = $sql->bind;
-        is($sql->to_string_embeded, q{SELECT * FROM tbl1 WHERE "a" = 'b'});
-        is($sql->to_string_embeded(q{`}), q{SELECT * FROM tbl1 WHERE "a" = `b`});
+        is($sql->to_string_embedded, q{SELECT * FROM tbl1 WHERE "a" = 'b'});
+        is($sql->to_string_embedded(q{`}), q{SELECT * FROM tbl1 WHERE "a" = `b`});
     }
     
     sub compress_sql {

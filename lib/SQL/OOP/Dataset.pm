@@ -131,7 +131,7 @@ SQL::OOP::Dataset is a class which represents data sets for INSERT or UPDATE
 
 =head2 SQL::OOP::Dataset->new(%data)
 
-Constractor.
+Constructor.
 
 =head2 $instance->append(%data)
 

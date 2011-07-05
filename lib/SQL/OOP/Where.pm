@@ -4,7 +4,7 @@ use warnings;
 use SQL::OOP::ID;
 
     ### ---
-    ### Constractor
+    ### Constructor
     ### ---
     sub new {
         
@@ -215,7 +215,7 @@ Returns SQL::OOP::Where instance.
 
 =head2 $instance->cmp($operator, $fieldname, $value)
 
-Generates 1 oprator expression.
+Generates 1 operator expression.
 
 	my $where = SQL::OOP::Where->new;
 	$where->cmp('=', 'col1', 'value') # "col1" = ?
@@ -223,7 +223,7 @@ Generates 1 oprator expression.
 	
 =head2 $instance->cmp_nested($fieldname, $object)
 
-Generates 1 oprator expression with sub query in value
+Generates 1 operator expression with sub query in value
 
 =head2 $instance->in($fieldname, $array_ref)
 

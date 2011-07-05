@@ -7,7 +7,7 @@ use warnings;
 use base qw(SQL::OOP::Array);
     
     ### ---
-    ### constractor
+    ### Constructor
     ### ---
     sub new {
         
@@ -87,7 +87,7 @@ use Scalar::Util qw(blessed);
 use base qw(SQL::OOP::Array);
     
     ### ---
-    ### constractor
+    ### Constructor
     ### ---
     sub new {
         

@@ -20,7 +20,7 @@ use 5.005;
     });
     
     ### ---
-    ### Constractor
+    ### Constructor
     ### ---
     sub new {
         
@@ -60,9 +60,9 @@ use 5.005;
     }
     
     ### ---
-    ### Get SQL snippet with values embeded [EXPERIMENTAL]
+    ### Get SQL snippet with values embedded [EXPERIMENTAL]
     ### ---
-    sub to_string_embeded {
+    sub to_string_embedded {
         
         my ($self, $quote_with) = @_;
         $quote_with ||= q{'};
@@ -149,7 +149,7 @@ This class represents SQLs or SQL snippets.
 
 =head2 SQL::OOP::Base->new($str, $array_ref)
     
-Constractor. It takes String and array ref.
+Constructor. It takes String and array ref.
 
     my $sql = SQL::OOP::Base->new('a = ? and b = ?', [10,20]);
 
@@ -163,12 +163,12 @@ This method returns the SQL string.
 
     $sql->to_string # 'a = ? and b = ?'
 
-=head2 $instance->to_string_embeded() [EXPERIMENTAL]
+=head2 $instance->to_string_embedded() [EXPERIMENTAL]
 
-This method returns the SQL string with binded values enbeded. This method aimed
+This method returns the SQL string with binded values embedded. This method aimed
 at use of debugging.
 
-    $sql->to_string_embeded # a = 'value' and b = 'value'
+    $sql->to_string_embedded # a = 'value' and b = 'value'
 
 =head2 $instance->bind()
 

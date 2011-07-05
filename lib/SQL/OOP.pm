@@ -43,10 +43,10 @@ SQL::OOP - SQL Generator
 =head1 DESCRIPTION
 
 This module provides you an object oriented interface to generate SQL
-statements. This doesn't require any complex syntaxed hash structure. All you
+statements. This doesn't require any complex syntactical hash structure. All you
 have to do is to call well-readable OOP methods.
 
-SQL::OOP distibution includes some modules. This is the base class of them.
+SQL::OOP distribution includes some modules. This is the base class of them.
     
     SQL::OOP::Base [abstract]
         SQL::OOP::Array [abstract]
@@ -62,7 +62,7 @@ SQL::OOP distibution includes some modules. This is the base class of them.
             SQL::OOP::Order
     SQL::OOP::Where [factory]
 
-Any instace returned by each class are capable of to_string() and bind(). These
+Any instance returned by each class are capable of to_string() and bind(). These
 methods returns similar values as SQL::Abstract. 
 
 =head1 SEE ALSO

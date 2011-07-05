@@ -5,7 +5,7 @@ use SQL::OOP::Base;
 use base qw(SQL::OOP::Array);
     
     ### ---
-    ### Constractor
+    ### Constructor
     ### ---
     sub new {
         

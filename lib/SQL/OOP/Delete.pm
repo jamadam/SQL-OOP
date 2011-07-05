@@ -28,7 +28,7 @@ use base qw(SQL::OOP::Command);
     }
     
     ### ---
-    ### Constractor
+    ### Constructor
     ### ---
     sub new {
         
@@ -97,7 +97,7 @@ SQL::OOP::Delete class represents Delete commands.
 
 =head2 SQL::OOP::Delete->new(%clause)
 
-Constractor. It takes argsuments in hash. The Hash keys are provided by
+Constructor. It takes arguments in hash. The Hash keys are provided by
 following methods. They can call either class method or instance method.
     
     ARG_TABLE
