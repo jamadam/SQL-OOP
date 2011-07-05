@@ -42,11 +42,8 @@ use base qw(SQL::OOP::Base);
         if (ref $array[0] && ref $array[0] eq 'ARRAY') {
             @array = @{$array[0]};
         }
-        foreach my $elem (@array) {## TODO optimize
-            if ($elem) {
-                push(@{$self->{array}}, SQL::OOP::Base->new($elem));
-            }
-        }
+        push(@{$self->{array}}, map {SQL::OOP::Base->new($_)} grep {$_} @array);
+        
         return $self;
     }
     
