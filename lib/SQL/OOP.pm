@@ -5,7 +5,7 @@ use Scalar::Util qw(blessed);
 use base qw(Class::Data::Inheritable);
 use SQL::OOP::Base;
 use 5.005;
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
     sub new {
         return SQL::OOP::Base->new(@_);
