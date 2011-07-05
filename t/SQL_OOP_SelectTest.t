@@ -109,7 +109,7 @@ use SQL::OOP::Select;
 	sub array_to_string4 : Test(1) {
 		
 		my $where = SQL::OOP::Where->new();
-		my $sql = SQL::OOP->new('col2');
+		my $sql = SQL::OOP::Base->new('col2');
 		my $a = $where->cmp_nested('=', 'col1', $sql);
 		my $select = SQL::OOP::Select->new();
 		$select->set(

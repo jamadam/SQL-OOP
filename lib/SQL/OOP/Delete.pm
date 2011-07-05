@@ -1,7 +1,7 @@
 package SQL::OOP::Delete;
 use strict;
 use warnings;
-use SQL::OOP;
+use SQL::OOP::Base;
 use SQL::OOP::Where;
 use base qw(SQL::OOP::Command);
 

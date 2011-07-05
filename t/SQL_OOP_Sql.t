@@ -11,7 +11,7 @@ use SQL::OOP::Where;
     
     sub bind_include_undef : Test(5) {
         
-        my $sql = SQL::OOP->new('a', ['a', undef, 'c']);
+        my $sql = SQL::OOP::Base->new('a', ['a', undef, 'c']);
         is($sql->to_string, 'a');
         my @bind = $sql->bind;
         is(scalar @bind, 3);
@@ -34,9 +34,9 @@ use SQL::OOP::Where;
     
     sub array_basic : Test(5) {
         
-        my $sql1 = SQL::OOP->new('a', ['a']);
-        my $sql2 = SQL::OOP->new('b', ['b']);
-        my $sql3 = SQL::OOP->new('c', ['c']);
+        my $sql1 = SQL::OOP::Base->new('a', ['a']);
+        my $sql2 = SQL::OOP::Base->new('b', ['b']);
+        my $sql3 = SQL::OOP::Base->new('c', ['c']);
         my $sql = SQL::OOP::Array->new($sql1, $sql2, $sql3)->set_sepa(',');
         is($sql->to_string, q{a,b,c});
         my @bind = $sql->bind;
@@ -48,9 +48,9 @@ use SQL::OOP::Where;
     
     sub array_basic_include_undef : Test(5) {
         
-        my $sql1 = SQL::OOP->new('a', ['a']);
-        my $sql2 = SQL::OOP->new('b', [undef]);
-        my $sql3 = SQL::OOP->new('c', ['c']);
+        my $sql1 = SQL::OOP::Base->new('a', ['a']);
+        my $sql2 = SQL::OOP::Base->new('b', [undef]);
+        my $sql3 = SQL::OOP::Base->new('c', ['c']);
         my $sql = SQL::OOP::Array->new($sql1, $sql2, $sql3)->set_sepa(',');
         is($sql->to_string, q{a,b,c});
         my @bind = $sql->bind;
@@ -62,9 +62,9 @@ use SQL::OOP::Where;
     
     sub array_basic_include_undef2 : Test(5) {
         
-        my $sql1 = SQL::OOP->new('a', ['a']);
-        my $sql2 = SQL::OOP->new('b', undef);
-        my $sql3 = SQL::OOP->new('c', ['c']);
+        my $sql1 = SQL::OOP::Base->new('a', ['a']);
+        my $sql2 = SQL::OOP::Base->new('b', undef);
+        my $sql3 = SQL::OOP::Base->new('c', ['c']);
         my $sql = SQL::OOP::Array->new($sql1, $sql2, $sql3)->set_sepa(',');
         is($sql->to_string, q{a,b,c});
         my @bind = $sql->bind;
@@ -82,10 +82,10 @@ use SQL::OOP::Where;
     sub set_quote : Test {
         
         my $id = SQL::OOP::ID->new('a');
-        my $backup = SQL::OOP->quote_char;
-        SQL::OOP->quote_char(q(`));
+        my $backup = SQL::OOP::Base->quote_char;
+        SQL::OOP::Base->quote_char(q(`));
         is($id->to_string, q{`a`});
-        SQL::OOP->quote_char($backup);
+        SQL::OOP::Base->quote_char($backup);
     }
     
     sub arrayed_construction : Test(4) {

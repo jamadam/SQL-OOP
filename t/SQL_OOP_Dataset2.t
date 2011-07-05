@@ -13,7 +13,7 @@ use Tie::IxHash;
     sub append_with_hash : Test(2) {
         
         my $dataset = SQL::OOP::Dataset->new();
-        $dataset->append(a => SQL::OOP->new(q{datetime('now', 'localtime')}));
+        $dataset->append(a => SQL::OOP::Base->new(q{datetime('now', 'localtime')}));
         is($dataset->to_string_for_insert, q(("a") VALUES (datetime('now', 'localtime'))));
         my @bind = $dataset->bind;
         is(scalar @bind, 0);
@@ -22,7 +22,7 @@ use Tie::IxHash;
     sub append_with_hash2 : Test(2) {
         
         my $dataset = SQL::OOP::Dataset->new();
-        $dataset->append(a => SQL::OOP->new(q{datetime('now', 'localtime')}));
+        $dataset->append(a => SQL::OOP::Base->new(q{datetime('now', 'localtime')}));
         is($dataset->to_string_for_update, q("a" = datetime('now', 'localtime')));
         my @bind = $dataset->bind;
         is(scalar @bind, 0);
@@ -31,7 +31,7 @@ use Tie::IxHash;
     sub append_with_hash3 : Test(2) {
         
         my $dataset = SQL::OOP::Dataset->new();
-        $dataset->append(a => SQL::OOP->new(q{"a" + 1}));
+        $dataset->append(a => SQL::OOP::Base->new(q{"a" + 1}));
         is($dataset->to_string_for_update, q("a" = "a" + 1));
         my @bind = $dataset->bind;
         is(scalar @bind, 0);
@@ -40,7 +40,7 @@ use Tie::IxHash;
     sub append_with_hash4 : Test(3) {
         
         my $dataset = SQL::OOP::Dataset->new();
-        $dataset->append(a => SQL::OOP->new(q{"a" + ?}, [1]));
+        $dataset->append(a => SQL::OOP::Base->new(q{"a" + ?}, [1]));
         is($dataset->to_string_for_update, q("a" = "a" + ?));
         my @bind = $dataset->bind;
         is(scalar @bind, 1);
@@ -51,7 +51,7 @@ use Tie::IxHash;
         
         my $dataset = SQL::OOP::Dataset->new();
         $dataset->append(
-            a => SQL::OOP->new(q{"a" + ?}, [1])
+            a => SQL::OOP::Base->new(q{"a" + ?}, [1])
         );
         is($dataset->to_string_for_update, q("a" = "a" + ?));
         my @bind = $dataset->bind;

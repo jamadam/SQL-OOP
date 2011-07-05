@@ -80,8 +80,8 @@ use Tie::IxHash;
 	sub update_value_is_a_array : Test(3) {
 		
 		my $array = SQL::OOP::Array->new->set_sepa(', ');
-		$array->append(SQL::OOP->new('a = ?', ['b']));
-		$array->append(SQL::OOP->new('c = ?', ['d']));
+		$array->append(SQL::OOP::Base->new('a = ?', ['b']));
+		$array->append(SQL::OOP::Base->new('c = ?', ['d']));
 		my $sql = SQL::OOP::Update->new();
 		$sql->set(
 			$sql->ARG_DATASET => $array,

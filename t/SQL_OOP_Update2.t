@@ -17,7 +17,7 @@ use Tie::IxHash;
 			$update->ARG_TABLE => 'tbl1',
 			$update->ARG_DATASET => sub {
 				my $ds = SQL::OOP::Dataset->new;
-				$ds->append('a' => SQL::OOP->new(q{"a" + ?}, [1]))
+				$ds->append('a' => SQL::OOP::Base->new(q{"a" + ?}, [1]))
 			},
 			$update->ARG_WHERE => SQL::OOP::Where->cmp('=', 'a', 'b'),
 		);

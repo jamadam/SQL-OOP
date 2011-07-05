@@ -1,7 +1,7 @@
 package SQL::OOP::Select;
 use strict;
 use warnings;
-use SQL::OOP;
+use SQL::OOP::Base;
 use SQL::OOP::Where;
 use base qw(SQL::OOP::Command);
 
@@ -74,7 +74,7 @@ use base qw(SQL::OOP::Command);
     }
 
 package SQL::OOP::Order;
-use SQL::OOP;
+use SQL::OOP::Base;
 use base qw(SQL::OOP::Array);
     
     ### ---
@@ -160,7 +160,7 @@ use base qw(SQL::OOP::Array);
 package SQL::OOP::Order::Expression;
 use strict;
 use warnings;
-use base qw(SQL::OOP);
+use base qw(SQL::OOP::Base);
 
     ### ---
     ### Constractor
@@ -228,7 +228,7 @@ SQL::OOP::Select
         }
     );
     
-    # SQL::OOP::Select can be part of any SQL::OOP sub classes
+    # SQL::OOP::Select can be part of any SQL::OOP::Base sub classes
     my $select2 = SQL::OOP::Select->new();
     $select2->set(
         $select2->ARG_FIELDS => q("col1", "col2"),

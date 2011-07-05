@@ -70,7 +70,7 @@ use warnings;
 		}
         if ($key && defined $val) {
             my $quoted = SQL::OOP::ID->new($key);
-            return SQL::OOP->new($quoted->to_string. qq( $op ?), [$val]);
+            return SQL::OOP::Base->new($quoted->to_string. qq( $op ?), [$val]);
         }
     }
     
@@ -97,7 +97,7 @@ use warnings;
         my ($self, $key) = @_;
         if ($key) {
             my $quoted = SQL::OOP::ID->new($key);
-            return SQL::OOP->new($quoted->to_string. qq( IS NULL));
+            return SQL::OOP::Base->new($quoted->to_string. qq( IS NULL));
         }
     }
 
@@ -109,7 +109,7 @@ use warnings;
         my ($self, $key) = @_;
         if ($key) {
             my $quoted = SQL::OOP::ID->new($key);
-            return SQL::OOP->new($quoted->to_string. qq( IS NOT NULL));
+            return SQL::OOP::Base->new($quoted->to_string. qq( IS NOT NULL));
         }
     }
     
@@ -123,7 +123,7 @@ use warnings;
             if (defined $val1 and defined $val2) {
                 my $quoted = SQL::OOP::ID->new($key)->to_string;
                 my $str = $quoted. qq( BETWEEN ? AND ?);
-                return SQL::OOP->new($str, [$val1, $val2]);
+                return SQL::OOP::Base->new($str, [$val1, $val2]);
             } elsif (defined $val1) {
                 return $self->cmp('>=', $key, $val1);
             } else {
@@ -142,7 +142,7 @@ use warnings;
             my $placeholder = '?, ' x scalar @$array_ref;
             $placeholder = substr($placeholder, 0, -2);
             my $quoted = SQL::OOP::ID->new($key)->to_string;
-            return SQL::OOP->new("$quoted IN ($placeholder)", $array_ref);
+            return SQL::OOP::Base->new("$quoted IN ($placeholder)", $array_ref);
         }
     }
     
@@ -156,7 +156,7 @@ use warnings;
             my $placeholder = '?, ' x scalar @$array_ref;
             $placeholder = substr($placeholder, 0, -2);
             my $quoted = SQL::OOP::ID->new($key)->to_string;
-            return SQL::OOP->new("$quoted NOT IN ($placeholder)", $array_ref);
+            return SQL::OOP::Base->new("$quoted NOT IN ($placeholder)", $array_ref);
         }
     }
 

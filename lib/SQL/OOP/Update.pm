@@ -1,7 +1,7 @@
 package SQL::OOP::Update;
 use strict;
 use warnings;
-use SQL::OOP;
+use SQL::OOP::Base;
 use SQL::OOP::Where;
 use SQL::OOP::Dataset;
 use base qw(SQL::OOP::Command);

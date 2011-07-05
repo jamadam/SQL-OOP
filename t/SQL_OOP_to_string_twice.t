@@ -10,7 +10,7 @@ use SQL::OOP::Select;
     
     sub to_string_twice : Test(2) {
         
-        my $a = SQL::OOP->new("a");
+        my $a = SQL::OOP::Base->new("a");
         is($a->to_string, 'a');
         is($a->to_string, 'a');
     }
@@ -24,7 +24,7 @@ use SQL::OOP::Select;
     
     sub array_to_string_twice2 : Test(2) {
         
-        my $a = SQL::OOP::Array->new(SQL::OOP->new('a'), SQL::OOP->new('b'))->set_sepa(', ');
+        my $a = SQL::OOP::Array->new(SQL::OOP::Base->new('a'), SQL::OOP::Base->new('b'))->set_sepa(', ');
         is($a->to_string, 'a, b');
         is($a->to_string, 'a, b');
     }
@@ -46,7 +46,7 @@ use SQL::OOP::Select;
         my $select = SQL::OOP::Select->new();
         $select->set(
             $select->ARG_FIELDS => 'a',
-            $select->ARG_FROM   => SQL::OOP->new('b'),
+            $select->ARG_FROM   => SQL::OOP::Base->new('b'),
         );
         my $a = SQL::OOP::Array->new($select)->set_sepa(', ');
         is($a->to_string, 'SELECT a FROM b');

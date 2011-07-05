@@ -1,7 +1,7 @@
 package SQL::OOP::Command;
 use strict;
 use warnings;
-use SQL::OOP;
+use SQL::OOP::Base;
 use base qw(SQL::OOP::Array);
     
     ### ---
@@ -58,7 +58,7 @@ use base qw(SQL::OOP::Array);
         my $tokens = $self->keys_to_idx;
         foreach my $key (keys %args) {
             my $idx = $tokens->{$key};
-            $self->{array}->[$idx] = SQL::OOP->new($args{$key});
+            $self->{array}->[$idx] = SQL::OOP::Base->new($args{$key});
         }
         
         return $self;

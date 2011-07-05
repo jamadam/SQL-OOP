@@ -1,7 +1,7 @@
 package SQL::OOP::Join;
 use strict;
 use warnings;
-use SQL::OOP;
+use SQL::OOP::Base;
 use base qw(SQL::OOP::Command);
 
     sub ARG_DIRECTION()     {1} ## no critic

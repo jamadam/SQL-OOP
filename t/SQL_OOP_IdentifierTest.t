@@ -51,7 +51,7 @@ use SQL::OOP::Select;
     sub fields_append_literal : Test {
     
         my $fields = SQL::OOP::IDArray->new(qw(a b c));
-        $fields->append(SQL::OOP->new('*'));
+        $fields->append(SQL::OOP::Base->new('*'));
         is($fields->to_string, qq{"a", "b", "c", *});
     }
     
@@ -73,7 +73,7 @@ use SQL::OOP::Select;
         $select->set(
             $select->ARG_FIELDS => SQL::OOP::IDArray->new(
                 SQL::OOP::ID->new('column1'),
-                SQL::OOP->new('count(*) AS "B"'),
+                SQL::OOP::Base->new('count(*) AS "B"'),
             ),
         );
         is($select->to_string, q{SELECT "column1", count(*) AS "B"});
@@ -87,7 +87,7 @@ use SQL::OOP::Select;
     
     sub array3 : Test {
         
-        my $sql = SQL::OOP::ID->new('a', 'b', SQL::OOP->new('c'));
+        my $sql = SQL::OOP::ID->new('a', 'b', SQL::OOP::Base->new('c'));
         is($sql->to_string, q{"a"."b".c});
     }
     

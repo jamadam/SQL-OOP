@@ -1,9 +1,9 @@
 package SQL::OOP::Dataset;
 use strict;
 use warnings;
-use SQL::OOP;
+use SQL::OOP::Base;
 use Scalar::Util qw(blessed);
-use base qw(SQL::OOP);
+use base qw(SQL::OOP::Base);
     
     sub MODE_INSERT() {1} ## no critic
     sub MODE_UPDATE() {2} ## no critic

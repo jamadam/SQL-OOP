@@ -18,7 +18,7 @@ use SQL::OOP::Select;
     
     sub basic_test: Test(1) {
         
-        my $b = SQL::OOP->new('a,b,c');
+        my $b = SQL::OOP::Base->new('a,b,c');
         is($b->to_string, 'a,b,c', 'basic test for to_string');
     }
     
@@ -111,7 +111,7 @@ EXPECTED
             $select->set(
                 $select->ARG_FIELDS => '*',
                 $select->ARG_FROM   => 'table',
-                $select->ARG_WHERE  => SQL::OOP->new(q{"a" = ? AND "b" = ?}, [1, 2]),
+                $select->ARG_WHERE  => SQL::OOP::Base->new(q{"a" = ? AND "b" = ?}, [1, 2]),
             );
             
             is($select->to_string, $expected, 'Literaly but need to bind');
@@ -193,7 +193,7 @@ EXPECTED
         {
             my $select = SQL::OOP::Select->new();
             $select->set(
-                $select->ARG_FIELDS => SQL::OOP->new(q{"ky1", "ky2", *}),
+                $select->ARG_FIELDS => SQL::OOP::Base->new(q{"ky1", "ky2", *}),
                 $select->ARG_FROM   => q("tbl1", "tbl2", "tbl3"),
                 $select->ARG_WHERE  => sub {
                     my $where = SQL::OOP::Where->new();
@@ -205,9 +205,9 @@ EXPECTED
                             $where->cmp('=', 'hoge4', 'hoge4'),
                             $where->between('price', 10, 20),
                             $where->is_null('vprice'),
-                            SQL::OOP->new('a = b'),
+                            SQL::OOP::Base->new('a = b'),
                             'a = b',
-                            SQL::OOP->new('c = ? ?', ['code1', 'code2']),
+                            SQL::OOP::Base->new('c = ? ?', ['code1', 'code2']),
                             $where->between('price', 10, 20),
                         ),
                         $where->or(

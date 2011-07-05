@@ -37,7 +37,7 @@ use Tie::IxHash;
 	sub cmp_nested : Test(2) {
 		
 		my $where = SQL::OOP::Where->new();
-		my $sql = SQL::OOP->new('test');
+		my $sql = SQL::OOP::Base->new('test');
 		{
 			my $a = $where->cmp_nested('=', 'col1', $sql);
 			is($a->to_string, '"col1" = test');
@@ -51,8 +51,8 @@ use Tie::IxHash;
 	sub cmp_nested2 : Test(2) {
 		
 		my $where = SQL::OOP::Where->new();
-		my $a = $where->cmp_nested('=', SQL::OOP->new('func(col1)'),
-										SQL::OOP->new('func(col2)'));
+		my $a = $where->cmp_nested('=', SQL::OOP::Base->new('func(col1)'),
+										SQL::OOP::Base->new('func(col2)'));
 		is($a->to_string, q{func(col1) = func(col2)});
 	}
 	
