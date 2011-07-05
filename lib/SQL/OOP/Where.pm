@@ -167,7 +167,7 @@ __END__
 
 =head1 NAME
 
-SQL::OOP::Where
+SQL::OOP::Where - WHERE factory class
 
 =head1 SYNOPSIS
     
@@ -204,14 +204,17 @@ SQL::OOP::Where
 
 =head1 DESCRIPTION
 
-SQL::OOP::Where is a Factory Class which creates SQL::OOP::Base instances for
-WHERE clauses.
+SQL::OOP::Where is a Factory Class for WHERE clause elements.
+All methods of this returns SQL::OOP::Base or SQL::OOP::Array.
 
 =head1 METHODS
 
 =head2 SQL::OOP::Where->new
 
-Returns SQL::OOP::Where instance.
+Returns SQL::OOP::Where instance. This class instance is just for convenience.
+All methods in this class also can be called as Class method.
+
+	my $util = SQL::OOP::Where->new;
 
 =head2 $instance->cmp($operator, $fieldname, $value)
 
@@ -231,9 +234,7 @@ Generates IN clause
 
 	my $where = SQL::OOP::Where->new;
 	$where->in('col1', ['candidate1', 'candidate2']) # "col1" IN (?, ?)
-	$where->in(
-		['table', 'col1'],
-		['candidate1', 'candidate2']) # "table"."col1" IN (?, ?)
+	$where->in(['table', 'col1'], ['c1', 'c2']) # "table"."col1" IN (?, ?)
 
 =head2 $instance->not_in($fieldname, $array_ref)
 
@@ -241,8 +242,7 @@ Generates NOT IN clause
 
 	my $where = SQL::OOP::Where->new;
 	$where->not_in('col1', ['val1', 'val2']) # "col1" NOT IN (?, ?)
-	$where->not_in(
-		['table', 'col1'], ['val1', 'val2']) # "table"."col1" NOT IN (?, ?)
+	$where->not_in(['tbl', 'col1'], ['v1', 'v2']) # "tbl"."col1" NOT IN (?, ?)
 
 =head2 $instance->between($fieldname, $upper, $lower)
 

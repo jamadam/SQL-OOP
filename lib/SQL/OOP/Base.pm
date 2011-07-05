@@ -182,15 +182,6 @@ This method returns binded values in array.
 
 =head1 SEE ALSO
 
-L<SQL::OOP::Order>
-L<SQL::OOP::Dataset>
-L<SQL::OOP::Command>
-L<SQL::OOP::Select>
-L<SQL::OOP::Insert>
-L<SQL::OOP::Update>
-L<SQL::OOP::Delete>
-L<SQL::OOP::Where>
-
 =head1 AUTHOR
 
 Sugama Keita, E<lt>sugama@jamadam.comE<gt>
