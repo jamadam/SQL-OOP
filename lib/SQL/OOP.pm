@@ -27,26 +27,31 @@ __END__
 SQL::OOP - SQL Generator
 
 =head1 SYNOPSIS
+
+    my $select = SQL::OOP::Select->new();
     
-    my $sql = SQL::OOP->new;
-    
-    ### Returns SQL::Abstract style values that can be thrown at DBI methods.
-    my $sql  = $select->to_string;
-    my @bind = $select->bind;
-    
-    ### field
-    my $field_obj = SQL::OOP::ID->new(@path_to_field); # e.g. "tbl"."col"
-    
-    ### from
-    my $from_obj = SQL::OOP::ID->new(@path_to_table); # e.g. "schema"."tbl"
+    $select->set(
+        $select->ARG_FIELDS => '*',
+        $select->ARG_FROM   => SQL::OOP::ID->new('public', 'master'),
+        $select->ARG_WHERE  => sub {
+            my $where = SQL::OOP::Where->new;
+            return $where->and(
+                $where->cmp('=', 'a', 1),
+                $where->cmp('=', 'b', 1),
+            )
+        },
+        $select->GROUP_BY => 'field1',
+        $select->ARG_LIMIT => 10,
+    );
 
 =head1 DESCRIPTION
 
-This module provides you an object oriented interface to generate SQL
-statements. This doesn't require any complex syntactical hash structure. All you
-have to do is to call well-readable OOP methods.
+SQL::OOP provides an object oriented interface for generating SQL statements.
+This doesn't require any complex syntactical hash structure. All you have to do
+is to call well-readable OOP methods.
 
-SQL::OOP distribution includes some modules. This is the base class of them.
+SQL::OOP distribution includes some modules. The following indecates the
+hierarchy of inheritance.
     
     SQL::OOP::Base [abstract]
         SQL::OOP::Array [abstract]
@@ -63,18 +68,10 @@ SQL::OOP distribution includes some modules. This is the base class of them.
     SQL::OOP::Where [factory]
 
 Any instance returned by each class are capable of to_string() and bind(). These
-methods returns similar values as SQL::Abstract. 
+methods returns similar values as SQL::Abstract, which can be thrown at DBI
+methods. 
 
 =head1 SEE ALSO
-
-L<SQL::OOP::Order>
-L<SQL::OOP::Dataset>
-L<SQL::OOP::Command>
-L<SQL::OOP::Select>
-L<SQL::OOP::Insert>
-L<SQL::OOP::Update>
-L<SQL::OOP::Delete>
-L<SQL::OOP::Where>
 
 =head1 AUTHOR
 
