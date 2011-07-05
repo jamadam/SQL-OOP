@@ -7,6 +7,7 @@ use SQL::OOP;
 use SQL::OOP::Join;
 use SQL::OOP::Where;
 use SQL::OOP::Select;
+use SQL::OOP::IDArray;
 	
 	__PACKAGE__->runtests;
 	

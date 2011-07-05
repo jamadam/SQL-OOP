@@ -4,6 +4,7 @@ use warnings;
 use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
+use SQL::OOP::IDArray;
 use SQL::OOP::Select;
     
     __PACKAGE__->runtests;
