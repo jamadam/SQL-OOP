@@ -15,4 +15,4 @@ Revision history for SQL-OOP
 0.09 2011/06/20
   - Order class got capable of array refs for keys
   - SQL::OOP renamed to SQL::OOP::Base
-  - 
+  - Documents improved

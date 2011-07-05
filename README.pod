@@ -72,6 +72,20 @@ instance can contain $cond1 and $cond2.
 $or is a SQL::OOP::Array instance which can contain both SQL::OOP::Base and
 SQL::OOP::Array.
 
+=head1 METHODS
+
+=head2 SQL::OOP->new
+
+This is an alias for SQLL::OOP::Base->new
+
+=head2 SQL::OOP->quote_char
+
+This is an alias for SQLL::OOP::Base->quote_char
+
+=head2 SQL::OOP->escape_code_ref
+
+This is an alias for SQLL::OOP::Base->escape_code_ref
+
 =head1 SEE ALSO
 
 =head1 AUTHOR
