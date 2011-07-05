@@ -1,31 +1,35 @@
-
 =head1 NAME
 
-SQL::OOP - SQL Generator base class
+SQL::OOP - SQL Generator
 
 =head1 SYNOPSIS
+
+    my $select = SQL::OOP::Select->new();
     
-    my $sql = SQL::OOP->new;
-    
-    ### Returns SQL::Abstract style values that can be thrown at DBI methods.
-    my $sql  = $select->to_string;
-    my @bind = $select->bind;
-    
-    ### field
-    my $field_obj = SQL::OOP::ID->new(@path_to_field); # e.g. "tbl"."col"
-    
-    ### from
-    my $from_obj = SQL::OOP::ID->new(@path_to_table); # e.g. "schema"."tbl"
+    $select->set(
+        $select->ARG_FIELDS => '*',
+        $select->ARG_FROM   => SQL::OOP::ID->new('public', 'master'),
+        $select->ARG_WHERE  => sub {
+            my $where = SQL::OOP::Where->new;
+            return $where->and(
+                $where->cmp('=', 'a', 1),
+                $where->cmp('=', 'b', 1),
+            )
+        },
+        $select->GROUP_BY => 'field1',
+        $select->ARG_LIMIT => 10,
+    );
 
 =head1 DESCRIPTION
 
-This module provides you an object oriented interface to generate SQL
-statements. This doesn't require any complex syntaxed hash structure. All you
-have to do is to call well-readable OOP methods.
+SQL::OOP provides an object oriented interface for generating SQL statements.
+This doesn't require any complex syntactical hash structure. All you have to do
+is to call well-readable OOP methods.
 
-SQL::OOP distibution includes some modules. This is the base class of them.
+SQL::OOP distribution includes some modules. The following indecates the
+hierarchy of inheritance.
     
-    SQL::OOP [abstract]
+    SQL::OOP::Base [abstract]
         SQL::OOP::Array [abstract]
             SQL::OOP::ID
                 SQL::OOP::IDArray
@@ -39,92 +43,11 @@ SQL::OOP distibution includes some modules. This is the base class of them.
             SQL::OOP::Order
     SQL::OOP::Where [factory]
 
-Any instace returned by each class are capable of to_string() and bind(). These
-methods returns similar values as SQL::Abstract. 
-
-=head1 SQL::OOP CLASS
-
-This class represents SQLs or SQL snippets.
-
-=head2 SQL::OOP->new($str, $array_ref)
-    
-Constractor. It takes String and array ref.
-
-    my $sql = SQL::OOP->new('a = ? and b = ?', [10,20]);
-
-=head2 $instance->to_string()
-
-This method returns the SQL string.
-
-    $sql->to_string # 'a = ? and b = ?'
-
-=head2 $instance->bind()
-
-This method returns binded values in array.
-
-    $sql->bind      # [10,20]
-
-=head2 $instance->generate()
-
-=head2 SQL::OOP->quote()
-
-=head1 SQL::OOP::Array CLASS
-
-This is an abstract class that extends SQL::OOP
-
-=head2 $instance->append(@elements)
-
-This method appends elements to the instance and returns $self;
-
-=head1 SQL::OOP::ID CLASS
-
-This class represents IDs such as table names, field names.
-
-=head2 SQL::OOP::ID->new(@ids)
-
-=head2 $instance->as($str)
-
-Here is some examples.
-    
-    my $id_obj = SQL::OOP::ID->new('public', 'tbl1'); 
-    $id_obj->to_string; # "public"."tbl1"
-    
-    $id_obj->as('TMP');
-    $id_obj->to_string; # "public"."tbl1" AS TMP
-
-=head1 SQL::OOP::IDArray CLASS
-
-This class represents ID arrays such as field lists in SELECT or table lists
-in FROM clause.
-
-=head2 SQL::OOP::IDArray->new(@ids)
-
-    my $id_list = SQL::OOP::IDArray->new('tbl1', 'tbl2', 'tbl3');
-    
-    $id_list->to_string; # "tbl1", "tbl2", "tbl3"    
-
-=head2 SQL::OOP::IDArray->new(@id_objects)
-
-Here is some examples.
-    
-    my $id_obj1 = SQL::OOP::ID->new('public', 'tbl1');
-    my $id_obj2 = SQL::OOP::ID->new('public', 'tbl2');
-    my $id_obj3 = SQL::OOP::ID->new('public', 'tbl3');
-    
-    my $id_list = SQL::OOP::IDArray->new($id_obj1, $id_obj2, $id_obj3);
-    
-    $id_list->to_string; # "public"."tbl1", "public"."tbl2", "public"."tbl3"
+Any instance returned by each class are capable of to_string() and bind(). These
+methods returns similar values as SQL::Abstract, which can be thrown at DBI
+methods. 
 
 =head1 SEE ALSO
-
-L<SQL::OOP::Order>
-L<SQL::OOP::Dataset>
-L<SQL::OOP::Command>
-L<SQL::OOP::Select>
-L<SQL::OOP::Insert>
-L<SQL::OOP::Update>
-L<SQL::OOP::Delete>
-L<SQL::OOP::Where>
 
 =head1 AUTHOR
 
