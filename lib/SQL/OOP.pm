@@ -100,15 +100,15 @@ SQL::OOP::Array.
 
 =head2 SQL::OOP->new
 
-This is an alias for SQLL::OOP::Base->new
+This is an alias for SQL::OOP::Base->new
 
 =head2 SQL::OOP->quote_char
 
-This is an alias for SQLL::OOP::Base->quote_char
+This is an alias for SQL::OOP::Base->quote_char
 
 =head2 SQL::OOP->escape_code_ref
 
-This is an alias for SQLL::OOP::Base->escape_code_ref
+This is an alias for SQL::OOP::Base->escape_code_ref
 
 =head1 SEE ALSO
 
