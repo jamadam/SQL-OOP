@@ -2,6 +2,7 @@ package SQL::OOP::Dataset;
 use strict;
 use warnings;
 use SQL::OOP::Base;
+use SQL::OOP::ID;
 use Scalar::Util qw(blessed);
 use base qw(SQL::OOP::Base);
     

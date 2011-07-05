@@ -1,7 +1,8 @@
 package SQL::OOP::Where;
 use strict;
 use warnings;
-    
+use SQL::OOP::ID;
+
     ### ---
     ### Constractor
     ### ---
