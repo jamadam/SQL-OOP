@@ -204,8 +204,8 @@ SQL::OOP::Where
 
 =head1 DESCRIPTION
 
-SQL::OOP::Where is a Factory Class which creates SQL::OOP instances for WHERE
-clauses.
+SQL::OOP::Where is a Factory Class which creates SQL::OOP::Base instances for
+WHERE clauses.
 
 =head1 METHODS
 

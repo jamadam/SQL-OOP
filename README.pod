@@ -47,6 +47,31 @@ Any instance returned by each class are capable of to_string() and bind(). These
 methods returns similar values as SQL::Abstract, which can be thrown at DBI
 methods. 
 
+Most class inherits SQL::OOP::Array which can contain array of SQL::OOP. This
+means most instances can contain any others. This means that a SELECT instance
+can be part of other SELECT command, for instance.
+
+This is an example of WHERE clause.
+
+    my $util = SQL::OOP::Where->new; ## for convenience
+    
+    my $cond1 = $util->cmp('<', 'price', '100');
+    my $cond2 = $util->cmp('=', 'category', 'book');
+    my $and = $util->and($cond1, $cond2);
+    
+    my $sql1 = $and->to_string # price < ? AND category = ?
+
+$cond1 and $cond2 are SQL::OOP::Base instances. $and which is a SQL::OOP::Array
+instance can contain $cond1 and $cond2.
+    
+    my $cond3 = $util->cmp('like', 'title', '%Perl%');
+    my $or = $util->or($and, $cond3);
+    
+    my $sql2 = $and->to_string # (price < ? AND category = ?) OR title like ?
+
+$or is a SQL::OOP::Array instance which can contain both SQL::OOP::Base and
+SQL::OOP::Array.
+
 =head1 SEE ALSO
 
 =head1 AUTHOR
