@@ -17,5 +17,7 @@ Revision history for SQL-OOP
   - SQL::OOP renamed to SQL::OOP::Base
   - Documents improved
 
-0.10 2011/07/05
+0.10 2011/07/06
   - Fixed bug on alias methods in SQL::OOP package
+
+0.11 2011/07/06
