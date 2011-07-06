@@ -10,7 +10,7 @@ use base qw(SQL::OOP::Base);
     sub MODE_UPDATE() {2} ## no critic
     
     ### ---
-    ### コンストラクタ
+    ### Constructor
     ### ---
     sub new {
         
@@ -25,7 +25,7 @@ use base qw(SQL::OOP::Base);
     }
     
     ### ---
-    ### 要素の追加
+    ### append elements
     ### ---
     sub append {
         
@@ -61,7 +61,7 @@ use base qw(SQL::OOP::Base);
     }
     
     ### ---
-    ### SQLスニペットを得る
+    ### Get SQL for UPDATE command in string
     ### ---
     sub to_string_for_update {
         
@@ -74,6 +74,9 @@ use base qw(SQL::OOP::Base);
         }
     }
     
+    ### ---
+    ### Get SQL for INSERT command in string
+    ### ---
     sub to_string_for_insert {
         
         my ($self, $prefix) = @_;

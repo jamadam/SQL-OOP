@@ -127,17 +127,10 @@ SQL::OOP::Base - SQL Generator base class
 
 =head1 SYNOPSIS
     
-    my $sql = SQL::OOP::Base->new;
+    my $sql = SQL::OOP::Base->new('field1 = ?', [1]);
     
-    ### Returns SQL::Abstract style values that can be thrown at DBI methods.
     my $sql  = $select->to_string;
     my @bind = $select->bind;
-    
-    ### field
-    my $field_obj = SQL::OOP::ID->new(@path_to_field); # e.g. "tbl"."col"
-    
-    ### from
-    my $from_obj = SQL::OOP::ID->new(@path_to_table); # e.g. "schema"."tbl"
 
 =head1 DESCRIPTION
 

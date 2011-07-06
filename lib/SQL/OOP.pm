@@ -53,8 +53,8 @@ SQL::OOP provides an object oriented interface for generating SQL statements.
 This doesn't require any complex syntactical hash structure. All you have to do
 is to call well-readable OOP methods.
 
-SQL::OOP distribution includes some modules. The following indicates the
-hierarchy of inheritance.
+SQL::OOP distribution consists of following modules. The indentation indicates
+the hierarchy of inheritance.
     
     SQL::OOP::Base [abstract]
         SQL::OOP::Array [abstract]
