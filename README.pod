@@ -23,7 +23,8 @@ SQL::OOP - Yet another SQL Generator
 =head1 DESCRIPTION
 
 SQL::OOP provides an object oriented interface for generating SQL statements.
-This doesn't require any complex syntactical hash structure. All you have to do
+This is an alternative to SQL::Abstract but doesn't require any complex
+syntactical hash structure. All you have to do
 is to call well-readable OOP methods. Moreover, if you use IDE for coding Perl,
 the auto completion and call tips may work well with this.
 
