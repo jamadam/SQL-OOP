@@ -24,7 +24,8 @@ SQL::OOP - SQL Generator
 
 SQL::OOP provides an object oriented interface for generating SQL statements.
 This doesn't require any complex syntactical hash structure. All you have to do
-is to call well-readable OOP methods.
+is to call well-readable OOP methods. Moreover, if you use IDE for coding Perl,
+the auto completion works well with this.
 
 SQL::OOP distribution consists of following modules. The indentation indicates
 the hierarchy of inheritance.
@@ -43,13 +44,13 @@ the hierarchy of inheritance.
             SQL::OOP::Order
     SQL::OOP::Where [factory]
 
-Any instance returned by each class are capable of to_string() and bind(). These
-methods returns similar values as SQL::Abstract, which can be thrown at DBI
-methods. 
+Any instance returned by the classes are capable of to_string() and bind().
+These methods returns similar values as SQL::Abstract, which can be thrown at
+DBI methods. 
 
 Most class inherits SQL::OOP::Array which can contain array of SQL::OOP. This
-means most instances can contain any others. This means that a SELECT instance
-can be part of other SELECT command, for instance.
+means most instances can contain any others. For example, that a SELECT instance
+can be part of other SELECT command.
 
 This is an example of WHERE clause.
 
@@ -71,6 +72,26 @@ instance can contain $cond1 and $cond2.
 
 $or is a SQL::OOP::Array instance which can contain both SQL::OOP::Base and
 SQL::OOP::Array.
+
+=head2 Code reference for arguments
+
+All new constructors, append methods and set methods are capable of code refs
+for arguments instead of string or objects so that you can encapsulate
+temporary things inside of it.
+    
+    $select->set(
+        $select->ARG_WHERE  => sub {
+            if ($cond_exist) {
+                my $tmp = $cond_exist;
+                
+                # DO SOMETHING to $tmp
+                
+                return SQL::OOP::Where->cmp('=', 'field', $tmp);
+            } else {
+                return;
+            }
+        },
+    );
 
 =head2 Undefined values
 
