@@ -8,14 +8,17 @@ use 5.005;
 our $VERSION = '0.10';
 
     sub new {
+        my $class = shift;
         return SQL::OOP::Base->new(@_);
     }
     
     sub quote_char {
+        my $class = shift;
         return SQL::OOP::Base->quote_char(@_);
     }
     
     sub escape_code_ref {
+        my $class = shift;
         return SQL::OOP::Base->escape_code_ref(@_);
     }
     
