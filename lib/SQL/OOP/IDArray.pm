@@ -97,7 +97,7 @@ Here is some examples.
 
 =head2 $instance->append
 
-Appends elems into existing instance.
+Appends elements into existing instance.
 
 =head2 fix_element_in_list_context
 

@@ -118,7 +118,7 @@ Here is some examples.
 
 =head2 $instance->append($elems)
 
-Appends elems into existing instance.
+Appends elements into existing instance.
 
 =head2 $instance->generate
 

@@ -114,7 +114,7 @@ This is an abstract class which represents array of SQL snippets.
 
 =head1 METHODS
 
-This class inherits all methods from SQL::OOP::Base. Some of them is overrided.
+This class inherits all methods from SQL::OOP::Base. Some of them is overridden.
 
 =head2 SQL::OOP::Array->new(@elements)
 
