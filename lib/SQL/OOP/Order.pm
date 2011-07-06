@@ -130,10 +130,6 @@ SQL::OOP::Order - ORDER BY class
 
 SQL::OOP::Order class represents ORDER BY clause.
 
-=head1 SQL::OOP::Order CLASS
-
-This class represents ORDER BY clause.
-
 =head2 SQL::OOP::Order->new(@array);
 
 Constructor.
