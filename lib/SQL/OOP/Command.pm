@@ -2,6 +2,8 @@ package SQL::OOP::Command;
 use strict;
 use warnings;
 use SQL::OOP::Base;
+use SQL::OOP::ID;
+use SQL::OOP::IDArray;
 use base qw(SQL::OOP::Array);
     
     ### ---
