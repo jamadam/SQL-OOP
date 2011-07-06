@@ -57,7 +57,7 @@ DBI methods.
 Most class inherits SQL::OOP::Array which can contain array of SQL::OOP. This
 means they can recursively contain any others. For example, SELECT command
 instance can be part of other SELECT command. Since the instances are
-well-encapsularated, you can manipulate them flexibly.
+well-encapsulated, you can manipulate them flexibly.
 
 All class of this distribution inherits SQL::OOP::Base class.
 
@@ -177,7 +177,7 @@ undef for value and explicitly output undefs to make DBI treats them as NULL.
 
 =head2 Room for extreme complexity
 
-If you need very complexed SQL generation such as functions or conditional
+If you need very complex SQL generation such as functions or conditional
 branches, you can always resort to string.
 
     $select->set(
