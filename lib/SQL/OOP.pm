@@ -204,8 +204,8 @@ undef for value and explicitly output undefs to make DBI treats them as NULL.
 
 =head2 Room for extreme complexity
 
-If you need very complexed SQL generation such as functions, you can give it
-to the methods in strings.
+If you need very complexed SQL generation such as functions or conditional
+branches, you can always resort to string.
 
     $select->set(
         $select->ARG_FIELDS     => '*', 
