@@ -21,3 +21,4 @@ Revision history for SQL-OOP
   - Fixed bug on alias methods in SQL::OOP package
 
 0.11 2011/07/06
+  - Documents improved
