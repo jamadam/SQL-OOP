@@ -154,6 +154,8 @@ undef for value and explicitly output undefs to make DBI treats them as NULL.
 
 =head1 METHODS
 
+The following methods are all aliases to SQL::OOP::Base class methods.
+
 =head2 SQL::OOP->new
 
 This is an alias for SQL::OOP::Base->new
@@ -167,6 +169,8 @@ This is an alias for SQL::OOP::Base->quote_char
 This is an alias for SQL::OOP::Base->escape_code_ref
 
 =head1 SEE ALSO
+
+L<DBI>, L<SQL::Abstract>
 
 =head1 AUTHOR
 
