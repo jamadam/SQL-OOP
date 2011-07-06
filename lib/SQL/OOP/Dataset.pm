@@ -123,8 +123,6 @@ SQL::OOP::Dataset - Dataset class for INSERT or UPDATE commands
     my $dataset = SQL::OOP::Dataset->new(field1 => $value2, field2 => $value2);
     
     $dataset->append(field3 => $value3, field4 => $value4);
-    or
-    $dataset->append({field3 => $value3, field4 => $value4});
 
 =head1 DESCRIPTION
 
@@ -136,21 +134,25 @@ SQL::OOP::Dataset is a class which represents data sets for INSERT or UPDATE
 
 Constructor.
 
+    SQL::OOP::Dataset->new(field => 'a', field2 => 'b', field3 => undef);
+
 =head2 $instance->append(%data)
 
-Append data entry.
+Appends data entries.
 
-=head2 $instance->generate
+    $instance->append(field => 'a', field2 => 'b', field3 => undef);
 
-This method called from inside the command subclasses.
+=head2 $instance->generate(MODE_INSERT or MODE_UPDATE)
+
+This method must be called internally and genereates SQL snippet for commands.
 
 =head2 $instance->to_string_for_insert
 
-This method called from inside the command subclasses.
+This method must be called from inside the command subclasses.
 
 =head2 $instance->to_string_for_update
 
-This method called from inside the command subclasses.
+This method must be called from inside the command subclasses.
 
 =head2 $instance->bind
 
