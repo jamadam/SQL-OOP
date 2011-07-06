@@ -42,7 +42,11 @@ use base qw(SQL::OOP::Base);
         if (ref $array[0] && ref $array[0] eq 'ARRAY') {
             @array = @{$array[0]};
         }
-        push(@{$self->{array}}, map {SQL::OOP::Base->new($_)} grep {$_} @array);
+        foreach my $elem (@array) {
+            if ($elem) {
+                push(@{$self->{array}}, SQL::OOP::Base->new($elem));
+            }
+        }
         
         return $self;
     }
