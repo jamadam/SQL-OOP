@@ -202,6 +202,28 @@ methods.
 The Only exception is the Dataset class for this system. Dataset can contain
 undef for value and explicitly output undefs to make DBI treats them as NULL.
 
+=head2 Room for extreme complexity
+
+If you need very complexed SQL generation such as functions, you can give it
+to the methods in strings.
+
+    $select->set(
+        $select->ARG_FIELDS     => '*', 
+        $select->ARG_FROM       => 'main', 
+        $select->ARG_ORDERBY    => q{
+            abs(date("timestamp") - date('now')) DESC
+        }
+    );
+
+The following is use of string in WHERE element.
+
+    my $util = SQL::OOP::Where->new;
+    my $cond1 = $util->cmp('=', 'a','b');
+    my $cond2 = $util->cmp('=', 'a','b');
+    my $cond3 = 'date("t1") > date("t2")';
+    my $and = $util->and($cond1, $cond2, $cond3);
+    warn $and->to_string; ## "a" = ? AND "a" = ? AND date("t1") > date("t2")
+
 =head1 METHODS
 
 The following methods are all aliases to SQL::OOP::Base class methods.
