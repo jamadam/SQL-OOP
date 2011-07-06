@@ -144,7 +144,7 @@ Appends data entries.
 
 =head2 $instance->generate(MODE_INSERT or MODE_UPDATE)
 
-This method must be called internally and genereates SQL snippet for commands.
+This method must be called internally and generates SQL snippet for commands.
 
 =head2 $instance->to_string_for_insert
 

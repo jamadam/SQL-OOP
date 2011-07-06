@@ -1,4 +1,6 @@
 package SQL::OOP::Order;
+use strict;
+use warnings;
 use SQL::OOP::Base;
 use base qw(SQL::OOP::Array);
     
@@ -173,6 +175,10 @@ Append ASC entry
 =head2 $instance->append_desc
 
 Append DESC entry
+
+=head2 $instance->fix_element_in_list_context
+
+Internal use.
 
 =head1 AUTHOR
 

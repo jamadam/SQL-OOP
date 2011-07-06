@@ -23,6 +23,7 @@ our $VERSION = '0.11';
     }
     
 1;
+
 __END__
 
 =head1 NAME
@@ -110,7 +111,7 @@ to_string returns right string.
     print $elem->to_string; ## field
     print scalar $elem->bind; ## 0
 
-On the other hand, undef values for array elements are totally ommitted. 
+On the other hand, undef values for array elements are totally omitted. 
 
     my $elem1 = SQL::OOP::Base->new('field1', 1);
     my $elem2 = undef;
@@ -119,7 +120,7 @@ On the other hand, undef values for array elements are totally ommitted.
     print $array->to_string; ## field1field3
     print $array->bind; ## 13
 
-Thsi system makes things easy.
+This system makes things easy.
 
     sub generate_where {
         my ($value1, $value2, $value3) = @_;
@@ -143,7 +144,7 @@ Thsi system makes things easy.
         return $select;
     }
 
-If you need to compare somthing to NULL in WHERE caluse, you can use specific
+If you need to compare something to NULL in WHERE clause, you can use specific
 methods.
 
     my $cond1 = $util->is_null('field');
