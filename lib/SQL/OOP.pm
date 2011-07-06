@@ -28,11 +28,11 @@ __END__
 
 =head1 NAME
 
-SQL::OOP - SQL Generator
+SQL::OOP - Yet another SQL Generator
 
 =head1 SYNOPSIS
 
-    my $select = SQL::OOP::Select->new();
+    my $select = SQL::OOP::Select->new;
     
     $select->set(
         $select->ARG_FIELDS => '*',
@@ -53,7 +53,7 @@ SQL::OOP - SQL Generator
 SQL::OOP provides an object oriented interface for generating SQL statements.
 This doesn't require any complex syntactical hash structure. All you have to do
 is to call well-readable OOP methods. Moreover, if you use IDE for coding Perl,
-the auto completion works well with this.
+the auto completion and call tips may work well with this.
 
 SQL::OOP distribution consists of following modules. The indentation indicates
 the hierarchy of inheritance.
@@ -72,13 +72,40 @@ the hierarchy of inheritance.
             SQL::OOP::Order
     SQL::OOP::Where [factory]
 
-Any instance returned by the classes are capable of to_string() and bind().
+=head2 Base architecture
+
+Any instance of the classes above are capable of to_string() and bind().
 These methods returns similar values as SQL::Abstract, which can be thrown at
 DBI methods. 
 
+    my $string = $any->to_string;
+    my @values = $any->bind
+    
 Most class inherits SQL::OOP::Array which can contain array of SQL::OOP. This
-means most instances can contain any others. For example, that a SELECT instance
-can be part of other SELECT command.
+means they can recursively contain any others. For example, SELECT command
+instance can be part of other SELECT command. Since the instances are
+well-encapsularated, you can manipulate them flexibly.
+
+All class of this distribution inherits SQL::OOP::Base class.
+
+    my $snippet1 = SQL::OOP::Base->new('a = ?', [1]);
+    my $snippet2 = SQL::OOP::Base->new('b = ?', [2]);
+
+Any instance can be part of any others.
+    
+    my $array1 = SQL::OOP::Array->new($snippet1, $snippet2);
+    $array1->set_sepa(', ');
+    
+    warn $array1->to_string; ## a = ?, b = ?
+    warn join ',', $array1->bind; ## 1,2
+
+Even arrays can contain arrays.
+    
+    my $array2 = SQL::OOP::Array->new($array1, $snippet1);
+    $array1->set_sepa(', ');
+    
+    warn $array2->to_string; ## (a = ?, b = ?), a = ?
+    warn join ',', $array2->bind; ## 1,2,1
 
 This is an example of WHERE clause.
 
@@ -141,7 +168,8 @@ On the other hand, undef values for array elements are totally omitted.
     print $array->to_string; ## field1field3
     print $array->bind; ## 13
 
-This system makes things easy.
+This system makes things easy. The following two functions works well and you
+don't have to worry about undef.
 
     sub generate_where {
         my ($value1, $value2, $value3) = @_;
