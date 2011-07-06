@@ -14,6 +14,22 @@ use SQL::OOP::Select;
         is($orderby->to_string, q{"a", "b"});
     }
     
+    sub expect_bare_string : Test(3) {
+        
+        my $o = SQL::OOP::Order->new;
+        $o->append(SQL::OOP->new(q{date('now')}));
+        is($o->to_string, q{date('now')});
+        $o->append_desc(SQL::OOP->new(q{date('now')}));
+        is($o->to_string, q{date('now'), date('now') DESC});
+        
+        my $select = SQL::OOP::Select->new();
+        $select->set(
+            $select->ARG_FIELDS => '*', 
+            $select->ARG_ORDERBY => $o
+        );
+        is($select->to_string, q{SELECT * ORDER BY date('now'), date('now') DESC});
+    }
+    
     sub order_append : Test {
     
         my $order = SQL::OOP::Order->new();
@@ -54,7 +70,7 @@ use SQL::OOP::Select;
         }
     }
     
-    sub order_abstract_scalar_for_asc : Test(3) {
+    sub order_abstract_scalar_for_asc : Test(2) {
         
         {
             my $sql = SQL::OOP::Order->abstract([['col1', 1], 'col2']);
