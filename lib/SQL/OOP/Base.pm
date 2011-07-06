@@ -146,6 +146,10 @@ Constructor. It takes String and array ref.
 
     my $sql = SQL::OOP::Base->new('a = ? and b = ?', [10,20]);
 
+$str can be a code ref. If so, the code invokes immediately inside constructor.
+
+    my $sql = SQL::OOP::Base->new(sub {return 'a = ? and b = ?'}, [10,20]);
+
 =head2 SQL::OOP::Base->quote_char($quote_char)
 
 =head2 SQL::OOP::Base->escape_code_ref($code_ref)
