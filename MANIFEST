@@ -9,6 +9,7 @@ lib/SQL/OOP/ID.pm
 lib/SQL/OOP/IDArray.pm
 lib/SQL/OOP/Insert.pm
 lib/SQL/OOP/Join.pm
+lib/SQL/OOP/Order.pm
 lib/SQL/OOP/Select.pm
 lib/SQL/OOP/Update.pm
 lib/SQL/OOP/Where.pm
