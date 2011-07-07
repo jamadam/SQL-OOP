@@ -54,8 +54,8 @@ DBI methods.
     my $string = $any->to_string;
     my @values = $any->bind
     
-Most class inherits SQL::OOP::Array which can contain array of SQL::OOP. This
-means they can recursively contain any others. For example, SELECT command
+Most class inherits SQL::OOP::Array which can contain array of SQL::OOP::Base.
+This means they can recursively contain any others. For example, SELECT command
 instance can be part of other SELECT command. Since the instances are
 well-encapsulated, you can manipulate them flexibly.
 
@@ -75,7 +75,7 @@ Any instance can be part of any others.
 Even arrays can contain arrays.
     
     my $array2 = SQL::OOP::Array->new($array1, $snippet1);
-    $array1->set_sepa(', ');
+    $array2->set_sepa(', ');
     
     warn $array2->to_string; ## (a = ?, b = ?), a = ?
     warn join ',', $array2->bind; ## 1,2,1
@@ -103,9 +103,9 @@ SQL::OOP::Array.
 
 =head2 Code reference for arguments
 
-All new constructors, append methods and set methods are capable of code refs
-for arguments instead of string or objects so that you can encapsulate
-temporary things inside of it.
+All new constructors, append methods for array subclsses, and set methods for
+command subclasses are capable of code refs for arguments instead of string or
+objects so that you can encapsulate temporary things inside of it.
     
     $select->set(
         $select->ARG_WHERE  => sub {
@@ -141,9 +141,18 @@ On the other hand, undef values for array elements are totally omitted.
     print $array->to_string; ## field1field3
     print $array->bind; ## 13
 
+WHERE factory methods omits undef for field names.
+
+    my $util = SQL::OOP::Where->new;
+    my $cond = $util->cmp('=', undef, '1'); ## undef
+
 This system makes things easy. The following two functions works well and you
 don't have to worry about undef.
 
+    generate_where(1,2,3)
+    generate_where(1,2)
+    generate_where(1)
+    
     sub generate_where {
         my ($value1, $value2, $value3) = @_;
         my $util = SQL::OOP::Where->new;
@@ -153,7 +162,11 @@ don't have to worry about undef.
         my $and = $util->and($cond1, $cond2, $cond3);
         return $and;
     }
-
+    
+    generate_select(generate_where(1), 50)
+    generate_select(generate_where(1))
+    generate_select(50)
+    
     sub generate_select {
         my ($where, $limit) = @_;
         my $select = SQL::OOP::Select->new;
