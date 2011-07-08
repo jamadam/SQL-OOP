@@ -15,6 +15,7 @@ lib/SQL/OOP/Update.pm
 lib/SQL/OOP/Where.pm
 Makefile.PL
 MANIFEST
+MANIFEST~
 README.pod
 t/00_load.t
 t/lib/Tie/IxHash.pm
