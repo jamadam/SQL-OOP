@@ -5,7 +5,7 @@ use Scalar::Util qw(blessed);
 use base qw(Class::Data::Inheritable);
 use SQL::OOP::Base;
 use 5.005;
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
     sub new {
         my $class = shift;
