@@ -26,7 +26,10 @@ Revision history for SQL-OOP
 0.12 2011/07/07
   - Documents improved
 
-0.13 2011/07/07
+0.13 2011/07/08
 
-0.14 2011/07/07
+0.14 2011/07/08
+  - Dependency for test specified
+
+0.15 2011/07/08
   - Dependency for test specified
