@@ -134,10 +134,6 @@ SQL::OOP::Select
 
 SQL::OOP::Select class represents Select commands. 
 
-=head1 SQL::OOP::Select CLASS
-
-This class represents SQL SELECT command
-
 =head2 SQL::OOP::Select->new(%clause)
 
 Constructor. It takes arguments in hash. The Hash keys are provided by
