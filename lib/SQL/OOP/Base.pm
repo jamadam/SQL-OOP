@@ -136,10 +136,6 @@ SQL::OOP::Base - SQL Generator base class
 
 This class represents SQLs or SQL snippets.
 
-=head1 SQL::OOP::Base CLASS
-
-This class represents SQLs or SQL snippets.
-
 =head2 SQL::OOP::Base->new($str, $array_ref)
     
 Constructor. It takes String and array ref.
