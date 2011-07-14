@@ -2,6 +2,7 @@ Revision history for SQL-OOP
 
 0.15 2011/07/08
   - cmp is now capable of sub queries for value
+  - cmp_nested is deprecated
 
 0.14 2011/07/08
   - Dependency for test specified
