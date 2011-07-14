@@ -125,7 +125,7 @@ SQL::OOP::Select
     );
     
     my $where = SQL::OOP::Where->new();
-    $where->cmp_nested('=', q{some_field}, $select); # some_filed = (SELECT ..)
+    $where->cmp('=', q{some_field}, $select); # some_filed = (SELECT ..)
     
     my $sql  = $select->to_string;
     my @bind = $select->bind;

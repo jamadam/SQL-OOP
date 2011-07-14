@@ -60,6 +60,28 @@ use SQL::OOP::Select;
 		is($array->to_string, 'a, b, c');
 	}
 	
+	sub array_to_string3 : Test(1) {
+		
+		my $select = SQL::OOP::Select->new;
+		$select->set(
+			$select->ARG_WHERE => SQL::OOP::Where->cmp('=', 'col1', SQL::OOP::ID->new('col2'))
+		);
+		is($select->to_string, 'WHERE "col1" = ("col2")');
+	}
+	
+	sub array_to_string4 : Test(1) {
+		
+		my $where = SQL::OOP::Where->new();
+		my $sql = SQL::OOP::Base->new('col2');
+		my $a = $where->cmp('=', 'col1', $sql);
+		my $select = SQL::OOP::Select->new();
+		$select->set(
+			$select->ARG_FIELDS => '*',
+			$select->ARG_WHERE  => $a,
+		);
+		is($select->to_string, 'SELECT * WHERE "col1" = col2');
+	}
+	
 	sub function_in_field : Test(1) {
 		
 		my $select = SQL::OOP::Select->new;
@@ -82,15 +104,6 @@ use SQL::OOP::Select;
 		is($array->to_string, q{col1 = (SELECT col1 FROM tbl WHERE test)});
 	}
 	
-	sub array_to_string3 : Test(1) {
-		
-		my $select = SQL::OOP::Select->new;
-		$select->set(
-			$select->ARG_WHERE => SQL::OOP::Where->cmp_nested('=', 'col1', 'col2')
-		);
-		is($select->to_string, 'WHERE "col1" = col2');
-	}
-	
 	sub select_part_of_other2 : Test(3) {
 		
 		my $where = SQL::OOP::Where->new();
@@ -99,24 +112,11 @@ use SQL::OOP::Select;
 			$sql->ARG_FIELDS    => '*',
 			$sql->ARG_WHERE     => $where->cmp('=', 'col1', 'col2')
 		);
-		my $a = $where->cmp_nested('=', 'col1', $sql);
+		my $a = $where->cmp('=', 'col1', $sql);
 		is($a->to_string, '"col1" = (SELECT * WHERE "col1" = ?)');
 		my @bind = $a->bind;
 		is(scalar @bind, 1);
 		is(shift @bind, 'col2');
-	}
-	
-	sub array_to_string4 : Test(1) {
-		
-		my $where = SQL::OOP::Where->new();
-		my $sql = SQL::OOP::Base->new('col2');
-		my $a = $where->cmp_nested('=', 'col1', $sql);
-		my $select = SQL::OOP::Select->new();
-		$select->set(
-			$select->ARG_FIELDS => '*',
-			$select->ARG_WHERE  => $a,
-		);
-		is($select->to_string, 'SELECT * WHERE "col1" = col2');
 	}
 	
 	sub cmp_nested_subquery2 : Test(3) {
@@ -127,7 +127,7 @@ use SQL::OOP::Select;
 			$select1->ARG_FIELDS    => '*',
 			$select1->ARG_WHERE     => $where->cmp('=', 'col1', 'col2')
 		);
-		my $a = $where->cmp_nested('=', 'col1', $select1);
+		my $a = $where->cmp('=', 'col1', $select1);
 		my $select2 = SQL::OOP::Select->new();
 		$select2->set(
 			$select2->ARG_FIELDS => '*',
@@ -144,7 +144,7 @@ use SQL::OOP::Select;
 		my $select = SQL::OOP::Select->new;
 		$select->set(
 			$select->ARG_FIELDS => '*',
-			$select->ARG_WHERE  => SQL::OOP::Where->cmp_nested('=', 'col1', sub {
+			$select->ARG_WHERE  => SQL::OOP::Where->cmp('=', 'col1', sub {
 				my $select = SQL::OOP::Select->new;
 				$select->set(
 					$select->ARG_FIELDS  => '*',
@@ -162,7 +162,7 @@ use SQL::OOP::Select;
 		my $select = SQL::OOP::Select->new;
 		$select->set(
 			$select->ARG_FIELDS => '*',
-			$select->ARG_WHERE  => $where->cmp_nested('=', 'col1',
+			$select->ARG_WHERE  => $where->cmp('=', 'col1',
 				sub {
 					my $sql = SQL::OOP::Select->new;
 					$sql->set(
@@ -209,7 +209,7 @@ EOF
 					$select2->ARG_WHERE  =>
 						$where->cmp('=', SQL::OOP::ID->new('A', 'id'), 'col2')
 				);
-				return $where->cmp_nested('=', SQL::OOP::ID->new('A', 'col1'), $select2);
+				return $where->cmp('=', SQL::OOP::ID->new('A', 'col1'), $select2);
 			}
 		);
 		

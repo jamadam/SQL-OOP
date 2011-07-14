@@ -131,8 +131,8 @@ SQL::OOP::Array.
 
 =head2 Code reference for arguments
 
-All new constructors, append methods for array subclsses, and set methods for
-command subclasses are capable of code refs for arguments instead of string or
+All new constructors, append methods for array sub classes, and set methods for
+command sub classes are capable of code refs for arguments instead of string or
 objects so that you can encapsulate temporary things inside of it.
     
     $select->set(

@@ -34,24 +34,31 @@ use Tie::IxHash;
 		is(shift @bind, '3');
 	}
 	
+	sub cmp_value_undef : Test(1) {
+		
+		my $where = SQL::OOP::Where->new();
+		my $a = $where->cmp('=', 'a', undef);
+		is($a, '');
+	}
+	
 	sub cmp_nested : Test(2) {
 		
 		my $where = SQL::OOP::Where->new();
 		my $sql = SQL::OOP::Base->new('test');
 		{
-			my $a = $where->cmp_nested('=', 'col1', $sql);
+			my $a = $where->cmp('=', 'col1', $sql);
 			is($a->to_string, '"col1" = test');
 		}
 		{
-			my $a = $where->cmp_nested('=', SQL::OOP::ID->new('col1'), $sql);
+			my $a = $where->cmp('=', SQL::OOP::ID->new('col1'), $sql);
 			is($a->to_string, '"col1" = test');
 		}
 	}
 	
-	sub cmp_nested2 : Test(2) {
+	sub cmp_nested2 : Test(1) {
 		
 		my $where = SQL::OOP::Where->new();
-		my $a = $where->cmp_nested('=', SQL::OOP::Base->new('func(col1)'),
+		my $a = $where->cmp('=', SQL::OOP::Base->new('func(col1)'),
 										SQL::OOP::Base->new('func(col2)'));
 		is($a->to_string, q{func(col1) = func(col2)});
 	}
@@ -126,7 +133,7 @@ use Tie::IxHash;
 		is($where->to_string, q{"public"."table"."c1" = ?});
 	}
 	
-	sub cmp_key_by_array_ref : Test(2) {
+	sub cmp_key_by_array_ref : Test(1) {
 		
 		my $where = SQL::OOP::Where->cmp('=', ['public','table','c1'], 'val');
 		is($where->to_string, q{"public"."table"."c1" = ?});

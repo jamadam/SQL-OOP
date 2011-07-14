@@ -1,6 +1,7 @@
 package SQL::OOP::Where;
 use strict;
 use warnings;
+use Scalar::Util qw(blessed);
 use SQL::OOP::ID;
 
     ### ---
@@ -71,15 +72,19 @@ use SQL::OOP::ID;
 		}
         if ($key && defined $val) {
             my $quoted = SQL::OOP::ID->new($key);
+			if (ref $val) {
+	            return SQL::OOP::Array->new($quoted->to_string, $val)->set_sepa(" $op ");
+			}
             return SQL::OOP::Base->new($quoted->to_string. qq( $op ?), [$val]);
         }
     }
     
     ### ---
-    ### binary operator expression factory with sub query in value
+    ### binary operator expression factory with sub query in value [DEPRECATED]
     ### ---
     sub cmp_nested {
         
+		warn 'cmp_nested is deprecated! Use cmp instead';
         my ($self, $op, $key, $val) = @_;
 		if (scalar @_ != 4) {
 			die 'Not enough args given';
@@ -179,7 +184,6 @@ SQL::OOP::Where - WHERE factory class
     my $cond3 = $where->is_not_null('some_field');
     my $cond4 = $where->between('some_field', 1, 2);
     my $cond5 = $where->in('some_field', [1, 2, 3]);
-    my $cond6 = $where->cmp_nested($operator, $field, $select_obj);
     
     my $sql  = $cond1->to_string;
     my @bind = $cond1->bind;
@@ -223,10 +227,11 @@ Generates 1 operator expression.
 	my $where = SQL::OOP::Where->new;
 	$where->cmp('=', 'col1', 'value') # "col1" = ?
 	$where->cmp('=', ['table', 'col1'], 'value') # "table"."col1" = ?
-	
-=head2 $instance->cmp_nested($fieldname, $object)
+	$where->cmp('=', $subquery, $subquery)
 
-Generates 1 operator expression with sub query in value
+=head2 $instance->cmp_nested($fieldname, $object) [DEPRECATED]
+
+Generates 1 operator expression with sub query in value.
 
 =head2 $instance->in($fieldname, $array_ref)
 
