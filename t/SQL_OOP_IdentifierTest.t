@@ -112,6 +112,11 @@ use SQL::OOP::Select;
         is($id->to_string, q{"schema"."table"."col"});
     }
     
+    sub id_array_suplied_in_ref :Test(1) {
+        my $id = SQL::OOP::IDArray->new([['schema', 'table', 'col1'], ['schema', 'table', 'col2']]);
+        is($id->to_string, q{"schema"."table"."col1", "schema"."table"."col2"});
+    }
+    
     sub compress_sql {
         
         my $sql = shift;
