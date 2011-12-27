@@ -113,8 +113,12 @@ use 5.005;
             }
             $with = $class->quote_char;
         }
-        $val = $class->escape_code_ref->($val, $with);
-        return $with. $val. $with;
+        if (defined $val) {
+            $val = $class->escape_code_ref->($val, $with);
+            return $with. $val. $with;
+        } else {
+            return undef;
+        }
     }
 
 1;

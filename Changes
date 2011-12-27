@@ -1,6 +1,7 @@
 Revision history for SQL-OOP
 
-0.17 2011/12/20
+0.17 2011/12/27
+  - Reduced undef warnings on quote method
 
 0.16 2011/12/20
   - Added some tests
