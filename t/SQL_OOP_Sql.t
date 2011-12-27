@@ -127,6 +127,21 @@ EOF
         is($sql->to_string_embedded(q{`}), q{SELECT * FROM tbl1 WHERE "a" = `b`});
     }
     
+    sub retrieve_from_array : Test(7) {
+        my $sql = SQL::OOP::Array->new('a', 'b', 'c');
+        my @a = $sql->values;
+        is scalar @a, 3;
+        is $a[0]->to_string, 'a';
+        is $a[1]->to_string, 'b';
+        is $a[2]->to_string, 'c';
+
+        $sql = SQL::OOP::IDArray->new([['A','B'],['C','D']]);
+        @a = $sql->values;
+        is scalar @a, 2;
+        is $a[0]->to_string, '"A"."B"';
+        is $a[1]->to_string, '"C"."D"';
+    }
+    
     sub compress_sql {
         
         my $sql = shift;

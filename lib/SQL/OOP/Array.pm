@@ -97,6 +97,11 @@ use base qw(SQL::OOP::Base);
         return @out if (wantarray);
         return scalar @out;
     }
+    
+    sub values {
+        my $self = shift;
+        return @{$self->{array}};
+    }
 
 1;
 
@@ -153,6 +158,10 @@ This method corrects all children's bind values and returns all together.
 This method generates SQL. This is called inside to_string so don't call it
 directly. This method internally corrects all children's to_string results and
 join them with separator.
+
+=head2 $instance->values;
+
+Retrieve values into array.
 
 =head2 $instance->fix_element_in_list_context
 
