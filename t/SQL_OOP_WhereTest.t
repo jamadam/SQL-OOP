@@ -1,6 +1,7 @@
 package SQL_OOP_WhereTest;
 use strict;
 use warnings;
+use lib qw(lib);
 use lib qw(t/lib);
 use base 'Test::Class';
 use Test::More;
@@ -10,7 +11,7 @@ use Tie::IxHash;
 	
 	__PACKAGE__->runtests;
 	
-	sub not_in : Test(5) {
+	sub not_in : Test(6) {
 		
 		my $where = SQL::OOP::Where->new();
 		my $in = $where->not_in('col', [1, 2, 3]);
@@ -20,9 +21,17 @@ use Tie::IxHash;
 		is(shift @bind, '1');
 		is(shift @bind, '2');
 		is(shift @bind, '3');
+
+		my $sub = SQL::OOP::Select->new;
+		$sub->set(
+			$sub->ARG_FIELDS => '*',
+			$sub->ARG_FROM => 'tbl',
+		);
+		$in = $where->not_in('col', $sub);
+		is($in->to_string, q{"col" NOT IN (SELECT * FROM tbl)});
 	}
 	
-	sub in : Test(5) {
+	sub in : Test(6) {
 		
 		my $where = SQL::OOP::Where->new();
 		my $in = $where->in('col', [1, 2, 3]);
@@ -32,6 +41,14 @@ use Tie::IxHash;
 		is(shift @bind, '1');
 		is(shift @bind, '2');
 		is(shift @bind, '3');
+
+		my $sub = SQL::OOP::Select->new;
+		$sub->set(
+			$sub->ARG_FIELDS => '*',
+			$sub->ARG_FROM => 'tbl',
+		);
+		$in = $where->in('col', $sub);
+		is($in->to_string, q{"col" IN (SELECT * FROM tbl)});
 	}
 	
 	sub cmp_value_undef : Test(1) {

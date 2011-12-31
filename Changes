@@ -1,6 +1,7 @@
 Revision history for SQL-OOP
 
-0.17 2011/12/27
+0.17 2012/01/01
+  - Made in and not_in methods to be capable of sub queries.
   - Reduced undef warnings on quote method
   - Added values method on Array class to retrieve values.
 

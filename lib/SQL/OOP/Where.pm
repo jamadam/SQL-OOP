@@ -143,12 +143,16 @@ use SQL::OOP::ID;
     ### ---
     sub in {
         
-        my ($self, $key, $array_ref) = @_;
+        my ($self, $key, $val) = @_;
         if ($key) {
-            my $placeholder = '?, ' x scalar @$array_ref;
-            $placeholder = substr($placeholder, 0, -2);
-            my $quoted = SQL::OOP::ID->new($key)->to_string;
-            return SQL::OOP::Base->new("$quoted IN ($placeholder)", $array_ref);
+			my $quoted = SQL::OOP::ID->new($key)->to_string;
+			if (ref $val eq 'ARRAY') {
+				my $placeholder = '?, ' x scalar @$val;
+				$placeholder = substr($placeholder, 0, -2);
+				return SQL::OOP::Base->new("$quoted IN ($placeholder)", $val);
+			} elsif (blessed($val) && $val->isa('SQL::OOP::Base')) {
+	            return SQL::OOP::Array->new($quoted, $val)->set_sepa(" IN ");
+			}
         }
     }
     
@@ -157,12 +161,16 @@ use SQL::OOP::ID;
     ### ---
     sub not_in {
         
-        my ($self, $key, $array_ref) = @_;
+        my ($self, $key, $val) = @_;
         if ($key) {
-            my $placeholder = '?, ' x scalar @$array_ref;
-            $placeholder = substr($placeholder, 0, -2);
-            my $quoted = SQL::OOP::ID->new($key)->to_string;
-            return SQL::OOP::Base->new("$quoted NOT IN ($placeholder)", $array_ref);
+			my $quoted = SQL::OOP::ID->new($key)->to_string;
+			if (ref $val eq 'ARRAY') {
+				my $placeholder = '?, ' x scalar @$val;
+				$placeholder = substr($placeholder, 0, -2);
+				return SQL::OOP::Base->new("$quoted NOT IN ($placeholder)", $val);
+			} elsif (blessed($val) && $val->isa('SQL::OOP::Base')) {
+	            return SQL::OOP::Array->new($quoted, $val)->set_sepa(" NOT IN ");
+			}
         }
     }
 
