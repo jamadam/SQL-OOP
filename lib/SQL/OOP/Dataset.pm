@@ -34,10 +34,10 @@ use base qw(SQL::OOP::Base);
         $self->_init_gen;
         
         for my $key (keys %$data_hash_ref) {
-            push(@{$self->{source}}, [
+            push(@{$self->{source}}, 
                 SQL::OOP::ID->new($key)->to_string,
                 $data_hash_ref->{$key},
-            ]);
+            );
         }
         
         return $self;
@@ -49,13 +49,18 @@ use base qw(SQL::OOP::Base);
     sub bind {
         
         my $self = shift;
+        my @copy = @{$self->{source}};
+        my @vals;
+        while (my ($k, $v) = splice @copy, 0, 2) {
+            push(@vals, $v);
+        }
         my @out = map {
             if (blessed($_)) {
                 $_->bind;
             } else {
                 $_;
             }
-        } map {$_->[1]} @{$self->{source}};
+        } @vals;
         return @out if (wantarray);
         return scalar @out;
     }
@@ -92,8 +97,13 @@ use base qw(SQL::OOP::Base);
         
         my ($self, $type) = @_;
         
-        my @key = map {$_->[0]} @{$self->{source}};
-        my @val = map {$_->[1]} @{$self->{source}};
+        my @copy = @{$self->{source}};
+        my @key;
+        my @val;
+        while (my($k, $v) = splice @copy, 0, 2) {
+            push(@key, $k);
+            push(@val, $v);
+        }
         
         if ($type eq MODE_INSERT) {
             $self->{gen} = sprintf('(%s) VALUES (%s)',
@@ -108,6 +118,12 @@ use base qw(SQL::OOP::Base);
             $self->{gen} =~ s{^, }{};
         }
         return $self;
+    }
+    
+    sub retrieve {
+        my ($self, $key) = @_;
+        my %tmp = (@{$self->{source}});
+        return $tmp{$key} || $tmp{$self->quote($key)};
     }
 
 1;
