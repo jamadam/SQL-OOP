@@ -18,7 +18,7 @@ use base qw(SQL::OOP::Base);
         my $data_hash_ref = (scalar @_ == 1) ? shift @_ : {@_};
         my $self = bless {
             gen     => undef,
-            source  => [],
+            array  => [],
         }, $class;
         
         return $self->append($data_hash_ref);
@@ -34,7 +34,7 @@ use base qw(SQL::OOP::Base);
         $self->_init_gen;
         
         for my $key (keys %$data_hash_ref) {
-            push(@{$self->{source}}, 
+            push(@{$self->{array}}, 
                 SQL::OOP::ID->new($key)->to_string,
                 $data_hash_ref->{$key},
             );
@@ -49,7 +49,7 @@ use base qw(SQL::OOP::Base);
     sub bind {
         
         my $self = shift;
-        my @copy = @{$self->{source}};
+        my @copy = @{$self->{array}};
         my @vals;
         while (my ($k, $v) = splice @copy, 0, 2) {
             push(@vals, $v);
@@ -97,7 +97,7 @@ use base qw(SQL::OOP::Base);
         
         my ($self, $type) = @_;
         
-        my @copy = @{$self->{source}};
+        my @copy = @{$self->{array}};
         my @key;
         my @val;
         while (my($k, $v) = splice @copy, 0, 2) {
@@ -122,7 +122,7 @@ use base qw(SQL::OOP::Base);
     
     sub retrieve {
         my ($self, $key) = @_;
-        my %tmp = (@{$self->{source}});
+        my %tmp = (@{$self->{array}});
         return $tmp{$key} || $tmp{$self->quote($key)};
     }
 
