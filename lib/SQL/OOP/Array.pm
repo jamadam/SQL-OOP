@@ -11,7 +11,6 @@ use base qw(SQL::OOP::Base);
     ### Constructor
     ### ---
     sub new {
-        
         my ($class, @array) = @_;
         my $self = bless {
             sepa    => ' ',
@@ -26,7 +25,6 @@ use base qw(SQL::OOP::Base);
     ### Set separator for join array
     ### ---
     sub set_sepa {
-        
         my ($self, $sepa) = @_;
         $self->{sepa} = $sepa;
         return $self;
@@ -36,7 +34,6 @@ use base qw(SQL::OOP::Base);
     ### Append snippet
     ### ---
     sub append {
-        
         my ($self, @array) = @_;
         $self->_init_gen;
         if (ref $array[0] && ref $array[0] eq 'ARRAY') {
@@ -55,7 +52,6 @@ use base qw(SQL::OOP::Base);
     ### generate SQL snippet
     ### ---
     sub generate {
-        
         my $self = shift;
         my @array = map {
             if ($_->to_string && (scalar @{$self->{array}}) >= 2) {
@@ -73,7 +69,6 @@ use base qw(SQL::OOP::Base);
     ### fix generated string in list context
     ### ---
     sub fix_element_in_list_context {
-        
         my ($self, $obj) = @_;
         if ($obj->isa(__PACKAGE__)) {
             return '('. $obj->to_string. ')';
@@ -85,7 +80,6 @@ use base qw(SQL::OOP::Base);
     ### Get binded values in array
     ### ---
     sub bind {
-        
         my $self = shift;
         my @out = map {
             my @a;

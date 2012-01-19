@@ -10,7 +10,6 @@ use base qw(SQL::OOP::Array);
     ### Constructor
     ### ---
     sub new {
-        
         my ($class, %args) = (@_);
         my $self = bless {
             gen => undef,
@@ -39,7 +38,6 @@ use base qw(SQL::OOP::Array);
     ### Get clause names and array index in array
     ### ---
     sub keys_to_idx {
-        
         my ($self) = (@_);
         my $out = ();
         my $idx = 0;
@@ -54,7 +52,6 @@ use base qw(SQL::OOP::Array);
     ### Set elements
     ### ---
     sub set {
-        
         my ($self, %args) = @_;
         $self->_init_gen;
         my $tokens = $self->keys_to_idx;
@@ -70,7 +67,6 @@ use base qw(SQL::OOP::Array);
     ### Genereate SQL snippet
     ### ---
     sub generate {
-        
         my ($self) = @_;
         $self->{gen} = '';
         my $prefix = $self->PREFIXES;

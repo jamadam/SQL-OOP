@@ -13,7 +13,6 @@ use base qw(SQL::OOP::Base);
     ### Constructor
     ### ---
     sub new {
-        
         my $class = shift @_;
         my $data_hash_ref = (scalar @_ == 1) ? shift @_ : {@_};
         my $self = bless {
@@ -28,7 +27,6 @@ use base qw(SQL::OOP::Base);
     ### append elements
     ### ---
     sub append {
-        
         my $self = shift @_;
         my $data_hash_ref = (scalar @_ == 1) ? shift @_ : {@_};
         $self->_init_gen;
@@ -47,7 +45,6 @@ use base qw(SQL::OOP::Base);
     ### Get binded values in array
     ### ---
     sub bind {
-        
         my $self = shift;
         my @copy = @{$self->{array}};
         my @vals;
@@ -69,7 +66,6 @@ use base qw(SQL::OOP::Base);
     ### Get SQL for UPDATE command in string
     ### ---
     sub to_string_for_update {
-        
         my ($self, $prefix) = @_;
         $self->generate(MODE_UPDATE);
         if ($self->{gen} && $prefix) {
@@ -83,7 +79,6 @@ use base qw(SQL::OOP::Base);
     ### Get SQL for INSERT command in string
     ### ---
     sub to_string_for_insert {
-        
         my ($self, $prefix) = @_;
         $self->generate(MODE_INSERT);
         if ($self->{gen} && $prefix) {
@@ -94,7 +89,6 @@ use base qw(SQL::OOP::Base);
     }
     
     sub generate {
-        
         my ($self, $type) = @_;
         
         my @copy = @{$self->{array}};

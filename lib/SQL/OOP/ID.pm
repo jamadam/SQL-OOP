@@ -10,7 +10,6 @@ use base qw(SQL::OOP::Array);
     ### Constructor
     ### ---
     sub new {
-        
         my ($class, @array) = @_;
         return $class->SUPER::new(@array)->set_sepa('.');
     }
@@ -19,7 +18,6 @@ use base qw(SQL::OOP::Array);
     ### Append ID
     ### ---
     sub append {
-        
         my ($self, @array) = @_;
         $self->_init_gen;
         if (ref $array[0] && ref $array[0] eq 'ARRAY') {
@@ -37,7 +35,6 @@ use base qw(SQL::OOP::Array);
     ### "field AS foo" syntax
     ### ---
     sub as {
-        
         my ($self, $as) = (@_);
         $self->{as} = $as;
         return $self;
@@ -47,7 +44,6 @@ use base qw(SQL::OOP::Array);
     ### Generate SQL snippet
     ### ---
     sub generate {
-        
         my $self = shift;
         my @array = map {$_->to_string} @{$self->{array}};
         $self->{gen} = join($self->{sepa}, grep {$_} @array);
@@ -71,7 +67,6 @@ use base qw(SQL::OOP::Base);
     ### Generate SQL snippet
     ### ---
     sub generate {
-        
         my $self = shift;
         $self->SUPER::generate(@_);
         $self->{gen} = $self->quote($self->{gen});

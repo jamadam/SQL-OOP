@@ -8,7 +8,6 @@ use base qw(SQL::OOP::Array);
     ### Constructor
     ### ---
     sub new {
-        
         my ($class, @array) = @_;
         return $class->SUPER::new(
                             map {SQL::OOP::ID->new($_)} @array)->set_sepa(', ');
@@ -18,7 +17,6 @@ use base qw(SQL::OOP::Array);
     ### fix generated string in list context
     ### ---
     sub fix_element_in_list_context {
-        
         my ($self, $obj) = @_;
         return $obj->to_string;
     }
@@ -27,7 +25,6 @@ use base qw(SQL::OOP::Array);
     ### Construct ORER BY clause by array
     ### ---
     sub abstract {
-        
         my ($class, $array_ref) = @_;
         my $self = $class->SUPER::new()->set_sepa(', ');
         foreach my $rec_ref (@{$array_ref}) {
@@ -48,7 +45,6 @@ use base qw(SQL::OOP::Array);
     ### Get SQL::OOP::Order::Expression instance(ASC)
     ### ---
     sub new_asc {
-        
         my ($class_or_obj, $key) = @_;
         return SQL::OOP::Order::Expression->new($key);
     }
@@ -57,7 +53,6 @@ use base qw(SQL::OOP::Array);
     ### Get SQL::OOP::Order::Expression instance(DESC)
     ### ---
     sub new_desc {
-        
         my ($class_or_obj, $key) = @_;
         return SQL::OOP::Order::Expression->new_desc($key);
     }
@@ -66,7 +61,6 @@ use base qw(SQL::OOP::Array);
     ### Append element(ASC)
     ### ---
     sub append_asc {
-        
         my ($self, $key) = @_;
         $self->_init_gen;
         push(@{$self->{array}}, SQL::OOP::Order::Expression->new($key));
@@ -77,7 +71,6 @@ use base qw(SQL::OOP::Array);
     ### Append element(DESC)
     ### ---
     sub append_desc {
-        
         my ($self, $key) = @_;
         $self->_init_gen;
         push(@{$self->{array}}, SQL::OOP::Order::Expression->new_desc($key));
@@ -93,7 +86,6 @@ use base qw(SQL::OOP::Base);
     ### Constructor
     ### ---
     sub new {
-        
         my ($class, $key) = @_;
         if ($key) {
             return $class->SUPER::new(SQL::OOP::ID->new($key));
@@ -104,7 +96,6 @@ use base qw(SQL::OOP::Base);
     ### DESC Constructor
     ### ---
     sub new_desc {
-        
         my ($class, $key) = @_;
         if ($key) {
             return $class->SUPER::new(

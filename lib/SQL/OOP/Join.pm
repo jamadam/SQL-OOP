@@ -17,7 +17,6 @@ use base qw(SQL::OOP::Command);
     ### Get Names of set arguments in array ref
     ### ---
     sub KEYS {
-        
         return [ARG_TABLE1, ARG_DIRECTION, ARG_TABLE2, ARG_ON];
     }
     
@@ -25,7 +24,6 @@ use base qw(SQL::OOP::Command);
     ### Get prefixes for each clause in hash ref
     ### ---
     sub PREFIXES {
-        
         my $self= shift;
         return {
             ARG_TABLE1()        => '',
@@ -39,7 +37,6 @@ use base qw(SQL::OOP::Command);
     ### Constructor
     ### ---
     sub new {
-        
         my ($class, %hash) = @_;
         return $class->SUPER::new(%hash);
     }
@@ -48,7 +45,6 @@ use base qw(SQL::OOP::Command);
     ### Set elements
     ### ---
     sub set {
-        
         my ($class, %hash) = @_;
         return $class->SUPER::set(%hash);
     }
@@ -57,7 +53,6 @@ use base qw(SQL::OOP::Command);
     ### Get SQL snippet
     ### ---
     sub to_string {
-        
         return shift->SUPER::to_string(@_);
     }
     
@@ -65,7 +60,6 @@ use base qw(SQL::OOP::Command);
     ### Get binded values in array
     ### ---
     sub bind {
-        
         return shift->SUPER::bind(@_);
     }
 

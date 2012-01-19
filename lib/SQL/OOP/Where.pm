@@ -8,7 +8,6 @@ use SQL::OOP::ID;
     ### Constructor
     ### ---
     sub new {
-        
         my $class = shift;
         return bless {}, $class;
     }
@@ -17,7 +16,6 @@ use SQL::OOP::ID;
     ### SQL::Abstract style AND factory
     ### ---
     sub and_hash {
-        
         my ($class, $hash_ref, $op) = @_;
         return _append_hash($class->and, $hash_ref, $op || '=');
     }
@@ -26,7 +24,6 @@ use SQL::OOP::ID;
     ### SQL::Abstract style OR factory
     ### ---
     sub or_hash {
-        
         my ($class, $hash_ref, $op) = @_;
         return _append_hash($class->or, $hash_ref, $op || '=');
     }
@@ -35,7 +32,6 @@ use SQL::OOP::ID;
     ### SQL::Abstract style AND factory backend
     ### ---
     sub _append_hash {
-        
         my ($obj, $hash_ref, $op) = @_;
         while (my ($key, $val) = each(%$hash_ref)) {
             $obj->append(__PACKAGE__->cmp($op || '=', $key, $val));
@@ -47,7 +43,6 @@ use SQL::OOP::ID;
     ### AND factory
     ### ---
     sub and {
-        
         my ($class, @array) = @_;
         return SQL::OOP::Array->new(@array)->set_sepa(' AND ');
     }
@@ -56,7 +51,6 @@ use SQL::OOP::ID;
     ### OR factory
     ### ---
     sub or {
-        
         my ($class, @array) = @_;
         return SQL::OOP::Array->new(@array)->set_sepa(' OR ');
     }
@@ -65,7 +59,6 @@ use SQL::OOP::ID;
     ### binary operator expression factory
     ### ---
     sub cmp {
-        
         my ($self, $op, $key, $val) = @_;
 		if (scalar @_ != 4) {
 			die 'Not enough args given';
@@ -83,7 +76,6 @@ use SQL::OOP::ID;
     ### binary operator expression factory with sub query in value [DEPRECATED]
     ### ---
     sub cmp_nested {
-        
 		warn 'cmp_nested is deprecated! Use cmp instead';
         my ($self, $op, $key, $val) = @_;
 		if (scalar @_ != 4) {
@@ -99,7 +91,6 @@ use SQL::OOP::ID;
     ### IS NULL factory
     ### ---
     sub is_null {
-        
         my ($self, $key) = @_;
         if ($key) {
             my $quoted = SQL::OOP::ID->new($key);
@@ -111,7 +102,6 @@ use SQL::OOP::ID;
     ### IS NOT NULL factory
     ### ---
     sub is_not_null {
-        
         my ($self, $key) = @_;
         if ($key) {
             my $quoted = SQL::OOP::ID->new($key);
@@ -123,7 +113,6 @@ use SQL::OOP::ID;
     ### BETWEEN ? AND ? factory
     ### ---
     sub between {
-        
         my ($self, $key, $val1, $val2) = @_;
         if ($key) {
             if (defined $val1 and defined $val2) {
@@ -142,7 +131,6 @@ use SQL::OOP::ID;
     ### IN factory
     ### ---
     sub in {
-        
         my ($self, $key, $val) = @_;
         if ($key) {
 			my $quoted = SQL::OOP::ID->new($key)->to_string;
@@ -160,7 +148,6 @@ use SQL::OOP::ID;
     ### NOT IN factory
     ### ---
     sub not_in {
-        
         my ($self, $key, $val) = @_;
         if ($key) {
 			my $quoted = SQL::OOP::ID->new($key)->to_string;

@@ -23,7 +23,6 @@ use 5.005;
     ### Constructor
     ### ---
     sub new {
-        
         my ($class, $str, $bind_ref) = @_;
         if (ref $str && (ref($str) eq 'CODE')) {
             $str = $str->();
@@ -47,7 +46,6 @@ use 5.005;
     ### Get SQL snippet
     ### ---
     sub to_string {
-        
         my ($self, $prefix) = @_;
         if (! defined $self->{gen}) {
             $self->generate;
@@ -63,7 +61,6 @@ use 5.005;
     ### Get SQL snippet with values embedded [EXPERIMENTAL]
     ### ---
     sub to_string_embedded {
-        
         my ($self, $quote_with) = @_;
         $quote_with ||= q{'};
         my $format = $self->to_string;
@@ -76,7 +73,6 @@ use 5.005;
     ### Get binded values in array
     ### ---
     sub bind {
-        
         my ($self) = @_;
         return @{$self->{bind} || []} if (wantarray);
         return scalar @{$self->{bind} || []};
@@ -86,7 +82,6 @@ use 5.005;
     ### initialize generated SQL
     ### ---
     sub _init_gen {
-        
         my ($self) = @_;
         $self->{gen} = undef;
     }
@@ -95,7 +90,6 @@ use 5.005;
     ### Generate SQL snippet
     ### ---
     sub generate {
-        
         my ($self) = @_;
         $self->{gen} = $self->{str} || '';
         return $self;
@@ -105,7 +99,6 @@ use 5.005;
     ### quote
     ### ---
     sub quote {
-        
         my ($class, $val, $with) = @_;
         if (! $with) {
             if (blessed($class)) {

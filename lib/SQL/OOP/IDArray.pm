@@ -9,7 +9,6 @@ use base qw(SQL::OOP::Array);
     ### Constructor
     ### ---
     sub new {
-        
         my ($class, @array) = @_;
         my $self = $class->SUPER::new(@array)->set_sepa(', ');
     }
@@ -18,7 +17,6 @@ use base qw(SQL::OOP::Array);
     ### Append ID
     ### ---
     sub append {
-        
         my ($self, @array) = @_;
         $self->_init_gen;
         if (ref $array[0] && ref $array[0] eq 'ARRAY') {
@@ -38,7 +36,6 @@ use base qw(SQL::OOP::Array);
     ### parenthisize sub query 
     ### ---
     sub fix_element_in_list_context {
-        
         my ($self, $obj) = @_;
         if ($obj->isa('SQL::OOP::Command')) {
             return '('. $obj->to_string. ')';
