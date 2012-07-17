@@ -2,22 +2,35 @@ package SQL::OOP::Base;
 use strict;
 use warnings;
 use Scalar::Util qw(blessed);
-use base qw(Class::Data::Inheritable);
 use 5.005;
     
-    ### ---
-    ### default quote character
-    ### ---
-    __PACKAGE__->mk_classdata(quote_char => q("));
+    our $quote_char;
     
-    ### ---
-    ### escape_code_ref for col names
-    ### ---
-    __PACKAGE__->mk_classdata(escape_code_ref => sub {
-        my ($str, $quote_char) = @_;
-        $str =~ s{$quote_char}{$quote_char$quote_char}g;
-        return $str;
-    });
+    sub quote_char {
+        my ($self, $val) = @_;
+        if (defined $val) {
+            $self->{quote_char} = $val;
+        }
+        if (! defined $self->{quote_char}) {
+            $self->{quote_char} = q(");
+        }
+        return $quote_char || $self->{quote_char};
+    }
+    
+    sub escape_code_ref {
+        my ($self, $val) = @_;
+        if (defined $val) {
+            $self->{escape_code_ref} = $val;
+        }
+        if (! defined $self->{escape_code_ref}) {
+            $self->{escape_code_ref} = sub {
+                my ($str, $quote_char) = @_;
+                $str =~ s{$quote_char}{$quote_char$quote_char}g;
+                return $str;
+            };
+        }
+        return $self->{escape_code_ref};
+    }
     
     ### ---
     ### Constructor
@@ -47,6 +60,7 @@ use 5.005;
     ### ---
     sub to_string {
         my ($self, $prefix) = @_;
+        local $SQL::OOP::Base::quote_char = $self->quote_char;
         if (! defined $self->{gen}) {
             $self->generate;
         }
@@ -62,6 +76,7 @@ use 5.005;
     ### ---
     sub to_string_embedded {
         my ($self, $quote_with) = @_;
+        local $SQL::OOP::Base::quote_char = $self->quote_char;
         $quote_with ||= q{'};
         my $format = $self->to_string;
         $format =~ s{\?}{%s}g;
@@ -99,15 +114,12 @@ use 5.005;
     ### quote
     ### ---
     sub quote {
-        my ($class, $val, $with) = @_;
+        my ($self, $val, $with) = @_;
         if (! $with) {
-            if (blessed($class)) {
-                $class = blessed($class);
-            }
-            $with = $class->quote_char;
+            $with = $quote_char || $self->quote_char;
         }
         if (defined $val) {
-            $val = $class->escape_code_ref->($val, $with);
+            $val = $self->escape_code_ref->($val, $with);
             return $with. $val. $with;
         } else {
             return undef;

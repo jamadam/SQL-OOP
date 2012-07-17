@@ -67,6 +67,7 @@ use base qw(SQL::OOP::Base);
     ### ---
     sub to_string_for_update {
         my ($self, $prefix) = @_;
+        local $SQL::OOP::Base::quote_char = $self->quote_char;
         $self->generate(MODE_UPDATE);
         if ($self->{gen} && $prefix) {
             return $prefix. ' '. $self->{gen};
@@ -80,6 +81,7 @@ use base qw(SQL::OOP::Base);
     ### ---
     sub to_string_for_insert {
         my ($self, $prefix) = @_;
+        local $SQL::OOP::Base::quote_char = $self->quote_char;
         $self->generate(MODE_INSERT);
         if ($self->{gen} && $prefix) {
             return $prefix. ' '. $self->{gen};

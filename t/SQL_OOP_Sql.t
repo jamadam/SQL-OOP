@@ -4,6 +4,7 @@ use warnings;
 use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
+use SQL::OOP::Array;
 use SQL::OOP::Insert;
 use SQL::OOP::Where;
     
@@ -82,10 +83,15 @@ use SQL::OOP::Where;
     sub set_quote : Test {
         
         my $id = SQL::OOP::ID->new('a');
-        my $backup = SQL::OOP::Base->quote_char;
-        SQL::OOP::Base->quote_char(q(`));
+        $id->quote_char(q(`));
         is($id->to_string, q{`a`});
-        SQL::OOP::Base->quote_char($backup);
+    }
+    
+    sub set_quote_deep : Test {
+        my $elem = SQL::OOP::ID->new('a');
+        my $array = SQL::OOP::Array->new($elem, $elem);
+        $array->quote_char(q{`});
+        is $array->to_string, q{(`a`) (`a`)};
     }
     
     sub arrayed_construction : Test(4) {

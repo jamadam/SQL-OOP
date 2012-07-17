@@ -51,6 +51,7 @@ use base qw(SQL::OOP::Command);
 	### ---
 	sub to_string {
 		my ($self) = @_;
+        local $SQL::OOP::Base::quote_char = $self->quote_char;
 		$self->{array}->[1]->generate(SQL::OOP::Dataset->MODE_UPDATE);
 		return shift->SUPER::to_string(@_);
 	}

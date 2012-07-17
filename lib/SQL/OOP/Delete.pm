@@ -45,7 +45,9 @@ use base qw(SQL::OOP::Command);
     ### Get SQL snippet
     ### ---
     sub to_string {
-        return shift->SUPER::to_string(@_);
+        my $self = shift;
+        local $SQL::OOP::Base::quote_char = $self->quote_char;
+        return $self->SUPER::to_string(@_);
     }
     
     ### ---
