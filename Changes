@@ -1,6 +1,7 @@
 Revision history for SQL-OOP
 
 0.21 2012/01/06
+  - Removed dependency on Class::Inheritable
 
 0.20 2012/01/06
   - Improved Dataset class to be compatible to super class attr.
