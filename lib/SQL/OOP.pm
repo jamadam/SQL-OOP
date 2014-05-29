@@ -4,7 +4,7 @@ use warnings;
 use Scalar::Util qw(blessed);
 use SQL::OOP::Base;
 use 5.005;
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 sub new {
     my $class = shift;

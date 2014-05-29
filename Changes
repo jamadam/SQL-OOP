@@ -1,5 +1,7 @@
 Revision history for SQL-OOP
 
+0.22 2014/05/29
+
 0.21 2014/05/29
   - Removed dependency on Class::Inheritable.
   - Deprecated accepting hashs for where clauses and datasets.
