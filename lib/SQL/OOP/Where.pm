@@ -16,6 +16,7 @@ sub new {
 ### SQL::Abstract style AND factory
 ### ---
 sub and_hash {
+    warn 'Deprecated infavor of and_abstract';
     my ($class, $hash_ref, $op) = @_;
     return _append_hash($class->and, $hash_ref, $op || '=');
 }
@@ -24,16 +25,34 @@ sub and_hash {
 ### SQL::Abstract style OR factory
 ### ---
 sub or_hash {
+    warn 'Deprecated infavor of or_abstract';
     my ($class, $hash_ref, $op) = @_;
     return _append_hash($class->or, $hash_ref, $op || '=');
+}
+
+### ---
+### SQL::Abstract style AND factory
+### ---
+sub and_abstract {
+    my ($class, $array_ref, $op) = @_;
+    return _append_hash($class->and, $array_ref, $op || '=');
+}
+
+### ---
+### SQL::Abstract style OR factory
+### ---
+sub or_abstract {
+    my ($class, $array_ref, $op) = @_;
+    return _append_hash($class->or, $array_ref, $op || '=');
 }
 
 ### ---
 ### SQL::Abstract style AND factory backend
 ### ---
 sub _append_hash {
-    my ($obj, $hash_ref, $op) = @_;
-    while (my ($key, $val) = each(%$hash_ref)) {
+    my ($obj, $array_ref, $op) = @_;
+    my @copied = ref $array_ref eq 'HASH' ? %{$array_ref} : @{$array_ref};
+    while (my($key, $val) = splice @copied, 0, 2) {
         $obj->append(__PACKAGE__->cmp($op || '=', $key, $val));
     }
     return $obj;
@@ -192,11 +211,11 @@ SQL::OOP::Where - WHERE factory class
     my @bind = $cond8->bind;
     
     # SQL::Abstract style
-    my %seed = (a => 'b', c => 'd');
-    my $cond10 = $where->and_hash(\%seed); # default operator is '='
-    my $cond11 = $where->and_hash(\%seed, "LIKE");
-    my $cond12 = $where->or_hash(\%seed); # default operator is '='
-    my $cond13 = $where->or_hash(\%seed, "LIKE");
+    my $seed = [a => 'b', c => 'd'];
+    my $cond10 = $where->and_abstract($seed); # default operator is '='
+    my $cond11 = $where->and_abstract($seed, "LIKE");
+    my $cond12 = $where->or_abstract($seed); # default operator is '='
+    my $cond13 = $where->or_abstract($seed, "LIKE");
     
     my $sql  = $cond13->to_string;
     my @bind = $cond13->bind;
@@ -272,17 +291,25 @@ Generates IS NULL clause
 
 Generates OR expression in SQL::OOP::Array
 
-=head2 $instance->or_hash(%hash_ref)
+=head2 $instance->or_hash(%hash_ref) DEPRECATED
 
 Generates OR expression in SQL::OOP::Array by hash
+
+=head2 $instance->or_abstract($array_ref)
+
+Generates OR expression in SQL::OOP::Array by key-value array
 
 =head2 $instance->and(@array)
 
 Generates AND expression in SQL::OOP::Array
 
-=head2 $instance->and_hash(%hash_ref)
+=head2 $instance->and_hash(%hash_ref) DEPRECATED
 
 Generates AND expression in SQL::OOP::Array by hash
+
+=head2 $instance->and_abstract($array_ref)
+
+Generates AND expression in SQL::OOP::Array by key-value array
 
 =head1 AUTHOR
 

@@ -6,7 +6,6 @@ use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Update;
-use Tie::IxHash;
 
 __PACKAGE__->runtests;
 
@@ -41,21 +40,11 @@ sub where : Test(3) {
     is(shift @bind, 'b');
 }
 
-sub ordered_hashref {
-    tie my %params, Tie::IxHash::, @_;
-    return \%params;
-}
-
 sub values_by_array : Test(4) {
     
-    tie(my %data, 'Tie::IxHash');
-    %data = (
-        a => 'b',
-        c => 'd',
-    );
     my $sql = SQL::OOP::Update->new();
     $sql->set(
-        $sql->ARG_DATASET => SQL::OOP::Dataset->new(\%data),
+        $sql->ARG_DATASET => SQL::OOP::Dataset->new(a => 'b',c => 'd'),
     );
     is($sql->to_string, 'SET "a" = ?, "c" = ?');
     my @bind = $sql->bind;

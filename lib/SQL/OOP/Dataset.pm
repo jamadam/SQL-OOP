@@ -14,13 +14,17 @@ sub MODE_UPDATE() {2} ## no critic
 ### ---
 sub new {
     my $class = shift @_;
-    my $data_hash_ref = (scalar @_ == 1) ? shift @_ : {@_};
+    my $data_ref = (scalar @_ == 1) ? shift @_ : [@_];
+    if (ref $data_ref eq 'HASH') {
+        warn 'Deprecated: call the method with key-value array instead of hash';
+        $data_ref = [%$data_ref];
+    }
     my $self = bless {
         gen     => undef,
         array  => [],
     }, $class;
     
-    return $self->append($data_hash_ref);
+    return $self->append($data_ref);
 }
 
 ### ---
@@ -28,14 +32,16 @@ sub new {
 ### ---
 sub append {
     my $self = shift @_;
-    my $data_hash_ref = (scalar @_ == 1) ? shift @_ : {@_};
+    my $data_ref = (scalar @_ == 1) ? shift @_ : [@_];
+    if (ref $data_ref eq 'HASH') {
+        warn 'Deprecated: call the method with key-value array instead of hash';
+        $data_ref = [%$data_ref];
+    }
+    my @copied = @{$data_ref};
     $self->_init_gen;
     
-    for my $key (keys %$data_hash_ref) {
-        push(@{$self->{array}}, 
-            SQL::OOP::ID->new($key)->to_string,
-            $data_hash_ref->{$key},
-        );
+    while (my($key, $val) = splice @copied, 0, 2) {
+        push(@{$self->{array}}, SQL::OOP::ID->new($key)->to_string, $val);
     }
     
     return $self;
@@ -142,13 +148,13 @@ SQL::OOP::Dataset is a class which represents data sets for INSERT or UPDATE
 
 =head1 METHODS
 
-=head2 SQL::OOP::Dataset->new(%data)
+=head2 SQL::OOP::Dataset->new(@data)
 
 Constructor.
 
     SQL::OOP::Dataset->new(field => 'a', field2 => 'b', field3 => undef);
 
-=head2 $instance->append(%data)
+=head2 $instance->append(@data)
 
 Appends data entries.
 

@@ -6,7 +6,6 @@ use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Update;
-use Tie::IxHash;
 
 __PACKAGE__->runtests;
 

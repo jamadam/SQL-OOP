@@ -7,7 +7,6 @@ use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Select;
-use Tie::IxHash;
 
 __PACKAGE__->runtests;
 
@@ -111,34 +110,31 @@ sub and_with_sub : Test(1) {
 
 sub abstract_and : Test(1) {
     
-    tie(my %seed, 'Tie::IxHash');
-    %seed = (
+    my $seed = [
         a => 'b',
         c => 'd',
-    );
-    my $where = SQL::OOP::Where->and_hash(\%seed);
+    ];
+    my $where = SQL::OOP::Where->and_abstract($seed);
     is($where->to_string, q{"a" = ? AND "c" = ?});
 }
 
 sub abstract_and_with_op : Test(1) {
     
-    tie(my %seed, 'Tie::IxHash');
-    %seed = (
+    my $seed = [
         a => 'b',
         c => 'd',
-    );
-    my $where = SQL::OOP::Where->and_hash(\%seed, "LIKE");
+    ];
+    my $where = SQL::OOP::Where->and_abstract($seed, "LIKE");
     is($where->to_string, q{"a" LIKE ? AND "c" LIKE ?});
 }
 
 sub abstract_or : Test(1) {
     
-    tie(my %seed, 'Tie::IxHash');
-    %seed = (
+    my $seed = [
         a => 'b',
         c => 'd',
-    );
-    my $where = SQL::OOP::Where->or_hash(\%seed);
+    ];
+    my $where = SQL::OOP::Where->or_abstract($seed);
     is($where->to_string, q{"a" = ? OR "c" = ?});
 }
 

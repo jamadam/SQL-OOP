@@ -1,7 +1,11 @@
 Revision history for SQL-OOP
 
-0.21 2012/01/06
-  - Removed dependency on Class::Inheritable
+0.21 2014/05/29
+  - Removed dependency on Class::Inheritable.
+  - Deprecated accepting hashs for where clauses and datasets.
+  - Deprecated Where::and_hash infavor of Where::and_abstract.
+  - Deprecated Where::or_hash infavor of Where::or_abstract.
+  - Tested on perl-5.18.2
 
 0.20 2012/01/06
   - Improved Dataset class to be compatible to super class attr.

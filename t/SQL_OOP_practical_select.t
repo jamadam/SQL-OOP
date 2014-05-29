@@ -13,7 +13,7 @@ __PACKAGE__->runtests;
 
 sub default_cond_and_flex_cond : Test(4) {
     
-    my $users = _active_users({'point' => '10'});
+    my $users = _active_users(['point' => '10']);
     is($users->to_string, q{SELECT "a", "b" FROM "user" WHERE "active" = ? AND ("point" = ?)});
     my @bind = $users->bind;
     is(scalar @bind, 2);
@@ -23,7 +23,7 @@ sub default_cond_and_flex_cond : Test(4) {
 
 sub default_cond_and_flex_cond_undef : Test(3) {
     
-    my $users = _active_users({'point' => undef});
+    my $users = _active_users(['point' => undef]);
     is($users->to_string, q{SELECT "a", "b" FROM "user" WHERE "active" = ?});
     my @bind = $users->bind;
     is(scalar @bind, 1);
@@ -42,7 +42,7 @@ sub _active_users {
             my $w = SQL::OOP::Where->new;
             return $w->and(
                 $w->cmp('=', 'active', '1'),
-                $w->and_hash($where_abstract),
+                $w->and_abstract($where_abstract),
             );
         }
     );

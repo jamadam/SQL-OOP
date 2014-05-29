@@ -76,7 +76,7 @@ SQL::OOP::Insert
     # set clause
     $insert->set(
         $insert->ARG_TABLE => SQL::OOP::ID->new('some_table'),
-        $insert->ARG_DATASET => SQL::OOP::Dataset->new(%data),
+        $insert->ARG_DATASET => SQL::OOP::Dataset->new(@data),
     );
     
     # reset clause by plain text

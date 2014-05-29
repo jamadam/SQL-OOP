@@ -6,7 +6,6 @@ use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Insert;
-use Tie::IxHash;
 
 __PACKAGE__->runtests;
 
@@ -30,15 +29,10 @@ INSERT INTO "tbl1" ("col1", "col2") VALUES (?, ?)
 EOF
     
     {
-        tie(my %data, 'Tie::IxHash');
-        %data = (
-            col1 => 'a',
-            col2 => 'b',
-        );
         my $insert = SQL::OOP::Insert->new();
         $insert->set(
             $insert->ARG_TABLE => '"tbl1"',
-            $insert->ARG_DATASET => SQL::OOP::Dataset->new(%data)
+            $insert->ARG_DATASET => SQL::OOP::Dataset->new(col1 => 'a', col2 => 'b')
         );
         
         my @bind = $insert->bind;

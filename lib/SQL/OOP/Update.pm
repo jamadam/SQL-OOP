@@ -85,7 +85,7 @@ SQL::OOP::Update
     # reset clauses using objects
     $update->set(
         $select->ARG_TABLE      => SQL::OOP::ID->new('some_table'),
-        $update->ARG_DATASET    => SQL::OOP::Dataset->new(%data),
+        $update->ARG_DATASET    => SQL::OOP::Dataset->new(@data),
         $select->ARG_WHERE      => $where->cmp('=', "some_fileld", 'value')
     );
     my $sql  = $update->to_string;

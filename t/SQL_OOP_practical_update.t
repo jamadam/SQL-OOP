@@ -13,7 +13,7 @@ __PACKAGE__->runtests;
 
 sub default_cond_and_flex_cond : Test(4) {
     
-    my $users = _update_user('jamadam', {'point' => '10'});
+    my $users = _update_user('jamadam', ['point' => '10']);
     is($users->to_string, q{UPDATE "user" SET "point" = ? WHERE "userid" = ?});
     my @bind = $users->bind;
     is(scalar @bind, 2);
@@ -23,7 +23,7 @@ sub default_cond_and_flex_cond : Test(4) {
 
 sub default_cond_and_flex_cond_undef : Test(4) {
     
-    my $users = _update_user('jamadam', {'point' => undef});
+    my $users = _update_user('jamadam', ['point' => undef]);
     is($users->to_string, q{UPDATE "user" SET "point" = ? WHERE "userid" = ?});
     my @bind = $users->bind;
     is(scalar @bind, 2);

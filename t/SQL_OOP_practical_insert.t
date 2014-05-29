@@ -13,7 +13,7 @@ __PACKAGE__->runtests;
 
 sub default_cond_and_flex_cond : Test(3) {
     
-    my $users = _insert_user('jamadam', {'point' => '10'});
+    my $users = _insert_user('jamadam', ['point' => '10']);
     is($users->to_string, q{INSERT INTO "user" ("point") VALUES (?)});
     my @bind = $users->bind;
     is(scalar @bind, 1);
@@ -22,7 +22,7 @@ sub default_cond_and_flex_cond : Test(3) {
 
 sub default_cond_and_flex_cond_undef : Test(3) {
     
-    my $users = _insert_user('jamadam', {'point' => undef});
+    my $users = _insert_user('jamadam', ['point' => undef]);
     is($users->to_string, q{INSERT INTO "user" ("point") VALUES (?)});
     my @bind = $users->bind;
     is(scalar @bind, 1);
