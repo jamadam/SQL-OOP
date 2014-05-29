@@ -8,12 +8,12 @@ use Test::More;
 use SQL::OOP;
 use SQL::OOP::Dataset;
 use Tie::IxHash;
-    
-    __PACKAGE__->runtests;
-    
-    sub retrieve : Test(2) {
-        my $dataset = SQL::OOP::Dataset->new();
-        $dataset->append(a => 'b', c => 'd');
-        is $dataset->retrieve('a'), 'b', 'right value';
-        is $dataset->retrieve('c'), 'd', 'right value';
-    }
+
+__PACKAGE__->runtests;
+
+sub retrieve : Test(2) {
+    my $dataset = SQL::OOP::Dataset->new();
+    $dataset->append(a => 'b', c => 'd');
+    is $dataset->retrieve('a'), 'b', 'right value';
+    is $dataset->retrieve('c'), 'd', 'right value';
+}

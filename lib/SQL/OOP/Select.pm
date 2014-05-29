@@ -6,69 +6,69 @@ use SQL::OOP::Where;
 use SQL::OOP::Order;
 use base qw(SQL::OOP::Command);
 
-    sub ARG_FIELDS()    {1} ## no critic
-    sub ARG_FROM()      {2} ## no critic
-    sub ARG_WHERE()     {3} ## no critic
-    sub ARG_GROUPBY()   {4} ## no critic
-    sub ARG_ORDERBY()   {5} ## no critic
-    sub ARG_LIMIT()     {6} ## no critic
-    sub ARG_OFFSET()    {7} ## no critic
-    
-    ### ---
-    ### Get Names of set arguments in array ref
-    ### ---
-    sub KEYS {
-        return
-        [ARG_FIELDS, ARG_FROM, ARG_WHERE,
-         ARG_GROUPBY, ARG_ORDERBY, ARG_LIMIT, ARG_OFFSET];
+sub ARG_FIELDS()    {1} ## no critic
+sub ARG_FROM()      {2} ## no critic
+sub ARG_WHERE()     {3} ## no critic
+sub ARG_GROUPBY()   {4} ## no critic
+sub ARG_ORDERBY()   {5} ## no critic
+sub ARG_LIMIT()     {6} ## no critic
+sub ARG_OFFSET()    {7} ## no critic
+
+### ---
+### Get Names of set arguments in array ref
+### ---
+sub KEYS {
+    return
+    [ARG_FIELDS, ARG_FROM, ARG_WHERE,
+     ARG_GROUPBY, ARG_ORDERBY, ARG_LIMIT, ARG_OFFSET];
+}
+
+### ---
+### Get prefixes for each clause in hash ref
+### ---
+sub PREFIXES {
+    return {
+        ARG_FIELDS()    => 'SELECT',
+        ARG_FROM()      => 'FROM',
+        ARG_WHERE()     => 'WHERE',
+        ARG_GROUPBY()   => 'GROUP BY',
+        ARG_ORDERBY()   => 'ORDER BY',
+        ARG_LIMIT()     => 'LIMIT',
+        ARG_OFFSET()    => 'OFFSET',
     }
-    
-    ### ---
-    ### Get prefixes for each clause in hash ref
-    ### ---
-    sub PREFIXES {
-        return {
-            ARG_FIELDS()    => 'SELECT',
-            ARG_FROM()      => 'FROM',
-            ARG_WHERE()     => 'WHERE',
-            ARG_GROUPBY()   => 'GROUP BY',
-            ARG_ORDERBY()   => 'ORDER BY',
-            ARG_LIMIT()     => 'LIMIT',
-            ARG_OFFSET()    => 'OFFSET',
-        }
-    }
-    
-    ### ---
-    ### Constructor
-    ### ---
-    sub new {
-        my ($class, %hash) = @_;
-        return $class->SUPER::new(%hash);
-    }
-    
-    ### ---
-    ### Set elements
-    ### ---
-    sub set {
-        my ($class, %hash) = @_;
-        return $class->SUPER::set(%hash);
-    }
-    
-    ### ---
-    ### Get SQL snippet
-    ### ---
-    sub to_string {
-        my $self = shift;
-        local $SQL::OOP::Base::quote_char = $self->quote_char;
-        return $self->SUPER::to_string(@_);
-    }
-    
-    ### ---
-    ### Get binded values in array
-    ### ---
-    sub bind {
-        return shift->SUPER::bind(@_);
-    }
+}
+
+### ---
+### Constructor
+### ---
+sub new {
+    my ($class, %hash) = @_;
+    return $class->SUPER::new(%hash);
+}
+
+### ---
+### Set elements
+### ---
+sub set {
+    my ($class, %hash) = @_;
+    return $class->SUPER::set(%hash);
+}
+
+### ---
+### Get SQL snippet
+### ---
+sub to_string {
+    my $self = shift;
+    local $SQL::OOP::Base::quote_char = $self->quote_char;
+    return $self->SUPER::to_string(@_);
+}
+
+### ---
+### Get binded values in array
+### ---
+sub bind {
+    return shift->SUPER::bind(@_);
+}
 
 1;
 

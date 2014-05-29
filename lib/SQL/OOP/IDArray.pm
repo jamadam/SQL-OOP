@@ -4,44 +4,44 @@ use warnings;
 use Scalar::Util qw(blessed);
 use SQL::OOP::ID;
 use base qw(SQL::OOP::Array);
-    
-    ### ---
-    ### Constructor
-    ### ---
-    sub new {
-        my ($class, @array) = @_;
-        my $self = $class->SUPER::new(@array)->set_sepa(', ');
+
+### ---
+### Constructor
+### ---
+sub new {
+    my ($class, @array) = @_;
+    my $self = $class->SUPER::new(@array)->set_sepa(', ');
+}
+
+### ---
+### Append ID
+### ---
+sub append {
+    my ($self, @array) = @_;
+    $self->_init_gen;
+    if (ref $array[0] && ref $array[0] eq 'ARRAY') {
+        @array = @{$array[0]};
     }
-    
-    ### ---
-    ### Append ID
-    ### ---
-    sub append {
-        my ($self, @array) = @_;
-        $self->_init_gen;
-        if (ref $array[0] && ref $array[0] eq 'ARRAY') {
-            @array = @{$array[0]};
+    foreach my $elem (@array) {
+        if (blessed($elem) && $elem->isa('SQL::OOP::Base')) {
+            push(@{$self->{array}}, $elem);
+        } elsif ($elem) {
+            push(@{$self->{array}}, SQL::OOP::ID->new($elem));
         }
-        foreach my $elem (@array) {
-            if (blessed($elem) && $elem->isa('SQL::OOP::Base')) {
-                push(@{$self->{array}}, $elem);
-            } elsif ($elem) {
-                push(@{$self->{array}}, SQL::OOP::ID->new($elem));
-            }
-        }
-        return $self;
     }
-    
-    ### ---
-    ### parenthisize sub query 
-    ### ---
-    sub fix_element_in_list_context {
-        my ($self, $obj) = @_;
-        if ($obj->isa('SQL::OOP::Command')) {
-            return '('. $obj->to_string. ')';
-        }
-        return $obj->to_string;
+    return $self;
+}
+
+### ---
+### parenthisize sub query 
+### ---
+sub fix_element_in_list_context {
+    my ($self, $obj) = @_;
+    if ($obj->isa('SQL::OOP::Command')) {
+        return '('. $obj->to_string. ')';
     }
+    return $obj->to_string;
+}
 
 1;
 

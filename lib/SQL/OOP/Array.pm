@@ -6,96 +6,96 @@ use strict;
 use warnings;
 use Scalar::Util qw(blessed);
 use base qw(SQL::OOP::Base);
+
+### ---
+### Constructor
+### ---
+sub new {
+    my ($class, @array) = @_;
+    my $self = bless {
+        sepa    => ' ',
+        gen     => undef,
+        array   => undef,
+    }, $class;
     
-    ### ---
-    ### Constructor
-    ### ---
-    sub new {
-        my ($class, @array) = @_;
-        my $self = bless {
-            sepa    => ' ',
-            gen     => undef,
-            array   => undef,
-        }, $class;
-        
-        return $self->append(@array);
+    return $self->append(@array);
+}
+
+### ---
+### Set separator for join array
+### ---
+sub set_sepa {
+    my ($self, $sepa) = @_;
+    $self->{sepa} = $sepa;
+    return $self;
+}
+
+### ---
+### Append snippet
+### ---
+sub append {
+    my ($self, @array) = @_;
+    $self->_init_gen;
+    if (ref $array[0] && ref $array[0] eq 'ARRAY') {
+        @array = @{$array[0]};
     }
-    
-    ### ---
-    ### Set separator for join array
-    ### ---
-    sub set_sepa {
-        my ($self, $sepa) = @_;
-        $self->{sepa} = $sepa;
-        return $self;
-    }
-    
-    ### ---
-    ### Append snippet
-    ### ---
-    sub append {
-        my ($self, @array) = @_;
-        $self->_init_gen;
-        if (ref $array[0] && ref $array[0] eq 'ARRAY') {
-            @array = @{$array[0]};
+    foreach my $elem (@array) {
+        if ($elem) {
+            push(@{$self->{array}}, SQL::OOP::Base->new($elem));
         }
-        foreach my $elem (@array) {
-            if ($elem) {
-                push(@{$self->{array}}, SQL::OOP::Base->new($elem));
-            }
+    }
+    
+    return $self;
+}
+
+### ---
+### generate SQL snippet
+### ---
+sub generate {
+    my $self = shift;
+    my @array = map {
+        if ($_->to_string && (scalar @{$self->{array}}) >= 2) {
+            $self->fix_element_in_list_context($_);
+        } else {
+            $_->to_string;
         }
-        
-        return $self;
-    }
+    } @{$self->{array}};
+    $self->{gen} = join($self->{sepa}, grep {$_} @array);
     
-    ### ---
-    ### generate SQL snippet
-    ### ---
-    sub generate {
-        my $self = shift;
-        my @array = map {
-            if ($_->to_string && (scalar @{$self->{array}}) >= 2) {
-                $self->fix_element_in_list_context($_);
-            } else {
-                $_->to_string;
-            }
-        } @{$self->{array}};
-        $self->{gen} = join($self->{sepa}, grep {$_} @array);
-        
-        return $self;
+    return $self;
+}
+
+### ---
+### fix generated string in list context
+### ---
+sub fix_element_in_list_context {
+    my ($self, $obj) = @_;
+    if ($obj->isa(__PACKAGE__)) {
+        return '('. $obj->to_string. ')';
     }
-    
-    ### ---
-    ### fix generated string in list context
-    ### ---
-    sub fix_element_in_list_context {
-        my ($self, $obj) = @_;
-        if ($obj->isa(__PACKAGE__)) {
-            return '('. $obj->to_string. ')';
+    return $obj->to_string;
+}
+
+### ---
+### Get binded values in array
+### ---
+sub bind {
+    my $self = shift;
+    my @out = map {
+        my @a;
+        if ($_) {
+            @a = $_->bind;
         }
-        return $obj->to_string;
-    }
-    
-    ### ---
-    ### Get binded values in array
-    ### ---
-    sub bind {
-        my $self = shift;
-        my @out = map {
-            my @a;
-            if ($_) {
-                @a = $_->bind;
-            }
-            @a;
-        } @{$self->{array}};
-        return @out if (wantarray);
-        return scalar @out;
-    }
-    
-    sub values {
-        my $self = shift;
-        return @{$self->{array}};
-    }
+        @a;
+    } @{$self->{array}};
+    return @out if (wantarray);
+    return scalar @out;
+}
+
+sub values {
+    my $self = shift;
+    return @{$self->{array}};
+}
 
 1;
 

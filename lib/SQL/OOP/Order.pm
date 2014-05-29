@@ -3,105 +3,105 @@ use strict;
 use warnings;
 use SQL::OOP::Base;
 use base qw(SQL::OOP::Array);
-    
-    ### ---
-    ### Constructor
-    ### ---
-    sub new {
-        my ($class, @array) = @_;
-        return $class->SUPER::new(
-                            map {SQL::OOP::ID->new($_)} @array)->set_sepa(', ');
-    }
-    
-    ### ---
-    ### fix generated string in list context
-    ### ---
-    sub fix_element_in_list_context {
-        my ($self, $obj) = @_;
-        return $obj->to_string;
-    }
-    
-    ### ---
-    ### Construct ORER BY clause by array
-    ### ---
-    sub abstract {
-        my ($class, $array_ref) = @_;
-        my $self = $class->SUPER::new()->set_sepa(', ');
-        foreach my $rec_ref (@{$array_ref}) {
-            if (ref $rec_ref) {
-                if ($rec_ref->[1]) {
-                    $self->append_desc($rec_ref->[0]);
-                } else {
-                    $self->append_asc($rec_ref->[0]);
-                }
+
+### ---
+### Constructor
+### ---
+sub new {
+    my ($class, @array) = @_;
+    return $class->SUPER::new(
+                        map {SQL::OOP::ID->new($_)} @array)->set_sepa(', ');
+}
+
+### ---
+### fix generated string in list context
+### ---
+sub fix_element_in_list_context {
+    my ($self, $obj) = @_;
+    return $obj->to_string;
+}
+
+### ---
+### Construct ORER BY clause by array
+### ---
+sub abstract {
+    my ($class, $array_ref) = @_;
+    my $self = $class->SUPER::new()->set_sepa(', ');
+    foreach my $rec_ref (@{$array_ref}) {
+        if (ref $rec_ref) {
+            if ($rec_ref->[1]) {
+                $self->append_desc($rec_ref->[0]);
             } else {
-                $self->append_asc($rec_ref);
+                $self->append_asc($rec_ref->[0]);
             }
+        } else {
+            $self->append_asc($rec_ref);
         }
-        return $self;
     }
-    
-    ### ---
-    ### Get SQL::OOP::Order::Expression instance(ASC)
-    ### ---
-    sub new_asc {
-        my ($class_or_obj, $key) = @_;
-        return SQL::OOP::Order::Expression->new($key);
-    }
-    
-    ### ---
-    ### Get SQL::OOP::Order::Expression instance(DESC)
-    ### ---
-    sub new_desc {
-        my ($class_or_obj, $key) = @_;
-        return SQL::OOP::Order::Expression->new_desc($key);
-    }
-    
-    ### ---
-    ### Append element(ASC)
-    ### ---
-    sub append_asc {
-        my ($self, $key) = @_;
-        $self->_init_gen;
-        push(@{$self->{array}}, SQL::OOP::Order::Expression->new($key));
-        return $self;
-    }
-    
-    ### ---
-    ### Append element(DESC)
-    ### ---
-    sub append_desc {
-        my ($self, $key) = @_;
-        $self->_init_gen;
-        push(@{$self->{array}}, SQL::OOP::Order::Expression->new_desc($key));
-        return $self;
-    }
+    return $self;
+}
+
+### ---
+### Get SQL::OOP::Order::Expression instance(ASC)
+### ---
+sub new_asc {
+    my ($class_or_obj, $key) = @_;
+    return SQL::OOP::Order::Expression->new($key);
+}
+
+### ---
+### Get SQL::OOP::Order::Expression instance(DESC)
+### ---
+sub new_desc {
+    my ($class_or_obj, $key) = @_;
+    return SQL::OOP::Order::Expression->new_desc($key);
+}
+
+### ---
+### Append element(ASC)
+### ---
+sub append_asc {
+    my ($self, $key) = @_;
+    $self->_init_gen;
+    push(@{$self->{array}}, SQL::OOP::Order::Expression->new($key));
+    return $self;
+}
+
+### ---
+### Append element(DESC)
+### ---
+sub append_desc {
+    my ($self, $key) = @_;
+    $self->_init_gen;
+    push(@{$self->{array}}, SQL::OOP::Order::Expression->new_desc($key));
+    return $self;
+}
 
 package SQL::OOP::Order::Expression;
 use strict;
 use warnings;
 use base qw(SQL::OOP::Base);
 
-    ### ---
-    ### Constructor
-    ### ---
-    sub new {
-        my ($class, $key) = @_;
-        if ($key) {
-            return $class->SUPER::new(SQL::OOP::ID->new($key));
-        }
+### ---
+### Constructor
+### ---
+sub new {
+    my ($class, $key) = @_;
+    if ($key) {
+        return $class->SUPER::new(SQL::OOP::ID->new($key));
     }
-    
-    ### ---
-    ### DESC Constructor
-    ### ---
-    sub new_desc {
-        my ($class, $key) = @_;
-        if ($key) {
-            return $class->SUPER::new(
-                                SQL::OOP::ID->new($key)->to_string. " DESC");
-        }
+}
+
+### ---
+### DESC Constructor
+### ---
+sub new_desc {
+    my ($class, $key) = @_;
+    if ($key) {
+        return $class->SUPER::new(
+                            SQL::OOP::ID->new($key)->to_string. " DESC");
     }
+}
 
 1;
 

@@ -6,21 +6,21 @@ use SQL::OOP::Base;
 use 5.005;
 our $VERSION = '0.21';
 
-    sub new {
-        my $class = shift;
-        return SQL::OOP::Base->new(@_);
-    }
-    
-    sub quote_char {
-        my $class = shift;
-        return SQL::OOP::Base->quote_char(@_);
-    }
-    
-    sub escape_code_ref {
-        my $class = shift;
-        return SQL::OOP::Base->escape_code_ref(@_);
-    }
-    
+sub new {
+    my $class = shift;
+    return SQL::OOP::Base->new(@_);
+}
+
+sub quote_char {
+    my $class = shift;
+    return SQL::OOP::Base->quote_char(@_);
+}
+
+sub escape_code_ref {
+    my $class = shift;
+    return SQL::OOP::Base->escape_code_ref(@_);
+}
+
 1;
 
 __END__

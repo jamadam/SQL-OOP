@@ -3,63 +3,63 @@ use strict;
 use warnings;
 use SQL::OOP::Dataset;
 use base qw(SQL::OOP::Command);
-	
-	sub ARG_TABLE()		{1} ## no critic
-	sub ARG_DATASET() 	{2} ## no critic
-	sub ARG_SELECT()	{3} ## no critic
-	
-	### ---
-	### Get Names of set arguments in array ref
-	### ---
-	sub KEYS {
-		return [ARG_TABLE, ARG_DATASET, ARG_SELECT];
-	}
-	
-	### ---
-	### Get prefixes for each clause in hash ref
-	### ---
-	sub PREFIXES {
-		return {
-			ARG_TABLE()		=> 'INSERT INTO',
-			ARG_DATASET() 	=> '',
-			ARG_SELECT() 	=> '',
-		}
-	}
-	
-	### ---
-	### Constructor
-	### ---
-	sub new {
-		my ($class, %hash) = @_;
-		return $class->SUPER::new(%hash);
-	}
-	
-	### ---
-	### Set elements
-	### ---
-	sub set {
-		my ($class, %hash) = @_;
-		return $class->SUPER::set(%hash);
-	}
-	
-	### ---
-	### Get SQL snippet
-	### ---
-	sub to_string {
-		my ($self) = @_;
-        local $SQL::OOP::Base::quote_char = $self->quote_char;
-		if ($self->{array}->[1]) {
-			$self->{array}->[1]->generate(SQL::OOP::Dataset->MODE_INSERT);
-		}
-		return shift->SUPER::to_string(@_);
-	}
-	
-	### ---
-	### Get binded values in array
-	### ---
-	sub bind {
-		return shift->SUPER::bind(@_);
-	}
+
+sub ARG_TABLE()     {1} ## no critic
+sub ARG_DATASET()   {2} ## no critic
+sub ARG_SELECT()    {3} ## no critic
+
+### ---
+### Get Names of set arguments in array ref
+### ---
+sub KEYS {
+    return [ARG_TABLE, ARG_DATASET, ARG_SELECT];
+}
+
+### ---
+### Get prefixes for each clause in hash ref
+### ---
+sub PREFIXES {
+    return {
+        ARG_TABLE()     => 'INSERT INTO',
+        ARG_DATASET()   => '',
+        ARG_SELECT()    => '',
+    }
+}
+
+### ---
+### Constructor
+### ---
+sub new {
+    my ($class, %hash) = @_;
+    return $class->SUPER::new(%hash);
+}
+
+### ---
+### Set elements
+### ---
+sub set {
+    my ($class, %hash) = @_;
+    return $class->SUPER::set(%hash);
+}
+
+### ---
+### Get SQL snippet
+### ---
+sub to_string {
+    my ($self) = @_;
+    local $SQL::OOP::Base::quote_char = $self->quote_char;
+    if ($self->{array}->[1]) {
+        $self->{array}->[1]->generate(SQL::OOP::Dataset->MODE_INSERT);
+    }
+    return shift->SUPER::to_string(@_);
+}
+
+### ---
+### Get binded values in array
+### ---
+sub bind {
+    return shift->SUPER::bind(@_);
+}
 
 1;
 
@@ -86,7 +86,7 @@ SQL::OOP::Insert
     
     my $sql  = $delete->to_string;
     my @bind = $delete->bind;
-	
+
 =head1 DESCRIPTION
 
 SQL::OOP::Insert class represents Insert commands.
