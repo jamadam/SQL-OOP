@@ -1,21 +1,12 @@
-package SQL_OOP_CpmprehensiveTest2;
 use strict;
 use warnings;
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Select;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub basic_test: Test(1) {
-    
+{
     my $expected = compress_sql(<<EXPECTED);
 SELECT
     *
@@ -47,3 +38,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();

@@ -1,48 +1,35 @@
-package SQL_OOP_CpmprehensiveTest;
 use strict;
 use warnings;
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::IDArray;
 use SQL::OOP::Select;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub select_basic : Test {
-    
+{
     my $select = $sql->select;
     my $fields = $sql->id_array(qw(a b c));
     my $sql = $fields->to_string;
     is($sql, qq{"a", "b", "c"});
 }
 
-sub basic_test: Test(1) {
-    
+{
     my $b = $sql->base('a,b,c');
     is($b->to_string, 'a,b,c', 'basic test for to_string');
 }
 
-sub include_undef : Test(1) {
-    
+{
     my $a = $sql->array('', '', ('a',undef,'c'))->set_sepa(', ');
     is($a->to_string, 'a, c', 'array include undef test');
 }
 
-sub basic_test_array : Test(1) {
-    
+{
     my $a = $sql->array('', '', qw(a b c))->set_sepa(', ');
     is($a->to_string, 'a, b, c', 'basic array test for bind');
 }
 
-sub where_append : Test(3) {
-
+{
     my $and = $sql->where->and(
         'a',
         'b',
@@ -54,16 +41,14 @@ sub where_append : Test(3) {
     is($and->to_string, 'a AND b AND c AND "d" = ?', 'where append obj');
 }
 
-sub where_basic : Test {
-    
+{
     my $cmp = $sql->where->cmp('=', 'column1', 'value');
     my $and = $sql->where->and($cmp, $cmp);
     my $str = $and->to_string;
     is($str, qq{"column1" = ? AND "column1" = ?}, 'cmp and cmp');
 }
 
-sub cmp_expression: Test(4) {
-    
+{
     my $cmp = $sql->where->cmp('=', 'column1', 'value');
     my $str = $cmp->to_string;
     my @bind = $cmp->bind;
@@ -76,8 +61,7 @@ sub cmp_expression: Test(4) {
 }
 
 ### Pertial adoption
-sub select_class : Test(8) {
-    
+{
     my $expected = compress_sql(<<EXPECTED);
 SELECT
     *
@@ -154,8 +138,7 @@ EXPECTED
     }
 }
 
-sub total : Test(13) {
-    
+{
     my $expected = compress_sql(<<"EXPECTED");
 SELECT
     "ky1", "ky2", *
@@ -258,3 +241,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();

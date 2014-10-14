@@ -1,22 +1,12 @@
-package SQL_OOP_UpdateTest;
 use strict;
 use warnings;
-use lib qw(t/lib);
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Update;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub set_clause_separately : Test(1) {
-    
+{
     my $update = $sql->update;
     $update->set(
         table => 'tbl1',
@@ -29,8 +19,7 @@ sub set_clause_separately : Test(1) {
     is($update->to_string, q(UPDATE tbl1 SET a = b, c = d WHERE some cond));
 }
 
-sub where : Test(3) {
-    
+{
     my $update = $sql->update;
     $update->set(
         table => 'tbl1',
@@ -46,8 +35,7 @@ sub where : Test(3) {
     is(shift @bind, 'b');
 }
 
-sub values_by_array : Test(4) {
-    
+{
     my $update = $sql->update;
     $update->set(
         dataset => $sql->dataset(a => 'b',c => 'd'),
@@ -59,8 +47,7 @@ sub values_by_array : Test(4) {
     is(shift @bind, 'd');
 }
 
-sub value_order_specific : Test(3) {
-    
+{
     my $update = $sql->update;
     $update->set(
         dataset =>
@@ -72,8 +59,7 @@ sub value_order_specific : Test(3) {
     is(shift @bind, 'd');
 }
 
-sub update_value_is_a_array : Test(3) {
-    
+{
     my $array = $sql->array->set_sepa(', ');
     $array->append($sql->base('a = ?', ['b']));
     $array->append($sql->base('c = ?', ['d']));
@@ -87,8 +73,7 @@ sub update_value_is_a_array : Test(3) {
     is(shift @bind, 'd');
 }
 
-sub conprehensive : Test(8) {
-    
+{
     my $expected = compress_sql(<<EOF);
 UPDATE tbl1 SET "a" = ? WHERE "c" = ?
 EOF
@@ -131,3 +116,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();

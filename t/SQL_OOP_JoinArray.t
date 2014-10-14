@@ -1,19 +1,11 @@
-package SQL_OOP_UpdateTest;
 use strict;
 use warnings;
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub join : Test(1) {
+{
     
     my $expected = <<EOF;
 SELECT
@@ -49,8 +41,7 @@ EOF
     is($select->to_string, compress_sql($expected));
 }
 
-sub join_nested : Test(1) {
-    
+{
     my $expected = <<EOF;
 SELECT
     hoge
@@ -105,3 +96,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();

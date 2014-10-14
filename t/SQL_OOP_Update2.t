@@ -1,22 +1,12 @@
-package SQL_OOP_UpdateTest;
 use strict;
 use warnings;
-use lib qw(t/lib);
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Update;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub sub_expression : Test(4) {
-    
+{
     my $update = $sql->update;
     $update->set(
         table => 'tbl1',
@@ -43,3 +33,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();

@@ -1,23 +1,12 @@
-package SQL_OOP_WhereTest;
 use strict;
 use warnings;
-use lib qw(lib);
-use lib qw(t/lib);
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Select;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub not_in : Test(6) {
-    
+{
     my $in = $sql->where->not_in('col', [1, 2, 3]);
     is($in->to_string, q{"col" NOT IN (?, ?, ?)});
     my @bind = $in->bind;
@@ -35,8 +24,7 @@ sub not_in : Test(6) {
     is($in->to_string, q{"col" NOT IN (SELECT * FROM tbl)});
 }
 
-sub in : Test(44) {
-    
+{
     my $in = $sql->where->in('col', 'hoge');
     is($in->to_string, q{"col" IN (?)});
     my @bind = $in->bind;
@@ -94,14 +82,12 @@ sub in : Test(44) {
     is(shift @bind, 'b');
 }
 
-sub cmp_value_undef : Test(1) {
-    
+{
     my $a = $sql->where->cmp('=', 'a', undef);
     is($a, undef);
 }
 
-sub cmp_nested : Test(2) {
-    
+{
     my $base = SQL::OOP::Base->new('test');
     {
         my $a = $sql->where->cmp('=', 'col1', $base);
@@ -113,15 +99,13 @@ sub cmp_nested : Test(2) {
     }
 }
 
-sub cmp_nested2 : Test(1) {
-    
+{
     my $a = $sql->where->cmp('=', SQL::OOP::Base->new('func(col1)'),
                                     SQL::OOP::Base->new('func(col2)'));
     is($a->to_string, q{func(col1) = func(col2)});
 }
 
-sub order_by : Test(3) {
-    
+{
     my $obj = $sql->where->cmp('=', 'key1', 'val1');
     is($obj->to_string, q{"key1" = ?});
     my $obj2 = $sql->where->or();
@@ -134,20 +118,17 @@ sub order_by : Test(3) {
     is($obj2->to_string, q{"key2" = ? OR ("key3" = ? OR "key4" = ?)});
 }
 
-sub and : Test(1) {
-    
+{
     my $and = $sql->where->and('a','b');
     is($and->to_string, q{a AND b});
 }
 
-sub and_with_sub : Test(1) {
-    
+{
     my $and = $sql->where->and(sub{'a'},sub{'b'}->());
     is($and->to_string, q{a AND b});
 }
 
-sub abstract_and : Test(1) {
-    
+{
     my $seed = [
         a => 'b',
         c => 'd',
@@ -156,8 +137,7 @@ sub abstract_and : Test(1) {
     is($where->to_string, q{"a" = ? AND "c" = ?});
 }
 
-sub abstract_and_with_op : Test(1) {
-    
+{
     my $seed = [
         a => 'b',
         c => 'd',
@@ -166,8 +146,7 @@ sub abstract_and_with_op : Test(1) {
     is($where->to_string, q{"a" LIKE ? AND "c" LIKE ?});
 }
 
-sub abstract_or : Test(1) {
-    
+{
     my $seed = [
         a => 'b',
         c => 'd',
@@ -176,38 +155,33 @@ sub abstract_or : Test(1) {
     is($where->to_string, q{"a" = ? OR "c" = ?});
 }
 
-sub cmp_key_by_array : Test(2) {
-    
+{
     my $id = $sql->id('public','table','c1');
     is($id->to_string, q{"public"."table"."c1"});
     my $where = $sql->where->cmp('=', $id, 'val');
     is($where->to_string, q{"public"."table"."c1" = ?});
 }
 
-sub cmp_key_by_array_ref : Test(1) {
-    
+{
     my $where = $sql->where->cmp('=', ['public','table','c1'], 'val');
     is($where->to_string, q{"public"."table"."c1" = ?});
 }
 
-sub is_null : Test(2) {
-    
+{
     my $where = $sql->where->is_null('col1');
     is($where->to_string, q{"col1" IS NULL});
     my $where2 = $sql->where->is_null($sql->id('col1'));
     is($where2->to_string, q{"col1" IS NULL});
 }
 
-sub between : Test(2) {
-    
+{
     my $where = $sql->where->between('col1', 1, 2);
     is($where->to_string, q{"col1" BETWEEN ? AND ?});
     my $where2 = $sql->where->between($sql->id('col1'), 1, 2);
     is($where2->to_string, q{"col1" BETWEEN ? AND ?});
 }
 
-sub between_smart : Test(2) {
-    
+{
     my $where = $sql->where->between('col1', 1, undef);
     is($where->to_string, q{"col1" >= ?});
     my $where2 = $sql->where->between($sql->id('col1'), 1, undef);
@@ -223,3 +197,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();

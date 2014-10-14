@@ -1,23 +1,14 @@
-package SQL_OOP_Sql;
 use strict;
 use warnings;
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Array;
 use SQL::OOP::Insert;
 use SQL::OOP::Where;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub bind_include_undef : Test(5) {
-    
+{
     my $base = $sql->base('a', ['a', undef, 'c']);
     is($base->to_string, 'a');
     my @bind = $base->bind;
@@ -27,20 +18,17 @@ sub bind_include_undef : Test(5) {
     is(shift @bind, 'c');
 }
 
-sub array : Test {
-    
+{
     my $array = $sql->array('a', 'b', 'c')->set_sepa(',');
     is($array->to_string, q{a,b,c});
 }
 
-sub array_include_undef : Test {
-    
+{
     my $array = $sql->array('a', undef, 'c')->set_sepa(',');
     is($array->to_string, q{a,c});
 }
 
-sub array_basic : Test(5) {
-    
+{
     my $sql1 = $sql->base('a', ['a']);
     my $sql2 = $sql->base('b', ['b']);
     my $sql3 = $sql->base('c', ['c']);
@@ -53,8 +41,7 @@ sub array_basic : Test(5) {
     is(shift @bind, 'c');
 }
 
-sub array_basic_include_undef : Test(5) {
-    
+{
     my $sql1 = $sql->base('a', ['a']);
     my $sql2 = $sql->base('b', [undef]);
     my $sql3 = $sql->base('c', ['c']);
@@ -67,8 +54,7 @@ sub array_basic_include_undef : Test(5) {
     is(shift @bind, 'c');
 }
 
-sub array_basic_include_undef2 : Test(5) {
-    
+{
     my $sql1 = $sql->base('a', ['a']);
     my $sql2 = $sql->base('b', undef);
     my $sql3 = $sql->base('c', ['c']);
@@ -80,28 +66,26 @@ sub array_basic_include_undef2 : Test(5) {
     is(shift @bind, 'c');
 }
 
-sub quote : Test {
-    
+{
     my $id = $sql->id('a');
     is($id->to_string, q{"a"});
 }
 
-sub set_quote : Test {
+{
     
     my $id = $sql->id('a');
     $id->quote_char(q(`));
     is($id->to_string, q{`a`});
 }
 
-sub set_quote_deep : Test {
+{
     my $elem = $sql->id('a');
     my $array = $sql->array($elem, $elem);
     $array->quote_char(q{`});
     is $array->to_string, q{(`a`) (`a`)};
 }
 
-sub arrayed_construction : Test(4) {
-    
+{
     my $expected = compress_sql(<<EOF);
 SELECT
     *
@@ -130,7 +114,7 @@ EOF
     }
 }
 
-sub to_string_embedded : Test(2) {
+{
     my $cond = $sql->where->cmp('=', 'a', 'b');
     my $array = $sql->array(
         'SELECT', '*', 'FROM', 'tbl1', 'WHERE', $cond);
@@ -139,7 +123,7 @@ sub to_string_embedded : Test(2) {
     is($array->to_string_embedded(q{`}), q{SELECT * FROM tbl1 WHERE "a" = `b`});
 }
 
-sub retrieve_from_array : Test(7) {
+{
     my $array = $sql->array('a', 'b', 'c');
     my @a = $array->values;
     is scalar @a, 3;
@@ -163,3 +147,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();

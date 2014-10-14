@@ -1,22 +1,12 @@
-package SQL_OOP_CpmprehensiveTest;
 use strict;
 use warnings;
-use lib qw(t/lib);
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Dataset;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub append_with_hash : Test(2) {
-    
+{
     my $dataset = $sql->dataset;
     $dataset->append(a => $sql->base(q{datetime('now', 'localtime')}));
     is($dataset->to_string_for_insert, q(("a") VALUES (datetime('now', 'localtime'))));
@@ -24,8 +14,7 @@ sub append_with_hash : Test(2) {
     is(scalar @bind, 0);
 }
 
-sub append_with_hash2 : Test(2) {
-    
+{
     my $dataset = $sql->dataset;
     $dataset->append(a => $sql->base(q{datetime('now', 'localtime')}));
     is($dataset->to_string_for_update, q("a" = datetime('now', 'localtime')));
@@ -33,8 +22,7 @@ sub append_with_hash2 : Test(2) {
     is(scalar @bind, 0);
 }
 
-sub append_with_hash3 : Test(2) {
-    
+{
     my $dataset = $sql->dataset;
     $dataset->append(a => $sql->base(q{"a" + 1}));
     is($dataset->to_string_for_update, q("a" = "a" + 1));
@@ -42,8 +30,7 @@ sub append_with_hash3 : Test(2) {
     is(scalar @bind, 0);
 }
 
-sub append_with_hash4 : Test(3) {
-    
+{
     my $dataset = $sql->dataset;
     $dataset->append(a => $sql->base(q{"a" + ?}, [1]));
     is($dataset->to_string_for_update, q("a" = "a" + ?));
@@ -52,8 +39,7 @@ sub append_with_hash4 : Test(3) {
     is(shift @bind, '1');
 }
 
-sub append_with_hash5 : Test(3) {
-    
+{
     my $dataset = $sql->dataset;
     $dataset->append(
         a => $sql->base(q{"a" + ?}, [1])
@@ -73,3 +59,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();

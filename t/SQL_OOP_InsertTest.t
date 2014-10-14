@@ -1,22 +1,12 @@
-package SQL_OOP_InsertTest;
 use strict;
 use warnings;
-use lib qw(t/lib);
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Insert;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub set_clause_separately : Test(1) {
-    
+{
     my $insert = $sql->insert;
     $insert->set(
         table => 'key1',
@@ -28,8 +18,7 @@ sub set_clause_separately : Test(1) {
     is($insert->to_string, q(INSERT INTO key1 (a) VALUES (b)));
 }
 
-sub complex_command : Test(8) {
-    
+{
     my $expected1 = compress_sql(<<EOF);
 INSERT INTO "tbl1" ("col1", "col2") VALUES (?, ?)
 EOF
@@ -80,3 +69,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();

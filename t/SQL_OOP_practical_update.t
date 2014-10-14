@@ -1,7 +1,5 @@
-package Temp;
 use strict;
 use warnings;
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Join;
@@ -9,16 +7,9 @@ use SQL::OOP::Where;
 use SQL::OOP::Update;
 use SQL::OOP::Dataset;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub default_cond_and_flex_cond : Test(4) {
-    
+{
     my $users = _update_user('jamadam', ['point' => '10']);
     is($users->to_string, q{UPDATE "user" SET "point" = ? WHERE "userid" = ?});
     my @bind = $users->bind;
@@ -27,8 +18,7 @@ sub default_cond_and_flex_cond : Test(4) {
     is(shift @bind, 'jamadam');
 }
 
-sub default_cond_and_flex_cond_undef : Test(4) {
-    
+{
     my $users = _update_user('jamadam', ['point' => undef]);
     is($users->to_string, q{UPDATE "user" SET "point" = ? WHERE "userid" = ?});
     my @bind = $users->bind;
@@ -58,3 +48,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();

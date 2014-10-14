@@ -1,41 +1,30 @@
-package SQL_OOP_CpmprehensiveTest;
 use strict;
 use warnings;
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Select;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub to_string_twice : Test(2) {
-    
+{
     my $a = $sql->base("a");
     is($a->to_string, 'a');
     is($a->to_string, 'a');
 }
 
-sub array_to_string_twice : Test(2) {
-    
+{
     my $a = $sql->array("a")->set_sepa(',');
     is($a->to_string, 'a');
     is($a->to_string, 'a');
 }
 
-sub array_to_string_twice2 : Test(2) {
-    
+{
     my $a = $sql->array($sql->base('a'), $sql->base('b'))->set_sepa(', ');
     is($a->to_string, 'a, b');
     is($a->to_string, 'a, b');
 }
 
-sub select_to_string_twice1 : Test(2) {
+{
     
     my $select = $sql->select(
         fields => 'a',
@@ -46,8 +35,7 @@ sub select_to_string_twice1 : Test(2) {
     is($a->to_string, 'SELECT a FROM b');
 }
 
-sub select_to_string_twice2 : Test(2) {
-    
+{
     my $select = $sql->select(
         fields => 'a',
         from   => $sql->base('b'),
@@ -57,8 +45,7 @@ sub select_to_string_twice2 : Test(2) {
     is($a->to_string, 'SELECT a FROM b');
 }
 
-sub select_to_string_twice3 : Test(2) {
-    
+{
     my $select = $sql->select(
         fields => 'a',
         from   => $sql->array('b')->set_sepa(''),
@@ -67,8 +54,7 @@ sub select_to_string_twice3 : Test(2) {
     is($select->to_string, 'SELECT a FROM b');
 }
 
-sub select_to_string_twice4 : Test(1) {
-    
+{
     my $select = $sql->select(
         fields => 'a',
         from   => 'b',
@@ -89,3 +75,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();

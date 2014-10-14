@@ -1,21 +1,12 @@
-package SQL_OOP_UpdateTest;
 use strict;
 use warnings;
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Delete;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub set_clause_separately : Test(1) {
-    
+{
     my $delete = $sql->delete;
     $delete->set(
         table => 'tbl1',
@@ -27,8 +18,7 @@ sub set_clause_separately : Test(1) {
     is($delete->to_string, q(DELETE FROM tbl1 WHERE some cond));
 }
 
-sub where : Test(3) {
-    
+{
     my $delete= $sql->delete;
     $delete->set(
         table => 'tbl1',
@@ -52,3 +42,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();

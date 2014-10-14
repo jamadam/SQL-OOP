@@ -1,21 +1,13 @@
-package SQL_OOP_UpdateTest;
 use strict;
 use warnings;
-use base 'Test::Class';
 use Test::More;
 use SQL::OOP;
 use SQL::OOP::Select;
 use SQL::OOP::Join;
 
-__PACKAGE__->runtests;
+my $sql = SQL::OOP->new;
 
-my $sql;
-
-sub setup : Test(setup) {
-    $sql = SQL::OOP->new;
-};
-
-sub join : Test(1) {
+{
     
     my $expected = <<EOF;
 SELECT
@@ -49,3 +41,5 @@ sub compress_sql {
     $sql =~ s/\s\)/\)/gs;
     return $sql;
 }
+
+done_testing();
