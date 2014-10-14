@@ -5,9 +5,14 @@ use Scalar::Util qw(blessed);
 use SQL::OOP::Base;
 use SQL::OOP::Where;
 use SQL::OOP::Join;
+use SQL::OOP::JoinArray;
 use SQL::OOP::Select;
+use SQL::OOP::Insert;
+use SQL::OOP::Update;
+use SQL::OOP::Dataset;
 use SQL::OOP::ID;
 use SQL::OOP::IDArray;
+use SQL::OOP::Order;
 use 5.005;
 our $VERSION = '0.22';
 
@@ -39,6 +44,11 @@ sub select {
 sub join {
     shift @_;
     return SQL::OOP::Join->new(@_);
+}
+
+sub join_array {
+    shift @_;
+    return SQL::OOP::JoinArray->new(@_);
 }
 
 sub update {
@@ -367,6 +377,12 @@ Short cut of
 Short cut of
 
     SQL::OOP->Join->new
+
+=head2 SQL::OOP->join_array
+
+Short cut of
+
+    SQL::OOP->JoinArray->new
 
 =head2 SQL::OOP->order
 
