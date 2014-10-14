@@ -8,6 +8,12 @@ use SQL::OOP::Select;
 
 __PACKAGE__->runtests;
 
+my $sql;
+
+sub setup : Test(setup) {
+    $sql = SQL::OOP->new;
+};
+
 sub basic_test: Test(1) {
     
     my $expected = compress_sql(<<EXPECTED);
@@ -21,7 +27,7 @@ EXPECTED
 
     ### The following blocks are expected to generate same SQL
     {
-        my $select = SQL::OOP::Select->new();
+        my $select = $sql->select;
         $select->set(
             fields => '*',
             from   => 'table',

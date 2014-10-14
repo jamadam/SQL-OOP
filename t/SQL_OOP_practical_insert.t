@@ -11,6 +11,12 @@ use SQL::OOP::Dataset;
 
 __PACKAGE__->runtests;
 
+my $sql;
+
+sub setup : Test(setup) {
+    $sql = SQL::OOP->new;
+};
+
 sub default_cond_and_flex_cond : Test(3) {
     
     my $users = _insert_user('jamadam', ['point' => '10']);
@@ -32,12 +38,11 @@ sub default_cond_and_flex_cond_undef : Test(3) {
 sub _insert_user {
     
     my ($userid, $dataset_ref) = @_;
-    my $sql = SQL::OOP::Insert->new();
-    $sql->set(
-    table     => SQL::OOP::ID->new('user'),
-    dataset   => SQL::OOP::Dataset->new($dataset_ref),
+    my $insert = $sql->insert(
+        table     => $sql->id('user'),
+        dataset   => $sql->dataset($dataset_ref),
     );
-    return $sql;
+    return $insert;
 }
 
 sub compress_sql {

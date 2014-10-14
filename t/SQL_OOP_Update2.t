@@ -9,16 +9,22 @@ use SQL::OOP::Update;
 
 __PACKAGE__->runtests;
 
+my $sql;
+
+sub setup : Test(setup) {
+    $sql = SQL::OOP->new;
+};
+
 sub sub_expression : Test(4) {
     
-    my $update = SQL::OOP::Update->new;
+    my $update = $sql->update;
     $update->set(
         table => 'tbl1',
         dataset => sub {
-            my $ds = SQL::OOP::Dataset->new;
-            $ds->append('a' => SQL::OOP::Base->new(q{"a" + ?}, [1]))
+            my $ds = $sql->dataset;
+            $ds->append('a' => $sql->base(q{"a" + ?}, [1]))
         },
-        where => SQL::OOP::Where->cmp('=', 'a', 'b'),
+        where => $sql->where->cmp('=', 'a', 'b'),
     );
     
     is($update->to_string, q(UPDATE tbl1 SET "a" = "a" + ? WHERE "a" = ?));

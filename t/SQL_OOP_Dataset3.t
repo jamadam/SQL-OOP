@@ -10,8 +10,14 @@ use SQL::OOP::Dataset;
 
 __PACKAGE__->runtests;
 
+my $sql;
+
+sub setup : Test(setup) {
+    $sql = SQL::OOP->new;
+};
+
 sub retrieve : Test(2) {
-    my $dataset = SQL::OOP::Dataset->new();
+    my $dataset = $sql->dataset;
     $dataset->append(a => 'b', c => 'd');
     is $dataset->retrieve('a'), 'b', 'right value';
     is $dataset->retrieve('c'), 'd', 'right value';

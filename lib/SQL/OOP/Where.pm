@@ -4,12 +4,15 @@ use warnings;
 use Scalar::Util qw(blessed);
 use SQL::OOP::ID;
 
+my $singleton;
+
 ### ---
 ### Constructor
 ### ---
 sub new {
     my $class = shift;
-    return bless {}, $class;
+    $singleton = bless {}, $class unless $singleton;
+    return $singleton;
 }
 
 ### ---

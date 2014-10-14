@@ -11,6 +11,12 @@ use SQL::OOP::Dataset;
 
 __PACKAGE__->runtests;
 
+my $sql;
+
+sub setup : Test(setup) {
+    $sql = SQL::OOP->new;
+};
+
 sub default_cond_and_flex_cond : Test(4) {
     
     my $users = _update_user('jamadam', ['point' => '10']);
@@ -34,13 +40,13 @@ sub default_cond_and_flex_cond_undef : Test(4) {
 sub _update_user {
     
     my ($userid, $dataset_ref) = @_;
-    my $sql = SQL::OOP::Update->new();
-    $sql->set(
-        table     => SQL::OOP::ID->new('user'),
-        dataset   => SQL::OOP::Dataset->new($dataset_ref),
-        where     => SQL::OOP::Where->cmp('=', 'userid', $userid),
+    my $update = $sql->update;
+    $update->set(
+        table     => $sql->id('user'),
+        dataset   => $sql->dataset($dataset_ref),
+        where     => $sql->where->cmp('=', 'userid', $userid),
     );
-    return $sql;
+    return $update;
 }
 
 sub compress_sql {

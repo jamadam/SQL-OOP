@@ -8,57 +8,60 @@ use SQL::OOP::Select;
 
 __PACKAGE__->runtests;
 
+my $sql;
+
+sub setup : Test(setup) {
+    $sql = SQL::OOP->new;
+};
+
 sub to_string_twice : Test(2) {
     
-    my $a = SQL::OOP::Base->new("a");
+    my $a = $sql->base("a");
     is($a->to_string, 'a');
     is($a->to_string, 'a');
 }
 
 sub array_to_string_twice : Test(2) {
     
-    my $a = SQL::OOP::Array->new("a")->set_sepa(',');
+    my $a = $sql->array("a")->set_sepa(',');
     is($a->to_string, 'a');
     is($a->to_string, 'a');
 }
 
 sub array_to_string_twice2 : Test(2) {
     
-    my $a = SQL::OOP::Array->new(SQL::OOP::Base->new('a'), SQL::OOP::Base->new('b'))->set_sepa(', ');
+    my $a = $sql->array($sql->base('a'), $sql->base('b'))->set_sepa(', ');
     is($a->to_string, 'a, b');
     is($a->to_string, 'a, b');
 }
 
 sub select_to_string_twice1 : Test(2) {
     
-    my $select = SQL::OOP::Select->new();
-    $select->set(
+    my $select = $sql->select(
         fields => 'a',
         from   => 'b',
     );
-    my $a = SQL::OOP::Array->new($select)->set_sepa(', ');
+    my $a = $sql->array($select)->set_sepa(', ');
     is($a->to_string, 'SELECT a FROM b');
     is($a->to_string, 'SELECT a FROM b');
 }
 
 sub select_to_string_twice2 : Test(2) {
     
-    my $select = SQL::OOP::Select->new();
-    $select->set(
+    my $select = $sql->select(
         fields => 'a',
-        from   => SQL::OOP::Base->new('b'),
+        from   => $sql->base('b'),
     );
-    my $a = SQL::OOP::Array->new($select)->set_sepa(', ');
+    my $a = $sql->array($select)->set_sepa(', ');
     is($a->to_string, 'SELECT a FROM b');
     is($a->to_string, 'SELECT a FROM b');
 }
 
 sub select_to_string_twice3 : Test(2) {
     
-    my $select = SQL::OOP::Select->new();
-    $select->set(
+    my $select = $sql->select(
         fields => 'a',
-        from   => SQL::OOP::Array->new('b')->set_sepa(''),
+        from   => $sql->array('b')->set_sepa(''),
     );
     is($select->to_string, 'SELECT a FROM b');
     is($select->to_string, 'SELECT a FROM b');
@@ -66,13 +69,11 @@ sub select_to_string_twice3 : Test(2) {
 
 sub select_to_string_twice4 : Test(1) {
     
-    my $select = SQL::OOP::Select->new();
-    $select->set(
+    my $select = $sql->select(
         fields => 'a',
         from   => 'b',
     );
-    my $select2 = SQL::OOP::Select->new();
-    $select2->set(
+    my $select2 = $sql->select(
         fields    => 'a',
         from    => $select,
     );

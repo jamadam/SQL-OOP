@@ -9,9 +9,15 @@ use SQL::OOP::Dataset;
 
 __PACKAGE__->runtests;
 
+my $sql;
+
+sub setup : Test(setup) {
+    $sql = SQL::OOP->new;
+};
+
 sub append_with_hash : Test(5) {
     
-    my $dataset = SQL::OOP::Dataset->new();
+    my $dataset = $sql->dataset;
     $dataset->append(a => 'b');
     $dataset->append(c => 'd');
     is($dataset->to_string_for_insert, q(("a", "c") VALUES (?, ?)));
@@ -24,7 +30,7 @@ sub append_with_hash : Test(5) {
 
 sub append_with_hashref : Test(5) {
     
-    my $dataset = SQL::OOP::Dataset->new();
+    my $dataset = $sql->dataset;
     $dataset->append(a => 'b');
     $dataset->append(c => 'd');
     is($dataset->to_string_for_insert, q(("a", "c") VALUES (?, ?)));
@@ -37,7 +43,7 @@ sub append_with_hashref : Test(5) {
 
 sub new_with_args : Test(5) {
     
-    my $dataset = SQL::OOP::Dataset->new([a => 'b', c => 'd']);
+    my $dataset = $sql->dataset([a => 'b', c => 'd']);
     is($dataset->to_string_for_insert, q(("a", "c") VALUES (?, ?)));
     is($dataset->to_string_for_update, q("a" = ?, "c" = ?));
     my @bind = $dataset->bind;
@@ -48,7 +54,7 @@ sub new_with_args : Test(5) {
 
 sub undef_value_alive : Test(5) {
     
-    my $dataset = SQL::OOP::Dataset->new();
+    my $dataset = $sql->dataset;
     $dataset->append(a => 'b');
     $dataset->append(c => undef);
     is($dataset->to_string_for_insert, q(("a", "c") VALUES (?, ?)));

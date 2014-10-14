@@ -9,9 +9,15 @@ use SQL::OOP::Insert;
 
 __PACKAGE__->runtests;
 
+my $sql;
+
+sub setup : Test(setup) {
+    $sql = SQL::OOP->new;
+};
+
 sub set_clause_separately : Test(1) {
     
-    my $insert = SQL::OOP::Insert->new();
+    my $insert = $sql->insert;
     $insert->set(
         table => 'key1',
     );
@@ -29,10 +35,10 @@ INSERT INTO "tbl1" ("col1", "col2") VALUES (?, ?)
 EOF
     
     {
-        my $insert = SQL::OOP::Insert->new();
+        my $insert = $sql->insert;
         $insert->set(
             table => '"tbl1"',
-            dataset => SQL::OOP::Dataset->new(col1 => 'a', col2 => 'b')
+            dataset => $sql->dataset(col1 => 'a', col2 => 'b')
         );
         
         my @bind = $insert->bind;
@@ -47,11 +53,11 @@ EOF
             ['col2', 'val2'],
         );
         
-        my $dataset = SQL::OOP::Dataset->new();
+        my $dataset = $sql->dataset;
         foreach my $rec (@vals) {
             $dataset->append($rec->[0] => $rec->[1]);
         }
-        my $insert = SQL::OOP::Insert->new();
+        my $insert = $sql->insert;
         $insert->set(
             table => '"tbl1"',
             dataset => $dataset,

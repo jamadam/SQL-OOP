@@ -3,12 +3,17 @@ use strict;
 use warnings;
 use Scalar::Util qw(blessed);
 use SQL::OOP::Base;
+use SQL::OOP::Where;
+use SQL::OOP::Join;
+use SQL::OOP::Select;
+use SQL::OOP::ID;
+use SQL::OOP::IDArray;
 use 5.005;
 our $VERSION = '0.22';
 
 sub new {
     my $class = shift;
-    return SQL::OOP::Base->new(@_);
+    return bless {}, $class;
 }
 
 sub quote_char {
@@ -19,6 +24,66 @@ sub quote_char {
 sub escape_code_ref {
     my $class = shift;
     return SQL::OOP::Base->escape_code_ref(@_);
+}
+
+sub base {
+    shift @_;
+    return SQL::OOP::Base->new(@_);
+}
+
+sub select {
+    shift @_;
+    return SQL::OOP::Select->new(@_);
+}
+
+sub join {
+    shift @_;
+    return SQL::OOP::Join->new(@_);
+}
+
+sub update {
+    shift @_;
+    return SQL::OOP::Update->new(@_);
+}
+
+sub insert {
+    shift @_;
+    return SQL::OOP::Insert->new(@_);
+}
+
+sub delete {
+    shift @_;
+    return SQL::OOP::Delete->new(@_);
+}
+
+sub where {
+    shift @_;
+    return SQL::OOP::Where->new(@_);
+}
+
+sub id {
+    shift @_;
+    return SQL::OOP::ID->new(@_);
+}
+
+sub id_array {
+    shift @_;
+    return SQL::OOP::IDArray->new(@_);
+}
+
+sub order {
+    shift @_;
+    return SQL::OOP::Order->new(@_);
+}
+
+sub array {
+    shift @_;
+    return SQL::OOP::Array->new(@_);
+}
+
+sub dataset {
+    shift @_;
+    return SQL::OOP::Dataset->new(@_);
 }
 
 1;

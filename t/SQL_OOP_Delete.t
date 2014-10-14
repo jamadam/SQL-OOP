@@ -8,9 +8,15 @@ use SQL::OOP::Delete;
 
 __PACKAGE__->runtests;
 
+my $sql;
+
+sub setup : Test(setup) {
+    $sql = SQL::OOP->new;
+};
+
 sub set_clause_separately : Test(1) {
     
-    my $delete = SQL::OOP::Delete->new;
+    my $delete = $sql->delete;
     $delete->set(
         table => 'tbl1',
     );
@@ -23,12 +29,12 @@ sub set_clause_separately : Test(1) {
 
 sub where : Test(3) {
     
-    my $delete= SQL::OOP::Delete->new();
+    my $delete= $sql->delete;
     $delete->set(
         table => 'tbl1',
     );
     $delete->set(
-        where => SQL::OOP::Where->cmp('=', 'a', 'b'),
+        where => $sql->where->cmp('=', 'a', 'b'),
     );
     
     is($delete->to_string, q(DELETE FROM tbl1 WHERE "a" = ?));

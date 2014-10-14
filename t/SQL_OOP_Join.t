@@ -9,6 +9,12 @@ use SQL::OOP::Join;
 
 __PACKAGE__->runtests;
 
+my $sql;
+
+sub setup : Test(setup) {
+    $sql = SQL::OOP->new;
+};
+
 sub join : Test(1) {
     
     my $expected = <<EOF;
@@ -20,10 +26,9 @@ WHERE
     a
 EOF
     
-    my $select = SQL::OOP::Select->new;
-    $select->set(
+    my $select = $sql->select(
         fields => 'hoge',
-        from   => SQL::OOP::Join->new(
+        from   => $sql->join(
             direction   => 'LEFT',
             table1      => 'table1',
             table2      => 'table2',

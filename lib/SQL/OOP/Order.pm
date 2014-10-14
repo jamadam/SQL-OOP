@@ -2,6 +2,7 @@ package SQL::OOP::Order;
 use strict;
 use warnings;
 use SQL::OOP::Base;
+use Scalar::Util qw(blessed);
 use base qw(SQL::OOP::Array);
 
 ### ---
@@ -25,8 +26,10 @@ sub fix_element_in_list_context {
 ### Construct ORER BY clause by array
 ### ---
 sub abstract {
-    my ($class, $array_ref) = @_;
-    my $self = $class->SUPER::new()->set_sepa(', ');
+    my ($class_or_obj, $array_ref) = @_;
+    my $self = blessed($class_or_obj)
+                ? $class_or_obj : $class_or_obj->SUPER::new->set_sepa(', ');
+    
     foreach my $rec_ref (@{$array_ref}) {
         if (ref $rec_ref) {
             if ($rec_ref->[1]) {

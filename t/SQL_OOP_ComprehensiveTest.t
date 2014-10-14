@@ -9,67 +9,70 @@ use SQL::OOP::Select;
 
 __PACKAGE__->runtests;
 
+my $sql;
+
+sub setup : Test(setup) {
+    $sql = SQL::OOP->new;
+};
+
 sub select_basic : Test {
     
-    my $select = SQL::OOP::Select->new();
-    my $fields = SQL::OOP::IDArray->new(qw(a b c));
+    my $select = $sql->select;
+    my $fields = $sql->id_array(qw(a b c));
     my $sql = $fields->to_string;
     is($sql, qq{"a", "b", "c"});
 }
 
 sub basic_test: Test(1) {
     
-    my $b = SQL::OOP::Base->new('a,b,c');
+    my $b = $sql->base('a,b,c');
     is($b->to_string, 'a,b,c', 'basic test for to_string');
 }
 
 sub include_undef : Test(1) {
     
-    my $a = SQL::OOP::Array->new('', '', ('a',undef,'c'))->set_sepa(', ');
+    my $a = $sql->array('', '', ('a',undef,'c'))->set_sepa(', ');
     is($a->to_string, 'a, c', 'array include undef test');
 }
 
 sub basic_test_array : Test(1) {
     
-    my $a = SQL::OOP::Array->new('', '', qw(a b c))->set_sepa(', ');
+    my $a = $sql->array('', '', qw(a b c))->set_sepa(', ');
     is($a->to_string, 'a, b, c', 'basic array test for bind');
 }
 
 sub where_append : Test(3) {
 
-    my $where = SQL::OOP::Where->new();
-    my $and = $where->and(
+    my $and = $sql->where->and(
         'a',
         'b',
     );
     is($and->to_string, 'a AND b', 'where initial');
     $and->append('c');
     is($and->to_string, 'a AND b AND c', 'where append');
-    $and->append($where->cmp('=', 'd', 'e'));
+    $and->append($sql->where->cmp('=', 'd', 'e'));
     is($and->to_string, 'a AND b AND c AND "d" = ?', 'where append obj');
 }
 
 sub where_basic : Test {
     
-    my $where = SQL::OOP::Where->new();
-    my $cmp = $where->cmp('=', 'column1', 'value');
-    my $and = $where->and($cmp, $cmp);
-    my $sql = $and->to_string;
-    is($sql, qq{"column1" = ? AND "column1" = ?}, 'cmp and cmp');
+    my $cmp = $sql->where->cmp('=', 'column1', 'value');
+    my $and = $sql->where->and($cmp, $cmp);
+    my $str = $and->to_string;
+    is($str, qq{"column1" = ? AND "column1" = ?}, 'cmp and cmp');
 }
 
 sub cmp_expression: Test(4) {
     
-    my $where = SQL::OOP::Where->new;
-    my $cmp = $where->cmp('=', 'column1', 'value');
-    my $sql = $cmp->to_string;
+    my $cmp = $sql->where->cmp('=', 'column1', 'value');
+    my $str = $cmp->to_string;
     my @bind = $cmp->bind;
-    is($sql, qq{"column1" = ?}, 'to_string');
+    is($str, qq{"column1" = ?}, 'to_string');
     is(shift @bind, qw(value), 'bind');
     is(shift @bind, undef, 'no more bind');
     
-    my $sql2 = $cmp->to_string('WHERE');
-    is($sql2, qq{WHERE "column1" = ?}, 'prefixed');
+    my $str2 = $cmp->to_string('WHERE');
+    is($str2, qq{WHERE "column1" = ?}, 'prefixed');
 }
 
 ### Pertial adoption
@@ -86,7 +89,7 @@ EXPECTED
     
     ### The following blocks are expected to generate same SQL
     {
-        my $select = SQL::OOP::Select->new();
+        my $select = $sql->select;
         $select->set(
             fields => '*',
             from   => 'table',
@@ -96,7 +99,7 @@ EXPECTED
         is($select->to_string, $expected, 'All literaly');
     }
     {
-        my $select = SQL::OOP::Select->new();
+        my $select = $sql->select;
         $select->set(
             fields     => '*',
             from       => 'table',
@@ -108,11 +111,11 @@ EXPECTED
         is($select->to_string, $expected, 'Some clause maybe empty');
     }
     {
-        my $select = SQL::OOP::Select->new();
+        my $select = $sql->select;
         $select->set(
             fields => '*',
             from   => 'table',
-            where  => SQL::OOP::Base->new(q{"a" = ? AND "b" = ?}, [1, 2]),
+            where  => $sql->base(q{"a" = ? AND "b" = ?}, [1, 2]),
         );
         
         is($select->to_string, $expected, 'Literaly but need to bind');
@@ -122,29 +125,27 @@ EXPECTED
         is(shift @bind, undef, 'Literaly but need to bind[no more bind]');
     }
     {
-        my $select = SQL::OOP::Select->new();
-        my $where = SQL::OOP::Where->new;
+        my $select = $sql->select;
         $select->set(
             fields => '*',
             from   => 'table',
-            where  => $where->and(
-                $where->cmp('=', 'a', 1),
-                $where->cmp('=', 'b', 1),
+            where  => $sql->where->and(
+                $sql->where->cmp('=', 'a', 1),
+                $sql->where->cmp('=', 'b', 1),
             ),
         );
         
         is($select->to_string, $expected, 'Use SQL::OOP::WHERE');
     }
     {
-        my $select = SQL::OOP::Select->new();
+        my $select = $sql->select;
         $select->set(
             fields => '*',
             from   => 'table',
             where  => sub {
-                my $where = SQL::OOP::Where->new;
-                return $where->and(
-                    $where->cmp('=', 'a', 1),
-                    $where->cmp('=', 'b', 1),
+                return $sql->where->and(
+                    $sql->where->cmp('=', 'a', 1),
+                    $sql->where->cmp('=', 'b', 1),
                 )
             },
         );
@@ -192,33 +193,32 @@ OFFSET
 EXPECTED
     
     {
-        my $select = SQL::OOP::Select->new();
+        my $select = $sql->select;
         $select->set(
-            fields => SQL::OOP::Base->new(q{"ky1", "ky2", *}),
+            fields => $sql->base(q{"ky1", "ky2", *}),
             from   => q("tbl1", "tbl2", "tbl3"),
             where  => sub {
-                my $where = SQL::OOP::Where->new();
-                return $where->and(
-                    $where->cmp('>=', 'hoge1', 'hoge1'),
-                    $where->cmp('=', 'hoge2', 'hoge2'),
-                    $where->or(
-                        $where->cmp('=', 'hoge3', 'hoge3'),
-                        $where->cmp('=', 'hoge4', 'hoge4'),
-                        $where->between('price', 10, 20),
-                        $where->is_null('vprice'),
-                        SQL::OOP::Base->new('a = b'),
+                return $sql->where->and(
+                    $sql->where->cmp('>=', 'hoge1', 'hoge1'),
+                    $sql->where->cmp('=', 'hoge2', 'hoge2'),
+                    $sql->where->or(
+                        $sql->where->cmp('=', 'hoge3', 'hoge3'),
+                        $sql->where->cmp('=', 'hoge4', 'hoge4'),
+                        $sql->where->between('price', 10, 20),
+                        $sql->where->is_null('vprice'),
+                        $sql->base('a = b'),
                         'a = b',
-                        SQL::OOP::Base->new('c = ? ?', ['code1', 'code2']),
-                        $where->between('price', 10, 20),
+                        $sql->base('c = ? ?', ['code1', 'code2']),
+                        $sql->where->between('price', 10, 20),
                     ),
-                    $where->or(
-                        $where->cmp('=', 'hoge3', undef),
-                        $where->cmp('=', 'hoge4', undef),
+                    $sql->where->or(
+                        $sql->where->cmp('=', 'hoge3', undef),
+                        $sql->where->cmp('=', 'hoge4', undef),
                     ),
                 )
             },
             orderby => sub {
-                my $order = SQL::OOP::Order->new();
+                my $order = $sql->order;
                 foreach my $rec_ref (@{[['hoge1', 1],['hoge2']]}) {
                     if ($rec_ref->[1]) {
                         $order->append_desc($rec_ref->[0]);
