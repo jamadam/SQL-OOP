@@ -19,8 +19,7 @@ sub ARG_OFFSET()    {'offset'} ## no critic
 ### ---
 sub KEYS {
     return
-    [ARG_FIELDS, ARG_FROM, ARG_WHERE,
-     ARG_GROUPBY, ARG_ORDERBY, ARG_LIMIT, ARG_OFFSET];
+    [qw(fields from where groupby orderby limit offset)];
 }
 
 ### ---
@@ -28,13 +27,13 @@ sub KEYS {
 ### ---
 sub PREFIXES {
     return {
-        ARG_FIELDS()    => 'SELECT',
-        ARG_FROM()      => 'FROM',
-        ARG_WHERE()     => 'WHERE',
-        ARG_GROUPBY()   => 'GROUP BY',
-        ARG_ORDERBY()   => 'ORDER BY',
-        ARG_LIMIT()     => 'LIMIT',
-        ARG_OFFSET()    => 'OFFSET',
+        fields    => 'SELECT',
+        from      => 'FROM',
+        where     => 'WHERE',
+        groupby   => 'GROUP BY',
+        orderby   => 'ORDER BY',
+        limit     => 'LIMIT',
+        offset    => 'OFFSET',
     }
 }
 
@@ -85,29 +84,29 @@ SQL::OOP::Select
     
     # set clause by plain text
     $select->set(
-        $select->ARG_FIELDS => '*',
-        $select->ARG_FROM   => 'some_table',
-        $select->ARG_WHERE  => q("some_filed" > 5)
-        $select->ARG_GROUPBY   => 'some_field',
-        $select->ARG_ORDERBY   => 'some_field ASC',
-        $select->ARG_LIMIT     => '10',
-        $select->ARG_OFFSET    => '2',
+        fields => '*',
+        from   => 'some_table',
+        where  => q("some_filed" > 5)
+        groupby   => 'some_field',
+        orderby   => 'some_field ASC',
+        limit     => '10',
+        offset    => '2',
     );
 
     # reset clauses using objects
     my $where = SQL::OOP::Where->new();
     $select->set(
-        $select->ARG_FIELDS => SQL::OOP::ID->new('some_field'),
-        $select->ARG_FROM   => SQL::OOP::ID->new('some_table'),
-        $select->ARG_WHERE  => $where->cmp('=', "some_fileld", 'value')
-        $select->ARG_ORDERBY=> SQL::OOP::Order->new('a', 'b'),
+        fields => SQL::OOP::ID->new('some_field'),
+        from   => SQL::OOP::ID->new('some_table'),
+        where  => $where->cmp('=', "some_fileld", 'value')
+        orderby => SQL::OOP::Order->new('a', 'b'),
     );
     
     # clause can treats subs so that temporary variables don't mess around
     $select->set(
-        $select->ARG_FIELDS => '*',
-        $select->ARG_FROM   => 'some_table',
-        $select->ARG_WHERE  => sub {
+        fields => '*',
+        from   => 'some_table',
+        where  => sub {
             my $where = SQL::OOP::Where->new();
             return $where->cmp('=', "some_fileld", 'value');
         }
@@ -116,8 +115,8 @@ SQL::OOP::Select
     # SQL::OOP::Select can be part of any SQL::OOP::Base sub classes
     my $select2 = SQL::OOP::Select->new();
     $select2->set(
-        $select2->ARG_FIELDS => q("col1", "col2"),
-        $select2->ARG_FROM   => $select,
+        fields => q("col1", "col2"),
+        from   => $select,
     );
     
     my $where = SQL::OOP::Where->new();
@@ -132,16 +131,15 @@ SQL::OOP::Select class represents Select commands.
 
 =head2 SQL::OOP::Select->new(%clause)
 
-Constructor. It takes arguments in hash. The Hash keys are provided by
-following methods. They can be called as either class or instance method.
+Constructor. It takes arguments in hash. It accepts following hash keys.
     
-    ARG_FIELDS
-    ARG_FROM
-    ARG_WHERE
-    ARG_GROUPBY
-    ARG_ORDERBY
-    ARG_LIMIT
-    ARG_OFFSET
+    fields
+    from
+    where
+    groupby
+    orderby
+    limit
+    offset
 
 =head2 $instance->set(%clause)
 
@@ -164,31 +162,31 @@ Get binded values in array
 
 =head2 ARG_FIELDS
 
-argument key for FIELDS(=1)
+argument key for FIELDS(='fields')
 
 =head2 ARG_FROM
 
-argument key for FROM clause(=2)
+argument key for FROM clause(='from')
 
 =head2 ARG_WHERE
 
-argument key for WHERE clause(=3)
+argument key for WHERE clause(='where')
 
 =head2 ARG_GROUPBY
 
-argument key for GROUP BY clause(=4)
+argument key for GROUP BY clause(='groupby')
 
 =head2 ARG_ORDERBY
 
-argument key for ORDER BY clause(=5)
+argument key for ORDER BY clause(='orderby')
 
 =head2 ARG_LIMIT
 
-argument key for LIMIT clause(=6)
+argument key for LIMIT clause(='limit')
 
 =head2 ARG_OFFSET
 
-argument key for OFFSET clause(=7)
+argument key for OFFSET clause(='offset')
 
 =head1 EXAMPLE
 
@@ -197,9 +195,9 @@ test scripts.
 
     my $select = SQL::OOP::Select->new();
     $select->set(
-        $select->ARG_FIELDS => '*',
-        $select->ARG_FROM   => 'table',
-        $select->ARG_WHERE  => sub {
+        fields => '*',
+        from   => 'table',
+        where  => sub {
             my $where = SQL::OOP::Where->new;
             return $where->and(
                 $where->cmp('=', 'a', 1),

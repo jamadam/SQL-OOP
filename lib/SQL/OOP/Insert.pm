@@ -12,7 +12,7 @@ sub ARG_SELECT()    {'select'} ## no critic
 ### Get Names of set arguments in array ref
 ### ---
 sub KEYS {
-    return [ARG_TABLE, ARG_DATASET, ARG_SELECT];
+    return [qw(table dataset select)];
 }
 
 ### ---
@@ -20,9 +20,9 @@ sub KEYS {
 ### ---
 sub PREFIXES {
     return {
-        ARG_TABLE()     => 'INSERT INTO',
-        ARG_DATASET()   => '',
-        ARG_SELECT()    => '',
+        table     => 'INSERT INTO',
+        dataset   => '',
+        select    => '',
     }
 }
 
@@ -75,13 +75,13 @@ SQL::OOP::Insert
     
     # set clause
     $insert->set(
-        $insert->ARG_TABLE => SQL::OOP::ID->new('some_table'),
-        $insert->ARG_DATASET => SQL::OOP::Dataset->new(@data),
+        table => SQL::OOP::ID->new('some_table'),
+        dataset => SQL::OOP::Dataset->new(@data),
     );
     
     # reset clause by plain text
     $insert->set(
-        $insert->ARG_TABLE => 'some_table',
+        table => 'some_table',
     );
     
     my $sql  = $delete->to_string;
@@ -95,12 +95,11 @@ SQL::OOP::Insert class represents Insert commands.
 
 =head2 SQL::OOP::Insert->new(%clause)
 
-Constructor. It takes arguments in hash. The Hash keys are provided by
-following methods. They can call either class method or instance method.
+Constructor. It takes arguments in hash. It accepts following hash keys.
     
-    ARG_TABLE
-    ARG_DATASET
-    ARG_SELECT
+    table
+    dataset
+    select
 
 =head2 $instance->set(%clause)
 
@@ -118,15 +117,15 @@ This method resets the clause data. It takes same argument as constructor.
 
 =head2 ARG_TABLE
 
-argument key for table name(=1)
+argument key for table name(='table')
 
 =head2 ARG_DATASET
 
-argument key for dataset(=2)
+argument key for dataset(='dataset')
 
 =head2 ARG_SELECT
 
-argument key for select(=3)
+argument key for select(='select')
 
 =head1 SEE ALSO
 

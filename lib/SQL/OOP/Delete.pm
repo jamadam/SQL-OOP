@@ -12,7 +12,7 @@ sub ARG_WHERE() {'where'} ## no critic
 ### Get Names of set arguments in array ref
 ### ---
 sub KEYS {
-    return [ARG_TABLE, ARG_WHERE];
+    return [qw(table where)];
 }
 
 ### ---
@@ -20,8 +20,8 @@ sub KEYS {
 ### ---
 sub PREFIXES {
     return {
-        ARG_TABLE() => 'DELETE FROM',
-        ARG_WHERE() => 'WHERE',
+        table => 'DELETE FROM',
+        where => 'WHERE',
     }
 }
 
@@ -73,13 +73,13 @@ SQL::OOP::Delete
     
     # set clause
     $delete->set(
-        $delete->ARG_TABLE => 'some_table',
-        $delete->ARG_WHERE => SQL::OOP::Where->cmp('=', 'a', 'b'),
+        table => 'some_table',
+        where => SQL::OOP::Where->cmp('=', 'a', 'b'),
     );
     
     # reset clause by plain text
     $delete->set(
-        $delete->ARG_WHERE => 'a = b'
+        where => 'a = b'
     );
     
     my $sql  = $delete->to_string;
@@ -93,11 +93,10 @@ SQL::OOP::Delete class represents Delete commands.
 
 =head2 SQL::OOP::Delete->new(%clause)
 
-Constructor. It takes arguments in hash. The Hash keys are provided by
-following methods. They can call either class method or instance method.
+Constructor. It takes arguments in hash. It accepts following hash keys.
     
-    ARG_TABLE
-    ARG_WHERE
+    table
+    where
 
 =head2 $instance->set(%clause)
 
@@ -115,11 +114,11 @@ This method resets the clause data. It takes same argument as constructor.
 
 =head2 ARG_TABLE
 
-argument key for table name(=1)
+argument key for table name(='table')
 
 =head2 ARG_WHERE
 
-argument key for where clause(=2)
+argument key for where clause(='where')
 
 =head1 SEE ALSO
 

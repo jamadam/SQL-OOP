@@ -15,7 +15,7 @@ sub ARG_WHERE()     {'where'} ## no critic
 ### Get Names of set arguments in array ref
 ### ---
 sub KEYS {
-    return [ARG_TABLE, ARG_DATASET, ARG_FROM, ARG_WHERE];
+    return [qw(table dataset from where)];
 }
 
 ### ---
@@ -23,10 +23,10 @@ sub KEYS {
 ### ---
 sub PREFIXES {
     return {
-        ARG_TABLE()     => 'UPDATE',
-        ARG_DATASET()   => 'SET',
-        ARG_FROM()      => 'FROM',
-        ARG_WHERE()     => 'WHERE',
+        table     => 'UPDATE',
+        dataset   => 'SET',
+        from      => 'FROM',
+        where     => 'WHERE',
     }
 }
 
@@ -77,16 +77,16 @@ SQL::OOP::Update
 
     # set clause by plain text
     $update->set(
-        $update->ARG_TABLE      => 'some_table',
-        $update->ARG_DATASET    => 'a = b, c = d',
-        $update->ARG_WHERE      => 'a = c',
+        table      => 'some_table',
+        dataset    => 'a = b, c = d',
+        where      => 'a = c',
     );
     
     # reset clauses using objects
     $update->set(
-        $select->ARG_TABLE      => SQL::OOP::ID->new('some_table'),
-        $update->ARG_DATASET    => SQL::OOP::Dataset->new(@data),
-        $select->ARG_WHERE      => $where->cmp('=', "some_fileld", 'value')
+        table      => SQL::OOP::ID->new('some_table'),
+        dataset    => SQL::OOP::Dataset->new(@data),
+        where      => $where->cmp('=', "some_fileld", 'value')
     );
     my $sql  = $update->to_string;
     my @bind = $update->bind;
@@ -99,13 +99,12 @@ SQL::OOP::Select class represents Select commands.
 
 =head2 SQL::OOP::Update->new(%clause)
 
-Constructor. It takes arguments in hash. The Hash keys are provided by
-following methods. They can call either class method or instance method.
+Constructor. It takes arguments in hash. It accepts following hash keys.
     
-    ARG_TABLE
-    ARG_DATASET
-    ARG_FROM
-    ARG_WHERE
+    table
+    dataset
+    from
+    where
 
 =head2 $instance->set(%clause)
 
@@ -123,19 +122,19 @@ This method resets the clause data. It takes same argument as constructor.
 
 =head2 ARG_TABLE
 
-argument key for TABLE(=1)
+argument key for TABLE(='table')
 
 =head2 ARG_DATASET
 
-argument key for DATASET(=2)
+argument key for DATASET(='dataset')
 
 =head2 ARG_FROM
 
-argument key for FROM clause(=3)
+argument key for FROM clause(='from')
 
 =head2 ARG_WHERE
 
-argument key for WHERE clause(=4)
+argument key for WHERE clause(='where')
 
 =head1 SEE ALSO
 

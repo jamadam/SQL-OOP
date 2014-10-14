@@ -34,17 +34,17 @@ SQL::OOP - Yet another SQL Generator
     my $select = SQL::OOP::Select->new;
     
     $select->set(
-        $select->ARG_FIELDS => '*',
-        $select->ARG_FROM   => SQL::OOP::ID->new('public', 'master'),
-        $select->ARG_WHERE  => sub {
+        fields => '*',
+        from   => SQL::OOP::ID->new('public', 'master'),
+        where  => sub {
             my $where = SQL::OOP::Where->new;
             return $where->and(
                 $where->cmp('=', 'a', 1),
                 $where->cmp('=', 'b', 1),
             )
         },
-        $select->GROUP_BY => 'field1',
-        $select->ARG_LIMIT => 10,
+        groupby => 'field1',
+        limit => 10,
     );
 
 =head1 DESCRIPTION
@@ -135,7 +135,7 @@ command sub classes are capable of code refs for arguments instead of string or
 objects so that you can encapsulate temporary things inside of it.
     
     $select->set(
-        $select->ARG_WHERE  => sub {
+        where  => sub {
             if ($cond_exist) {
                 my $tmp = $cond_exist;
                 
@@ -198,10 +198,10 @@ don't have to worry about undef.
         my ($where, $limit) = @_;
         my $select = SQL::OOP::Select->new;
         $select->set(
-            $select->ARG_FIELDS => '*',
-            $select->ARG_FROM   => 'main',
-            $select->ARG_WHERE  => $where,  ## This may be undef
-            $select->ARG_LIMIT  => $limit,  ## This may be undef
+            fields => '*',
+            from   => 'main',
+            where  => $where,  ## This may be undef
+            limit  => $limit,  ## This may be undef
         );
         return $select;
     }
@@ -221,9 +221,9 @@ If you need very complex SQL generation such as functions or conditional
 branches, you can always resort to string.
 
     $select->set(
-        $select->ARG_FIELDS     => '*', 
-        $select->ARG_FROM       => 'main', 
-        $select->ARG_ORDERBY    => q{
+        fields     => '*', 
+        from       => 'main', 
+        orderby    => q{
             abs(date("timestamp") - date('now')) DESC
         }
     );

@@ -17,7 +17,7 @@ sub ARG_DIRECTION_RIGHT()   {'RIGHT'} ## no critic
 ### Get Names of set arguments in array ref
 ### ---
 sub KEYS {
-    return [ARG_TABLE1, ARG_DIRECTION, ARG_TABLE2, ARG_ON];
+    return [qw(table1 direction table2 on)];
 }
 
 ### ---
@@ -26,10 +26,10 @@ sub KEYS {
 sub PREFIXES {
     my $self= shift;
     return {
-        ARG_TABLE1()        => '',
-        ARG_DIRECTION()     => '',
-        ARG_TABLE2()        => 'JOIN',
-        ARG_ON()            => 'ON',
+        table1        => '',
+        direction     => '',
+        table2        => 'JOIN',
+        on            => 'ON',
     }
 }
 
@@ -91,17 +91,31 @@ SQL::OOP::Join [EXPERIMENTAL]
 
 =head2 ARG_DIRECTION
 
+(='direction')
+
 =head2 ARG_DIRECTION_INNER
+
+(='INNER')
 
 =head2 ARG_DIRECTION_LEFT
 
+(='LEFT')
+
 =head2 ARG_DIRECTION_RIGHT
+
+(='RIGHT')
 
 =head2 ARG_ON
 
+(='on')
+
 =head2 ARG_TABLE1
 
+(='table1')
+
 =head2 ARG_TABLE2
+
+(='table2')
 
 =head2 KEYS
 
