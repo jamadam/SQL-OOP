@@ -30,24 +30,57 @@ sub not_in : Test(6) {
     is($in->to_string, q{"col" NOT IN (SELECT * FROM tbl)});
 }
 
-sub in : Test(6) {
+sub in : Test(41) {
     
     my $where = SQL::OOP::Where->new();
-    my $in = $where->in('col', [1, 2, 3]);
-    is($in->to_string, q{"col" IN (?, ?, ?)});
+    my $in = $where->in('col', 'hoge');
+    is($in->to_string, q{"col" IN (?)});
     my @bind = $in->bind;
+    is(scalar @bind, 1);
+    is(shift @bind, 'hoge');
+    
+    $where = SQL::OOP::Where->new();
+    $in = $where->in('col', [1, 2, 3]);
+    is($in->to_string, q{"col" IN (?, ?, ?)});
+    @bind = $in->bind;
     is(scalar @bind, 3);
     is(shift @bind, '1');
     is(shift @bind, '2');
     is(shift @bind, '3');
-
+    
+    $where = SQL::OOP::Where->new();
+    $in = $where->in('col', 1, 2, 3);
+    is($in->to_string, q{"col" IN (?, ?, ?)});
+    @bind = $in->bind;
+    is(scalar @bind, 3);
+    is(shift @bind, '1');
+    is(shift @bind, '2');
+    is(shift @bind, '3');
+    
     my $sub = SQL::OOP::Select->new;
     $sub->set(
         $sub->ARG_FIELDS => '*',
         $sub->ARG_FROM => 'tbl',
+        $sub->ARG_WHERE  => SQL::OOP::Where->cmp('=', 'a', 'b'),
     );
     $in = $where->in('col', $sub);
-    is($in->to_string, q{"col" IN (SELECT * FROM tbl)});
+    is($in->to_string, q{"col" IN (SELECT * FROM tbl WHERE "a" = ?)});
+    @bind = $in->bind;
+    is(scalar @bind, 1);
+    is(shift @bind, 'b');
+    
+    $sub = SQL::OOP::Select->new;
+    $sub->set(
+        $sub->ARG_FIELDS => '*',
+        $sub->ARG_FROM => 'tbl',
+        $sub->ARG_WHERE  => SQL::OOP::Where->cmp('=', 'a', 'b'),
+    );
+    $in = $where->in('col', $sub, $sub);
+    is($in->to_string, q{"col" IN (SELECT * FROM tbl WHERE "a" = ?, SELECT * FROM tbl WHERE "a" = ?)});
+    @bind = $in->bind;
+    is(scalar @bind, 2);
+    is(shift @bind, 'b');
+    is(shift @bind, 'b');
 }
 
 sub cmp_value_undef : Test(1) {

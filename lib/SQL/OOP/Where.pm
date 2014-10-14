@@ -92,21 +92,6 @@ sub cmp {
 }
 
 ### ---
-### binary operator expression factory with sub query in value [DEPRECATED]
-### ---
-sub cmp_nested {
-    warn 'cmp_nested is deprecated! Use cmp instead';
-    my ($self, $op, $key, $val) = @_;
-    if (scalar @_ != 4) {
-        die 'Not enough args given';
-    }
-    if ($key && defined $val) {
-        my $quoted = SQL::OOP::ID->new($key);
-        return SQL::OOP::Array->new($quoted->to_string, $val)->set_sepa(" $op ");
-    }
-}
-
-### ---
 ### IS NULL factory
 ### ---
 sub is_null {
@@ -150,34 +135,46 @@ sub between {
 ### IN factory
 ### ---
 sub in {
-    my ($self, $key, $val) = @_;
-    if ($key) {
-        my $quoted = SQL::OOP::ID->new($key)->to_string;
-        if (ref $val eq 'ARRAY') {
-            my $placeholder = '?, ' x scalar @$val;
-            $placeholder = substr($placeholder, 0, -2);
-            return SQL::OOP::Base->new("$quoted IN ($placeholder)", $val);
-        } elsif (blessed($val) && $val->isa('SQL::OOP::Base')) {
-            return SQL::OOP::Array->new($quoted, $val)->set_sepa(" IN ");
-        }
-    }
+    my ($self, $key, @vals) = @_;
+    return $self->_in_backend('IN', $key, @vals);
 }
 
 ### ---
 ### NOT IN factory
 ### ---
 sub not_in {
-    my ($self, $key, $val) = @_;
-    if ($key) {
-        my $quoted = SQL::OOP::ID->new($key)->to_string;
-        if (ref $val eq 'ARRAY') {
-            my $placeholder = '?, ' x scalar @$val;
-            $placeholder = substr($placeholder, 0, -2);
-            return SQL::OOP::Base->new("$quoted NOT IN ($placeholder)", $val);
-        } elsif (blessed($val) && $val->isa('SQL::OOP::Base')) {
-            return SQL::OOP::Array->new($quoted, $val)->set_sepa(" NOT IN ");
+    my ($self, $key, @vals) = @_;
+    return $self->_in_backend('NOT IN', $key, @vals);
+}
+
+### ---
+### IN and NOT IN backend
+### ---
+sub _in_backend {
+    my ($self, $type, $key, @vals) = @_;
+    return if (!$key);
+    my $valarray =
+        @vals == 1 && ref $vals[0] && ref $vals[0] eq 'ARRAY' ? $vals[0] : [@vals];
+    my @ph;
+    my @binds;
+    for (@$valarray) {
+        if (blessed($_) && $_->isa('SQL::OOP::Base')) {
+            push(@ph, $_->to_string);
+            push(@binds, $_->bind);
+        } else {
+            push(@ph, '?');
+            push(@binds, $_);
         }
     }
+    
+    return SQL::OOP::Base->new(
+        sprintf("%s %s (%s)",
+            SQL::OOP::ID->new($key)->to_string,
+            $type,
+            join(', ', @ph)
+        ),
+        [@binds]
+    );
 }
 
 1;
