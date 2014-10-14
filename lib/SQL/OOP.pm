@@ -96,18 +96,15 @@ SQL::OOP - Yet another SQL Generator
 
 =head1 SYNOPSIS
 
-    my $select = SQL::OOP::Select->new;
+    my $fac = SQL::OOP->new;
     
-    $select->set(
+    $fac->select(
         fields => '*',
-        from   => SQL::OOP::ID->new('public', 'master'),
-        where  => sub {
-            my $where = SQL::OOP::Where->new;
-            return $where->and(
-                $where->cmp('=', 'a', 1),
-                $where->cmp('=', 'b', 1),
-            )
-        },
+        from   => $fac->id('public', 'master'),
+        where  => $fac->where->and(
+            $where->cmp('=', 'a', 1),
+            $where->cmp('=', 'b', 1),
+        ),
         groupby => 'field1',
         limit => 10,
     );
@@ -123,6 +120,7 @@ the auto completion and call tips may work well with this.
 SQL::OOP distribution consists of following modules. The indentation indicates
 the hierarchy of inheritance.
     
+    SQL::OOP[factory]
     SQL::OOP::Base [abstract]
         SQL::OOP::Array [abstract]
             SQL::OOP::ID
@@ -317,6 +315,82 @@ This is an alias for SQL::OOP::Base->quote_char
 =head2 SQL::OOP->escape_code_ref
 
 This is an alias for SQL::OOP::Base->escape_code_ref
+
+This is an alias for SQL::OOP::Base->escape_code_ref
+
+=head1 FACTORY METHODS
+
+=head2 SQL::OOP->array
+
+Short cut of
+
+    SQL::OOP->Array->new
+
+=head2 SQL::OOP->base
+
+Short cut of
+
+    SQL::OOP->Base->new
+
+=head2 SQL::OOP->dataset
+
+Short cut of
+
+    SQL::OOP->Dataset->new
+
+=head2 SQL::OOP->delete
+
+Short cut of
+
+    SQL::OOP->Delete->new
+
+=head2 SQL::OOP->id
+
+Short cut of
+
+    SQL::OOP->ID->new
+
+=head2 SQL::OOP->id_array
+
+Short cut of
+
+    SQL::OOP->IDArray->new
+
+=head2 SQL::OOP->insert
+
+Short cut of
+
+    SQL::OOP->Insert->new
+
+=head2 SQL::OOP->join
+
+Short cut of
+
+    SQL::OOP->Join->new
+
+=head2 SQL::OOP->order
+
+Short cut of
+
+    SQL::OOP->Order->new
+
+=head2 SQL::OOP->select
+
+Short cut of
+
+    SQL::OOP->Select->new
+
+=head2 SQL::OOP->update
+
+Short cut of
+
+    SQL::OOP->Where->new
+
+=head2 SQL::OOP->where
+
+Short cut of
+
+    SQL::OOP->Where->new
 
 =head1 SEE ALSO
 
