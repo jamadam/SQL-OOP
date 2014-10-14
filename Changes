@@ -2,6 +2,7 @@ Revision history for SQL-OOP
 
 0.22 2014/05/29
   - Improved IN and NOT IN clause generator on handling sub queries.
+  - REMOVED cmp_nested method which have been deprecated.
 
 0.21 2014/05/29
   - Removed dependency on Class::Inheritable.

@@ -15,24 +15,6 @@ sub new {
 ### ---
 ### SQL::Abstract style AND factory
 ### ---
-sub and_hash {
-    warn 'Deprecated infavor of and_abstract';
-    my ($class, $hash_ref, $op) = @_;
-    return _append_hash($class->and, $hash_ref, $op || '=');
-}
-
-### ---
-### SQL::Abstract style OR factory
-### ---
-sub or_hash {
-    warn 'Deprecated infavor of or_abstract';
-    my ($class, $hash_ref, $op) = @_;
-    return _append_hash($class->or, $hash_ref, $op || '=');
-}
-
-### ---
-### SQL::Abstract style AND factory
-### ---
 sub and_abstract {
     my ($class, $array_ref, $op) = @_;
     return _append_hash($class->and, $array_ref, $op || '=');
@@ -79,16 +61,11 @@ sub or {
 ### ---
 sub cmp {
     my ($self, $op, $key, $val) = @_;
-    if (scalar @_ != 4) {
-        die 'Not enough args given';
-    }
-    if ($key && defined $val) {
-        my $quoted = SQL::OOP::ID->new($key);
-        if (ref $val) {
-            return SQL::OOP::Array->new($quoted->to_string, $val)->set_sepa(" $op ");
-        }
-        return SQL::OOP::Base->new($quoted->to_string. qq( $op ?), [$val]);
-    }
+    die 'Not enough args given' if (scalar @_ != 4);
+    return unless ($key && defined $val);
+    my $id = SQL::OOP::ID->new($key);
+    return SQL::OOP::Array->new($id->to_string, $val)->set_sepa(" $op ") if (ref $val);
+    return SQL::OOP::Base->new($id->to_string. qq( $op ?), [$val]);
 }
 
 ### ---
@@ -96,10 +73,9 @@ sub cmp {
 ### ---
 sub is_null {
     my ($self, $key) = @_;
-    if ($key) {
-        my $quoted = SQL::OOP::ID->new($key);
-        return SQL::OOP::Base->new($quoted->to_string. qq( IS NULL));
-    }
+    return unless ($key);
+    return
+        SQL::OOP::Base->new(SQL::OOP::ID->new($key)->to_string. qq( IS NULL));
 }
 
 ### ---
@@ -107,10 +83,9 @@ sub is_null {
 ### ---
 sub is_not_null {
     my ($self, $key) = @_;
-    if ($key) {
-        my $quoted = SQL::OOP::ID->new($key);
-        return SQL::OOP::Base->new($quoted->to_string. qq( IS NOT NULL));
-    }
+    return unless ($key);
+    return
+        SQL::OOP::Base->new(SQL::OOP::ID->new($key)->to_string. qq( IS NOT NULL));
 }
 
 ### ---
@@ -118,16 +93,15 @@ sub is_not_null {
 ### ---
 sub between {
     my ($self, $key, $val1, $val2) = @_;
-    if ($key) {
-        if (defined $val1 and defined $val2) {
-            my $quoted = SQL::OOP::ID->new($key)->to_string;
-            my $str = $quoted. qq( BETWEEN ? AND ?);
-            return SQL::OOP::Base->new($str, [$val1, $val2]);
-        } elsif (defined $val1) {
-            return $self->cmp('>=', $key, $val1);
-        } else {
-            return $self->cmp('<=', $key, $val2);
-        }
+    return unless ($key);
+    if (defined $val1 and defined $val2) {
+        my $quoted = SQL::OOP::ID->new($key)->to_string;
+        my $str = $quoted. qq( BETWEEN ? AND ?);
+        return SQL::OOP::Base->new($str, [$val1, $val2]);
+    } elsif (defined $val1) {
+        return $self->cmp('>=', $key, $val1);
+    } else {
+        return $self->cmp('<=', $key, $val2);
     }
 }
 
@@ -152,7 +126,7 @@ sub not_in {
 ### ---
 sub _in_backend {
     my ($self, $type, $key, @vals) = @_;
-    return if (!$key);
+    return unless ($key);
     my $valarray =
         @vals == 1 && ref $vals[0] && ref $vals[0] eq 'ARRAY' ? $vals[0] : [@vals];
     my @ph;
@@ -240,10 +214,6 @@ Generates 1 operator expression.
     $where->cmp('=', ['table', 'col1'], 'value') # "table"."col1" = ?
     $where->cmp('=', $subquery, $subquery)
 
-=head2 $instance->cmp_nested($fieldname, $object) [DEPRECATED]
-
-Generates 1 operator expression with sub query in value.
-
 =head2 $instance->in($fieldname, $array_ref)
 
 Generates IN clause
@@ -288,10 +258,6 @@ Generates IS NULL clause
 
 Generates OR expression in SQL::OOP::Array
 
-=head2 $instance->or_hash(%hash_ref) DEPRECATED
-
-Generates OR expression in SQL::OOP::Array by hash
-
 =head2 $instance->or_abstract($array_ref)
 
 Generates OR expression in SQL::OOP::Array by key-value array
@@ -299,10 +265,6 @@ Generates OR expression in SQL::OOP::Array by key-value array
 =head2 $instance->and(@array)
 
 Generates AND expression in SQL::OOP::Array
-
-=head2 $instance->and_hash(%hash_ref) DEPRECATED
-
-Generates AND expression in SQL::OOP::Array by hash
 
 =head2 $instance->and_abstract($array_ref)
 

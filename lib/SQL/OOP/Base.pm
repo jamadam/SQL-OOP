@@ -8,20 +8,15 @@ our $quote_char;
 
 sub quote_char {
     my ($self, $val) = @_;
-    if (defined $val) {
-        $self->{quote_char} = $val;
-    }
-    if (! defined $self->{quote_char}) {
-        $self->{quote_char} = q(");
-    }
+    $self->{quote_char} = $val if (defined $val);
+    $self->{quote_char} = q(") if (! defined $self->{quote_char});
     return $quote_char || $self->{quote_char};
 }
 
 sub escape_code_ref {
     my ($self, $val) = @_;
-    if (defined $val) {
-        $self->{escape_code_ref} = $val;
-    }
+    $self->{escape_code_ref} = $val if (defined $val);
+    
     if (! defined $self->{escape_code_ref}) {
         $self->{escape_code_ref} = sub {
             my ($str, $quote_char) = @_;
@@ -37,15 +32,10 @@ sub escape_code_ref {
 ### ---
 sub new {
     my ($class, $str, $bind_ref) = @_;
-    if (ref $str && (ref($str) eq 'CODE')) {
-        $str = $str->();
-    }
-    if (blessed($str) && $str->isa(__PACKAGE__)) {
-        return $str;
-    } elsif ($str) {
-        if ($bind_ref && ! ref $bind_ref) {
-            die '$bind_ref must be an Array ref';
-        }
+    $str = $str->() if (ref $str && (ref($str) eq 'CODE'));
+    return $str if (blessed($str) && $str->isa(__PACKAGE__));
+    if ($str) {
+        die '$bind_ref must be an Array ref' if ($bind_ref && ! ref $bind_ref);
         return bless {
             str     => $str,
             gen     => undef,
@@ -61,14 +51,9 @@ sub new {
 sub to_string {
     my ($self, $prefix) = @_;
     local $SQL::OOP::Base::quote_char = $self->quote_char;
-    if (! defined $self->{gen}) {
-        $self->generate;
-    }
-    if ($self->{gen} && $prefix) {
-        return $prefix. ' '. $self->{gen};
-    } else {
-        return $self->{gen};
-    }
+    $self->generate if (! defined $self->{gen});
+    return $prefix. ' '. $self->{gen} if ($self->{gen} && $prefix);
+    return $self->{gen};
 }
 
 ### ---
@@ -81,7 +66,7 @@ sub to_string_embedded {
     my $format = $self->to_string;
     $format =~ s{\?}{%s}g;
     return
-    sprintf($format, map {$self->quote($_, $quote_with)} @{[$self->bind]});
+        sprintf($format, map {$self->quote($_, $quote_with)} @{[$self->bind]});
 }
 
 ### ---
@@ -115,15 +100,9 @@ sub generate {
 ### ---
 sub quote {
     my ($self, $val, $with) = @_;
-    if (! $with) {
-        $with = $quote_char || $self->quote_char;
-    }
-    if (defined $val) {
-        $val = $self->escape_code_ref->($val, $with);
-        return $with. $val. $with;
-    } else {
-        return undef;
-    }
+    $with = $quote_char || $self->quote_char if (! $with);
+    return $with. $self->escape_code_ref->($val, $with). $with if (defined $val);
+    return undef;
 }
 
 1;

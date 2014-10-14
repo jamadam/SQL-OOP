@@ -15,10 +15,6 @@ sub MODE_UPDATE() {2} ## no critic
 sub new {
     my $class = shift @_;
     my $data_ref = (scalar @_ == 1) ? shift @_ : [@_];
-    if (ref $data_ref eq 'HASH') {
-        warn 'Deprecated: call the method with key-value array instead of hash';
-        $data_ref = [%$data_ref];
-    }
     my $self = bless {
         gen     => undef,
         array  => [],
@@ -33,10 +29,6 @@ sub new {
 sub append {
     my $self = shift @_;
     my $data_ref = (scalar @_ == 1) ? shift @_ : [@_];
-    if (ref $data_ref eq 'HASH') {
-        warn 'Deprecated: call the method with key-value array instead of hash';
-        $data_ref = [%$data_ref];
-    }
     my @copied = @{$data_ref};
     $self->_init_gen;
     
@@ -75,11 +67,8 @@ sub to_string_for_update {
     my ($self, $prefix) = @_;
     local $SQL::OOP::Base::quote_char = $self->quote_char;
     $self->generate(MODE_UPDATE);
-    if ($self->{gen} && $prefix) {
-        return $prefix. ' '. $self->{gen};
-    } else {
-        return $self->{gen};
-    }
+    return $prefix. ' '. $self->{gen} if ($self->{gen} && $prefix);
+    return $self->{gen};
 }
 
 ### ---
@@ -89,11 +78,8 @@ sub to_string_for_insert {
     my ($self, $prefix) = @_;
     local $SQL::OOP::Base::quote_char = $self->quote_char;
     $self->generate(MODE_INSERT);
-    if ($self->{gen} && $prefix) {
-        return $prefix. ' '. $self->{gen};
-    } else {
-        return $self->{gen};
-    }
+    return $prefix. ' '. $self->{gen} if ($self->{gen} && $prefix);
+    return $self->{gen};
 }
 
 sub generate {

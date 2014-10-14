@@ -87,7 +87,7 @@ sub cmp_value_undef : Test(1) {
     
     my $where = SQL::OOP::Where->new();
     my $a = $where->cmp('=', 'a', undef);
-    is($a, '');
+    is($a, undef);
 }
 
 sub cmp_nested : Test(2) {

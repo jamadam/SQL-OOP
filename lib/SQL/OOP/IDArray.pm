@@ -19,9 +19,7 @@ sub new {
 sub append {
     my ($self, @array) = @_;
     $self->_init_gen;
-    if (ref $array[0] && ref $array[0] eq 'ARRAY') {
-        @array = @{$array[0]};
-    }
+    @array = @{$array[0]} if (ref $array[0] && ref $array[0] eq 'ARRAY');
     foreach my $elem (@array) {
         if (blessed($elem) && $elem->isa('SQL::OOP::Base')) {
             push(@{$self->{array}}, $elem);
@@ -37,9 +35,7 @@ sub append {
 ### ---
 sub fix_element_in_list_context {
     my ($self, $obj) = @_;
-    if ($obj->isa('SQL::OOP::Command')) {
-        return '('. $obj->to_string. ')';
-    }
+    return '('. $obj->to_string. ')' if ($obj->isa('SQL::OOP::Command'));
     return $obj->to_string;
 }
 

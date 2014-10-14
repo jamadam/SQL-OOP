@@ -41,10 +41,7 @@ sub keys_to_idx {
     my ($self) = (@_);
     my $out = ();
     my $idx = 0;
-    foreach my $key (@{$self->KEYS}) {
-        $out->{$key} = $idx;
-        $idx++;
-    }
+    $out->{$_} = $idx++ foreach (@{$self->KEYS});
     return $out;
 }
 
@@ -54,12 +51,8 @@ sub keys_to_idx {
 sub set {
     my ($self, %args) = @_;
     $self->_init_gen;
-    my $tokens = $self->keys_to_idx;
-    foreach my $key (keys %args) {
-        my $idx = $tokens->{$key};
-        $self->{array}->[$idx] = SQL::OOP::Base->new($args{$key});
-    }
-    
+    my $t = $self->keys_to_idx;
+    $self->{array}->[$t->{$_}] = SQL::OOP::Base->new($args{$_}) for (keys %args);
     return $self;
 }
 
@@ -74,9 +67,7 @@ sub generate {
     for (my $idx = 0; $idx < @{$self->KEYS}; $idx++) {
         if (my $obj = $self->{array}->[$idx]) {
             if (my $a = $obj->to_string) {
-                if ($obj->isa(__PACKAGE__)) {
-                    $a = '('. $a. ')';
-                }
+                $a = '('. $a. ')' if ($obj->isa(__PACKAGE__));
                 my $name = $self->KEYS->[$idx];
                 if ($prefix->{$name}) {
                     $self->{gen} .= ' '. $prefix->{$name}. ' '. $a;

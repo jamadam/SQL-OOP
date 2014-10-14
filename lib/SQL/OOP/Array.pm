@@ -40,9 +40,7 @@ sub append {
         @array = @{$array[0]};
     }
     foreach my $elem (@array) {
-        if ($elem) {
-            push(@{$self->{array}}, SQL::OOP::Base->new($elem));
-        }
+        push(@{$self->{array}}, SQL::OOP::Base->new($elem)) if ($elem);
     }
     
     return $self;
@@ -70,9 +68,7 @@ sub generate {
 ### ---
 sub fix_element_in_list_context {
     my ($self, $obj) = @_;
-    if ($obj->isa(__PACKAGE__)) {
-        return '('. $obj->to_string. ')';
-    }
+    return '('. $obj->to_string. ')' if ($obj->isa(__PACKAGE__));
     return $obj->to_string;
 }
 
@@ -82,10 +78,7 @@ sub fix_element_in_list_context {
 sub bind {
     my $self = shift;
     my @out = map {
-        my @a;
-        if ($_) {
-            @a = $_->bind;
-        }
+        my @a = $_->bind if ($_);
         @a;
     } @{$self->{array}};
     return @out if (wantarray);

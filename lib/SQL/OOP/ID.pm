@@ -20,13 +20,9 @@ sub new {
 sub append {
     my ($self, @array) = @_;
     $self->_init_gen;
-    if (ref $array[0] && ref $array[0] eq 'ARRAY') {
-        @array = @{$array[0]};
-    }
+    @array = @{$array[0]} if (ref $array[0] && ref $array[0] eq 'ARRAY');
     for my $elem (@array) {
-        if ($elem) {
-            push(@{$self->{array}}, SQL::OOP::ID::Parts->new($elem));
-        }
+        push(@{$self->{array}}, SQL::OOP::ID::Parts->new($elem)) if ($elem);
     }
     return $self;
 }
@@ -47,11 +43,7 @@ sub generate {
     my $self = shift;
     my @array = map {$_->to_string} @{$self->{array}};
     $self->{gen} = join($self->{sepa}, grep {$_} @array);
-
-    if ($self->{as}) {
-        $self->{gen} .= ' AS '. $self->quote($self->{as});
-    }
-    
+    $self->{gen} .= ' AS '. $self->quote($self->{as}) if ($self->{as});
     return $self;
 }
 
