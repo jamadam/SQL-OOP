@@ -23,9 +23,9 @@ EXPECTED
     {
         my $select = SQL::OOP::Select->new();
         $select->set(
-            $select->ARG_FIELDS => '*',
-            $select->ARG_FROM   => 'table',
-            $select->ARG_WHERE  => q{"a" = ? AND "b" = ?},
+            fields => '*',
+            from   => 'table',
+            where  => q{"a" = ? AND "b" = ?},
         );
         
         is($select->to_string, $expected, 'All literaly');

@@ -88,9 +88,9 @@ EXPECTED
     {
         my $select = SQL::OOP::Select->new();
         $select->set(
-            $select->ARG_FIELDS => '*',
-            $select->ARG_FROM   => 'table',
-            $select->ARG_WHERE  => q{"a" = ? AND "b" = ?},
+            fields => '*',
+            from   => 'table',
+            where  => q{"a" = ? AND "b" = ?},
         );
         
         is($select->to_string, $expected, 'All literaly');
@@ -98,11 +98,11 @@ EXPECTED
     {
         my $select = SQL::OOP::Select->new();
         $select->set(
-            $select->ARG_FIELDS     => '*',
-            $select->ARG_FROM       => 'table',
-            $select->ARG_WHERE      => q{"a" = ? AND "b" = ?},
-            $select->ARG_ORDERBY    => undef,
-            $select->ARG_LIMIT      => '',
+            fields     => '*',
+            from       => 'table',
+            where      => q{"a" = ? AND "b" = ?},
+            orderby    => undef,
+            limit      => '',
         );
         
         is($select->to_string, $expected, 'Some clause maybe empty');
@@ -110,9 +110,9 @@ EXPECTED
     {
         my $select = SQL::OOP::Select->new();
         $select->set(
-            $select->ARG_FIELDS => '*',
-            $select->ARG_FROM   => 'table',
-            $select->ARG_WHERE  => SQL::OOP::Base->new(q{"a" = ? AND "b" = ?}, [1, 2]),
+            fields => '*',
+            from   => 'table',
+            where  => SQL::OOP::Base->new(q{"a" = ? AND "b" = ?}, [1, 2]),
         );
         
         is($select->to_string, $expected, 'Literaly but need to bind');
@@ -125,9 +125,9 @@ EXPECTED
         my $select = SQL::OOP::Select->new();
         my $where = SQL::OOP::Where->new;
         $select->set(
-            $select->ARG_FIELDS => '*',
-            $select->ARG_FROM   => 'table',
-            $select->ARG_WHERE  => $where->and(
+            fields => '*',
+            from   => 'table',
+            where  => $where->and(
                 $where->cmp('=', 'a', 1),
                 $where->cmp('=', 'b', 1),
             ),
@@ -138,9 +138,9 @@ EXPECTED
     {
         my $select = SQL::OOP::Select->new();
         $select->set(
-            $select->ARG_FIELDS => '*',
-            $select->ARG_FROM   => 'table',
-            $select->ARG_WHERE  => sub {
+            fields => '*',
+            from   => 'table',
+            where  => sub {
                 my $where = SQL::OOP::Where->new;
                 return $where->and(
                     $where->cmp('=', 'a', 1),
@@ -194,9 +194,9 @@ EXPECTED
     {
         my $select = SQL::OOP::Select->new();
         $select->set(
-            $select->ARG_FIELDS => SQL::OOP::Base->new(q{"ky1", "ky2", *}),
-            $select->ARG_FROM   => q("tbl1", "tbl2", "tbl3"),
-            $select->ARG_WHERE  => sub {
+            fields => SQL::OOP::Base->new(q{"ky1", "ky2", *}),
+            from   => q("tbl1", "tbl2", "tbl3"),
+            where  => sub {
                 my $where = SQL::OOP::Where->new();
                 return $where->and(
                     $where->cmp('>=', 'hoge1', 'hoge1'),
@@ -217,7 +217,7 @@ EXPECTED
                     ),
                 )
             },
-            $select->ARG_ORDERBY => sub {
+            orderby => sub {
                 my $order = SQL::OOP::Order->new();
                 foreach my $rec_ref (@{[['hoge1', 1],['hoge2']]}) {
                     if ($rec_ref->[1]) {
@@ -228,8 +228,8 @@ EXPECTED
                 }
                 return $order;
             },
-            $select->ARG_LIMIT  => 11315,
-            $select->ARG_OFFSET => 1,
+            limit  => 11315,
+            offset => 1,
         );
         
         is($select->to_string, $expected, 'complex to_string');

@@ -13,10 +13,10 @@ sub set_clause_separately : Test(1) {
     
     my $insert = SQL::OOP::Insert->new();
     $insert->set(
-        $insert->ARG_TABLE => 'key1',
+        table => 'key1',
     );
     $insert->set(
-        $insert->ARG_DATASET => '(a) VALUES (b)',
+        dataset => '(a) VALUES (b)',
     );
     
     is($insert->to_string, q(INSERT INTO key1 (a) VALUES (b)));
@@ -31,8 +31,8 @@ EOF
     {
         my $insert = SQL::OOP::Insert->new();
         $insert->set(
-            $insert->ARG_TABLE => '"tbl1"',
-            $insert->ARG_DATASET => SQL::OOP::Dataset->new(col1 => 'a', col2 => 'b')
+            table => '"tbl1"',
+            dataset => SQL::OOP::Dataset->new(col1 => 'a', col2 => 'b')
         );
         
         my @bind = $insert->bind;
@@ -53,8 +53,8 @@ EOF
         }
         my $insert = SQL::OOP::Insert->new();
         $insert->set(
-            $insert->ARG_TABLE => '"tbl1"',
-            $insert->ARG_DATASET => $dataset,
+            table => '"tbl1"',
+            dataset => $dataset,
         );
         
         my @bind = $insert->bind;

@@ -34,8 +34,8 @@ sub _insert_user {
     my ($userid, $dataset_ref) = @_;
     my $sql = SQL::OOP::Insert->new();
     $sql->set(
-    $sql->ARG_TABLE     => SQL::OOP::ID->new('user'),
-    $sql->ARG_DATASET   => SQL::OOP::Dataset->new($dataset_ref),
+    table     => SQL::OOP::ID->new('user'),
+    dataset   => SQL::OOP::Dataset->new($dataset_ref),
     );
     return $sql;
 }

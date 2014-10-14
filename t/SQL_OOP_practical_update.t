@@ -36,9 +36,9 @@ sub _update_user {
     my ($userid, $dataset_ref) = @_;
     my $sql = SQL::OOP::Update->new();
     $sql->set(
-        $sql->ARG_TABLE     => SQL::OOP::ID->new('user'),
-        $sql->ARG_DATASET   => SQL::OOP::Dataset->new($dataset_ref),
-        $sql->ARG_WHERE     => SQL::OOP::Where->cmp('=', 'userid', $userid),
+        table     => SQL::OOP::ID->new('user'),
+        dataset   => SQL::OOP::Dataset->new($dataset_ref),
+        where     => SQL::OOP::Where->cmp('=', 'userid', $userid),
     );
     return $sql;
 }

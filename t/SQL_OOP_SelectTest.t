@@ -12,7 +12,7 @@ sub array_include_undef2 : Test(1) {
     
     my $select = SQL::OOP::Select->new();
     $select->set(
-        $select->ARG_WHERE   => sub {
+        where   => sub {
             SQL::OOP::Array->new('a', 'b', undef, 'c')->set_sepa(', ')
         }
     );
@@ -23,15 +23,15 @@ sub set_clause_separately : Test(2) {
     
     my $select = SQL::OOP::Select->new();
     $select->set(
-        $select->ARG_FIELDS => 'key1',
-        $select->ARG_FROM   => 'table1',
+        fields => 'key1',
+        from   => 'table1',
     );
     
     is($select->to_string, q(SELECT key1 FROM table1));
     
     ### append clause
     $select->set(
-        $select->ARG_WHERE  => 'some cond',
+        where  => 'some cond',
     );
     
     is($select->to_string, q(SELECT key1 FROM table1 WHERE some cond));
@@ -41,11 +41,11 @@ sub set_clause_separately_with_bind : Test(3) {
     
     my $select = SQL::OOP::Select->new();
     $select->set(
-        $select->ARG_FIELDS => 'key1',
-        $select->ARG_FROM   => 'table1',
+        fields => 'key1',
+        from   => 'table1',
     );
     $select->set(
-        $select->ARG_WHERE  => SQL::OOP::Where->cmp('=', 'a', 'b'),
+        where  => SQL::OOP::Where->cmp('=', 'a', 'b'),
     );
     
     is($select->to_string, q(SELECT key1 FROM table1 WHERE "a" = ?));
@@ -64,7 +64,7 @@ sub array_to_string3 : Test(1) {
     
     my $select = SQL::OOP::Select->new;
     $select->set(
-        $select->ARG_WHERE => SQL::OOP::Where->cmp('=', 'col1', SQL::OOP::ID->new('col2'))
+        where => SQL::OOP::Where->cmp('=', 'col1', SQL::OOP::ID->new('col2'))
     );
     is($select->to_string, 'WHERE "col1" = ("col2")');
 }
@@ -76,8 +76,8 @@ sub array_to_string4 : Test(1) {
     my $a = $where->cmp('=', 'col1', $sql);
     my $select = SQL::OOP::Select->new();
     $select->set(
-        $select->ARG_FIELDS => '*',
-        $select->ARG_WHERE  => $a,
+        fields => '*',
+        where  => $a,
     );
     is($select->to_string, 'SELECT * WHERE "col1" = col2');
 }
@@ -86,8 +86,8 @@ sub function_in_field : Test(1) {
     
     my $select = SQL::OOP::Select->new;
     $select->set(
-        $select->ARG_FIELDS => 'max(a) AS b',
-        $select->ARG_FROM   => 'tbl',
+        fields => 'max(a) AS b',
+        from   => 'tbl',
     );
     is($select->to_string, 'SELECT max(a) AS b FROM tbl');
 }
@@ -96,9 +96,9 @@ sub select_part_of_other1 : Test(1) {
     
     my $select = SQL::OOP::Select->new;
     $select->set(
-        $select->ARG_FIELDS => 'col1',
-        $select->ARG_FROM   => 'tbl',
-        $select->ARG_WHERE   => 'test'
+        fields => 'col1',
+        from   => 'tbl',
+        where   => 'test'
     );
     my $array = SQL::OOP::Array->new('col1', $select)->set_sepa(' = ');
     is($array->to_string, q{col1 = (SELECT col1 FROM tbl WHERE test)});
@@ -109,8 +109,8 @@ sub select_part_of_other2 : Test(3) {
     my $where = SQL::OOP::Where->new();
     my $sql = SQL::OOP::Select->new();
     $sql->set(
-        $sql->ARG_FIELDS    => '*',
-        $sql->ARG_WHERE     => $where->cmp('=', 'col1', 'col2')
+        fields    => '*',
+        where     => $where->cmp('=', 'col1', 'col2')
     );
     my $a = $where->cmp('=', 'col1', $sql);
     is($a->to_string, '"col1" = (SELECT * WHERE "col1" = ?)');
@@ -124,14 +124,14 @@ sub cmp_nested_subquery2 : Test(3) {
     my $where = SQL::OOP::Where->new();
     my $select1 = SQL::OOP::Select->new;
     $select1->set(
-        $select1->ARG_FIELDS    => '*',
-        $select1->ARG_WHERE     => $where->cmp('=', 'col1', 'col2')
+        fields    => '*',
+        where     => $where->cmp('=', 'col1', 'col2')
     );
     my $a = $where->cmp('=', 'col1', $select1);
     my $select2 = SQL::OOP::Select->new();
     $select2->set(
-        $select2->ARG_FIELDS => '*',
-        $select2->ARG_WHERE  => $a,
+        fields => '*',
+        where  => $a,
     );
     is($select2->to_string, q{SELECT * WHERE "col1" = (SELECT * WHERE "col1" = ?)});
     my @bind = $select2->bind;
@@ -143,12 +143,12 @@ sub subquery_in_where : Test(1) {
     
     my $select = SQL::OOP::Select->new;
     $select->set(
-        $select->ARG_FIELDS => '*',
-        $select->ARG_WHERE  => SQL::OOP::Where->cmp('=', 'col1', sub {
+        fields => '*',
+        where  => SQL::OOP::Where->cmp('=', 'col1', sub {
             my $select = SQL::OOP::Select->new;
             $select->set(
-                $select->ARG_FIELDS  => '*',
-                $select->ARG_WHERE   => 'test'
+                fields  => '*',
+                where   => 'test'
             );
         }),
     );
@@ -161,13 +161,13 @@ sub subquery_in_where2 : Test(3) {
     my $where = SQL::OOP::Where->new;
     my $select = SQL::OOP::Select->new;
     $select->set(
-        $select->ARG_FIELDS => '*',
-        $select->ARG_WHERE  => $where->cmp('=', 'col1',
+        fields => '*',
+        where  => $where->cmp('=', 'col1',
             sub {
                 my $sql = SQL::OOP::Select->new;
                 $sql->set(
-                    $sql->ARG_FIELDS => '*',
-                    $sql->ARG_WHERE => $where->cmp('=', 'col1', 'col2')
+                    fields => '*',
+                    where => $where->cmp('=', 'col1', 'col2')
                 );
             }
         ),
@@ -198,15 +198,15 @@ EOF
     
     my $select = SQL::OOP::Select->new();
     $select->set(
-        $select->ARG_FIELDS => '*',
-        $select->ARG_FROM   => q("tbl" A),
-        $select->ARG_WHERE  => sub {
+        fields => '*',
+        from   => q("tbl" A),
+        where  => sub {
             my $where = SQL::OOP::Where->new();
             my $select2 = SQL::OOP::Select->new();
             $select2->set(
-                $select2->ARG_FIELDS => SQL::OOP::ID->new('col1'),
-                $select2->ARG_FROM   => SQL::OOP::ID->new('tbl2')->as('B'),
-                $select2->ARG_WHERE  =>
+                fields => SQL::OOP::ID->new('col1'),
+                from   => SQL::OOP::ID->new('tbl2')->as('B'),
+                where  =>
                     $where->cmp('=', SQL::OOP::ID->new('A', 'id'), 'col2')
             );
             return $where->cmp('=', SQL::OOP::ID->new('A', 'col1'), $select2);
@@ -235,12 +235,12 @@ EOF
     my $select2 = SQL::OOP::Select->new();
     
     $select2->set(
-        $select2->ARG_FIELDS => q("col1", "col2"),
-        $select2->ARG_FROM   => q("table1"),
+        fields => q("col1", "col2"),
+        from   => q("table1"),
     );
     $select->set(
-        $select->ARG_FIELDS => '*',
-        $select->ARG_FROM   => $select2,
+        fields => '*',
+        from   => $select2,
     );
     
     is($select->to_string, $expected);

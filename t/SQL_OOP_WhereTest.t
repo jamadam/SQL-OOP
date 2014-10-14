@@ -23,8 +23,8 @@ sub not_in : Test(6) {
 
     my $sub = SQL::OOP::Select->new;
     $sub->set(
-        $sub->ARG_FIELDS => '*',
-        $sub->ARG_FROM => 'tbl',
+        fields => '*',
+        from => 'tbl',
     );
     $in = $where->not_in('col', $sub);
     is($in->to_string, q{"col" NOT IN (SELECT * FROM tbl)});
@@ -66,9 +66,9 @@ sub in : Test(44) {
     
     my $sub = SQL::OOP::Select->new;
     $sub->set(
-        $sub->ARG_FIELDS => '*',
-        $sub->ARG_FROM => 'tbl',
-        $sub->ARG_WHERE  => SQL::OOP::Where->cmp('=', 'a', 'b'),
+        fields => '*',
+        from => 'tbl',
+        where  => SQL::OOP::Where->cmp('=', 'a', 'b'),
     );
     $in = $where->in('col', $sub);
     is($in->to_string, q{"col" IN (SELECT * FROM tbl WHERE "a" = ?)});
@@ -78,9 +78,9 @@ sub in : Test(44) {
     
     $sub = SQL::OOP::Select->new;
     $sub->set(
-        $sub->ARG_FIELDS => '*',
-        $sub->ARG_FROM => 'tbl',
-        $sub->ARG_WHERE  => SQL::OOP::Where->cmp('=', 'a', 'b'),
+        fields => '*',
+        from => 'tbl',
+        where  => SQL::OOP::Where->cmp('=', 'a', 'b'),
     );
     $in = $where->in('col', $sub, $sub);
     is($in->to_string, q{"col" IN (SELECT * FROM tbl WHERE "a" = ?, SELECT * FROM tbl WHERE "a" = ?)});

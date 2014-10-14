@@ -13,11 +13,11 @@ sub set_clause_separately : Test(1) {
     
     my $update = SQL::OOP::Update->new;
     $update->set(
-        $update->ARG_TABLE => 'tbl1',
-        $update->ARG_DATASET => 'a = b, c = d',
+        table => 'tbl1',
+        dataset => 'a = b, c = d',
     );
     $update->set(
-        $update->ARG_WHERE => 'some cond',
+        where => 'some cond',
     );
     
     is($update->to_string, q(UPDATE tbl1 SET a = b, c = d WHERE some cond));
@@ -27,11 +27,11 @@ sub where : Test(3) {
     
     my $update = SQL::OOP::Update->new();
     $update->set(
-        $update->ARG_TABLE => 'tbl1',
-        $update->ARG_DATASET => 'a = ?, b = ?',
+        table => 'tbl1',
+        dataset => 'a = ?, b = ?',
     );
     $update->set(
-        $update->ARG_WHERE => SQL::OOP::Where->cmp('=', 'a', 'b'),
+        where => SQL::OOP::Where->cmp('=', 'a', 'b'),
     );
     
     is($update->to_string, q(UPDATE tbl1 SET a = ?, b = ? WHERE "a" = ?));
@@ -44,7 +44,7 @@ sub values_by_array : Test(4) {
     
     my $sql = SQL::OOP::Update->new();
     $sql->set(
-        $sql->ARG_DATASET => SQL::OOP::Dataset->new(a => 'b',c => 'd'),
+        dataset => SQL::OOP::Dataset->new(a => 'b',c => 'd'),
     );
     is($sql->to_string, 'SET "a" = ?, "c" = ?');
     my @bind = $sql->bind;
@@ -57,7 +57,7 @@ sub value_order_specific : Test(3) {
     
     my $sql = SQL::OOP::Update->new();
     $sql->set(
-        $sql->ARG_DATASET =>
+        dataset =>
             SQL::OOP::Dataset->new()->append(a => 'b')->append(c => 'd'),
     );
     is($sql->to_string, 'SET "a" = ?, "c" = ?');
@@ -73,7 +73,7 @@ sub update_value_is_a_array : Test(3) {
     $array->append(SQL::OOP::Base->new('c = ?', ['d']));
     my $sql = SQL::OOP::Update->new();
     $sql->set(
-        $sql->ARG_DATASET => $array,
+        dataset => $array,
     );
     is($sql->to_string, 'SET a = ?, c = ?');
     my @bind = $sql->bind;
@@ -90,9 +90,9 @@ EOF
     {
         my $update = SQL::OOP::Update->new();
         $update->set(
-            $update->ARG_TABLE => 'tbl1',
-            $update->ARG_DATASET => SQL::OOP::Dataset->new(a => 'b'),
-            $update->ARG_WHERE => SQL::OOP::Where->cmp('=', 'c', 'd'),
+            table => 'tbl1',
+            dataset => SQL::OOP::Dataset->new(a => 'b'),
+            where => SQL::OOP::Where->cmp('=', 'c', 'd'),
         );
         is($update->to_string, $expected);
         my @bind = $update->bind;
@@ -104,9 +104,9 @@ EOF
     {
         my $update = SQL::OOP::Update->new();
         $update->set(
-            $update->ARG_TABLE => 'tbl1',
-            $update->ARG_DATASET => SQL::OOP::Dataset->new(a => 'b'),
-            $update->ARG_WHERE => SQL::OOP::Where->cmp('=', 'c', 'd'),
+            table => 'tbl1',
+            dataset => SQL::OOP::Dataset->new(a => 'b'),
+            where => SQL::OOP::Where->cmp('=', 'c', 'd'),
         );
         is($update->to_string, $expected);
         my @bind = $update->bind;

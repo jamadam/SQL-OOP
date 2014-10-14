@@ -12,10 +12,10 @@ sub set_clause_separately : Test(1) {
     
     my $delete = SQL::OOP::Delete->new;
     $delete->set(
-        $delete->ARG_TABLE => 'tbl1',
+        table => 'tbl1',
     );
     $delete->set(
-        $delete->ARG_WHERE => 'some cond',
+        where => 'some cond',
     );
     
     is($delete->to_string, q(DELETE FROM tbl1 WHERE some cond));
@@ -25,10 +25,10 @@ sub where : Test(3) {
     
     my $delete= SQL::OOP::Delete->new();
     $delete->set(
-        $delete->ARG_TABLE => 'tbl1',
+        table => 'tbl1',
     );
     $delete->set(
-        $delete->ARG_WHERE => SQL::OOP::Where->cmp('=', 'a', 'b'),
+        where => SQL::OOP::Where->cmp('=', 'a', 'b'),
     );
     
     is($delete->to_string, q(DELETE FROM tbl1 WHERE "a" = ?));

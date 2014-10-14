@@ -33,8 +33,8 @@ sub select_to_string_twice1 : Test(2) {
     
     my $select = SQL::OOP::Select->new();
     $select->set(
-        $select->ARG_FIELDS => 'a',
-        $select->ARG_FROM   => 'b',
+        fields => 'a',
+        from   => 'b',
     );
     my $a = SQL::OOP::Array->new($select)->set_sepa(', ');
     is($a->to_string, 'SELECT a FROM b');
@@ -45,8 +45,8 @@ sub select_to_string_twice2 : Test(2) {
     
     my $select = SQL::OOP::Select->new();
     $select->set(
-        $select->ARG_FIELDS => 'a',
-        $select->ARG_FROM   => SQL::OOP::Base->new('b'),
+        fields => 'a',
+        from   => SQL::OOP::Base->new('b'),
     );
     my $a = SQL::OOP::Array->new($select)->set_sepa(', ');
     is($a->to_string, 'SELECT a FROM b');
@@ -57,8 +57,8 @@ sub select_to_string_twice3 : Test(2) {
     
     my $select = SQL::OOP::Select->new();
     $select->set(
-        $select->ARG_FIELDS => 'a',
-        $select->ARG_FROM   => SQL::OOP::Array->new('b')->set_sepa(''),
+        fields => 'a',
+        from   => SQL::OOP::Array->new('b')->set_sepa(''),
     );
     is($select->to_string, 'SELECT a FROM b');
     is($select->to_string, 'SELECT a FROM b');
@@ -68,13 +68,13 @@ sub select_to_string_twice4 : Test(1) {
     
     my $select = SQL::OOP::Select->new();
     $select->set(
-        $select->ARG_FIELDS => 'a',
-        $select->ARG_FROM   => 'b',
+        fields => 'a',
+        from   => 'b',
     );
     my $select2 = SQL::OOP::Select->new();
     $select2->set(
-        $select2->ARG_FIELDS    => 'a',
-        $select2->ARG_FROM    => $select,
+        fields    => 'a',
+        from    => $select,
     );
     is($select2->to_string, 'SELECT a FROM (SELECT a FROM b)');
 }

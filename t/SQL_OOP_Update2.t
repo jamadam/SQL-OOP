@@ -13,12 +13,12 @@ sub sub_expression : Test(4) {
     
     my $update = SQL::OOP::Update->new;
     $update->set(
-        $update->ARG_TABLE => 'tbl1',
-        $update->ARG_DATASET => sub {
+        table => 'tbl1',
+        dataset => sub {
             my $ds = SQL::OOP::Dataset->new;
             $ds->append('a' => SQL::OOP::Base->new(q{"a" + ?}, [1]))
         },
-        $update->ARG_WHERE => SQL::OOP::Where->cmp('=', 'a', 'b'),
+        where => SQL::OOP::Where->cmp('=', 'a', 'b'),
     );
     
     is($update->to_string, q(UPDATE tbl1 SET "a" = "a" + ? WHERE "a" = ?));

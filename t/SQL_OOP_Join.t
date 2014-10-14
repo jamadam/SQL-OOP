@@ -22,17 +22,14 @@ EOF
     
     my $select = SQL::OOP::Select->new;
     $select->set(
-        $select->ARG_FIELDS => 'hoge',
-        $select->ARG_FROM   => sub {
-            my $a = SQL::OOP::Join->new;
-            return $a->set(
-                $a->ARG_DIRECTION   => $a->ARG_DIRECTION_LEFT,
-                $a->ARG_TABLE1      => 'table1',
-                $a->ARG_TABLE2      => 'table2',
-                $a->ARG_ON          => '"a" = "b"',
-            );
-        },
-        $select->ARG_WHERE  => 'a',
+        fields => 'hoge',
+        from   => SQL::OOP::Join->new(
+            direction   => 'LEFT',
+            table1      => 'table1',
+            table2      => 'table2',
+            on          => '"a" = "b"',
+        ),
+        where  => 'a',
     );
     
     is($select->to_string, compress_sql($expected));

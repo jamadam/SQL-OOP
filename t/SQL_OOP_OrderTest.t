@@ -24,8 +24,8 @@ sub expect_bare_string : Test(3) {
     
     my $select = SQL::OOP::Select->new();
     $select->set(
-        $select->ARG_FIELDS => '*', 
-        $select->ARG_ORDERBY => $o
+        fields => '*', 
+        orderby => $o
     );
     is($select->to_string, q{SELECT * ORDER BY date('now'), date('now') DESC});
 }

@@ -36,9 +36,9 @@ sub _active_users {
     
     my $select = SQL::OOP::Select->new;
     $select->set(
-        $select->ARG_FIELDS => SQL::OOP::IDArray->new('a','b'),
-        $select->ARG_FROM   => SQL::OOP::IDArray->new('user'),
-        $select->ARG_WHERE  => sub {
+        fields => SQL::OOP::IDArray->new('a','b'),
+        from   => SQL::OOP::IDArray->new('user'),
+        where  => sub {
             my $w = SQL::OOP::Where->new;
             return $w->and(
                 $w->cmp('=', 'active', '1'),
@@ -83,9 +83,9 @@ sub _active_users2 {
     
     my $select = SQL::OOP::Select->new;
     $select->set(
-        $select->ARG_FIELDS => SQL::OOP::IDArray->new('a','b'),
-        $select->ARG_FROM   => SQL::OOP::IDArray->new('user'),
-        $select->ARG_WHERE  => sub {
+        fields => SQL::OOP::IDArray->new('a','b'),
+        from   => SQL::OOP::IDArray->new('user'),
+        where  => sub {
             my $w = SQL::OOP::Where->new;
             return $w->and(
                 $w->cmp('=', 'active', '1'),

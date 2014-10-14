@@ -61,8 +61,8 @@ sub nested_token : Test {
     my $fields = SQL::OOP::IDArray->new(qw(a b c));
     my $sub_query = SQL::OOP::Select->new();
     $sub_query->set(
-        $sub_query->ARG_FIELDS  => 'hoge',
-        $sub_query->ARG_WHERE   => 'a = b',
+        fields  => 'hoge',
+        where   => 'a = b',
     );
     $fields->append($sub_query);
     is($fields->to_string, qq{"a", "b", "c", (SELECT hoge WHERE a = b)});
@@ -72,7 +72,7 @@ sub id_literaly : Test {
     
     my $select = SQL::OOP::Select->new();
     $select->set(
-        $select->ARG_FIELDS => SQL::OOP::IDArray->new(
+        fields => SQL::OOP::IDArray->new(
             SQL::OOP::ID->new('column1'),
             SQL::OOP::Base->new('count(*) AS "B"'),
         ),
