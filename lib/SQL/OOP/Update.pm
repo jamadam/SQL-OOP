@@ -6,10 +6,10 @@ use SQL::OOP::Where;
 use SQL::OOP::Dataset;
 use base qw(SQL::OOP::Command);
 
-sub ARG_TABLE()     {1} ## no critic
-sub ARG_DATASET()   {2} ## no critic
-sub ARG_FROM()      {3} ## no critic
-sub ARG_WHERE()     {4} ## no critic
+sub ARG_TABLE()     {'table'} ## no critic
+sub ARG_DATASET()   {'dataset'} ## no critic
+sub ARG_FROM()      {'from'} ## no critic
+sub ARG_WHERE()     {'where'} ## no critic
 
 ### ---
 ### Get Names of set arguments in array ref

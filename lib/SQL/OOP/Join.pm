@@ -4,10 +4,10 @@ use warnings;
 use SQL::OOP::Base;
 use base qw(SQL::OOP::Command);
 
-sub ARG_DIRECTION()     {1} ## no critic
-sub ARG_TABLE1()        {2} ## no critic
-sub ARG_TABLE2()        {3} ## no critic
-sub ARG_ON()            {4} ## no critic
+sub ARG_DIRECTION()     {'direction'} ## no critic
+sub ARG_TABLE1()        {'table1'} ## no critic
+sub ARG_TABLE2()        {'table2'} ## no critic
+sub ARG_ON()            {'on'} ## no critic
 
 sub ARG_DIRECTION_INNER()   {'INNER'} ## no critic
 sub ARG_DIRECTION_LEFT()    {'LEFT'} ## no critic

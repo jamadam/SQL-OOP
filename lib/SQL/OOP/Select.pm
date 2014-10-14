@@ -6,13 +6,13 @@ use SQL::OOP::Where;
 use SQL::OOP::Order;
 use base qw(SQL::OOP::Command);
 
-sub ARG_FIELDS()    {1} ## no critic
-sub ARG_FROM()      {2} ## no critic
-sub ARG_WHERE()     {3} ## no critic
-sub ARG_GROUPBY()   {4} ## no critic
-sub ARG_ORDERBY()   {5} ## no critic
-sub ARG_LIMIT()     {6} ## no critic
-sub ARG_OFFSET()    {7} ## no critic
+sub ARG_FIELDS()    {'fields'} ## no critic
+sub ARG_FROM()      {'from'} ## no critic
+sub ARG_WHERE()     {'where'} ## no critic
+sub ARG_GROUPBY()   {'groupby'} ## no critic
+sub ARG_ORDERBY()   {'orderby'} ## no critic
+sub ARG_LIMIT()     {'limit'} ## no critic
+sub ARG_OFFSET()    {'offset'} ## no critic
 
 ### ---
 ### Get Names of set arguments in array ref

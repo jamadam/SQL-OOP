@@ -4,9 +4,9 @@ use warnings;
 use SQL::OOP::Dataset;
 use base qw(SQL::OOP::Command);
 
-sub ARG_TABLE()     {1} ## no critic
-sub ARG_DATASET()   {2} ## no critic
-sub ARG_SELECT()    {3} ## no critic
+sub ARG_TABLE()     {'table'} ## no critic
+sub ARG_DATASET()   {'dataset'} ## no critic
+sub ARG_SELECT()    {'select'} ## no critic
 
 ### ---
 ### Get Names of set arguments in array ref
