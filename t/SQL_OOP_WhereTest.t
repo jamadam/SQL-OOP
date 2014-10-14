@@ -30,7 +30,7 @@ sub not_in : Test(6) {
     is($in->to_string, q{"col" NOT IN (SELECT * FROM tbl)});
 }
 
-sub in : Test(41) {
+sub in : Test(44) {
     
     my $where = SQL::OOP::Where->new();
     my $in = $where->in('col', 'hoge');
@@ -39,7 +39,15 @@ sub in : Test(41) {
     is(scalar @bind, 1);
     is(shift @bind, 'hoge');
     
-    $where = SQL::OOP::Where->new();
+    $in = $where->in('col', undef);
+    is($in, undef);
+    
+    $in = $where->in('col', 0);
+    is($in->to_string, q{"col" IN (?)});
+    @bind = $in->bind;
+    is(scalar @bind, 1);
+    is(shift @bind, 0);
+    
     $in = $where->in('col', [1, 2, 3]);
     is($in->to_string, q{"col" IN (?, ?, ?)});
     @bind = $in->bind;
@@ -48,7 +56,6 @@ sub in : Test(41) {
     is(shift @bind, '2');
     is(shift @bind, '3');
     
-    $where = SQL::OOP::Where->new();
     $in = $where->in('col', 1, 2, 3);
     is($in->to_string, q{"col" IN (?, ?, ?)});
     @bind = $in->bind;

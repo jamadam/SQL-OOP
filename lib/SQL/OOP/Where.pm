@@ -126,7 +126,10 @@ sub not_in {
 ### ---
 sub _in_backend {
     my ($self, $type, $key, @vals) = @_;
+    
+    return if (@vals == 1 && !defined $vals[0]);
     return unless ($key);
+    
     my $valarray =
         @vals == 1 && ref $vals[0] && ref $vals[0] eq 'ARRAY' ? $vals[0] : [@vals];
     my @ph;
