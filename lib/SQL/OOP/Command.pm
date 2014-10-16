@@ -110,19 +110,42 @@ SELECT, INSERT, UPDATE etc.
 
 =head2 generate
 
-=head2 keys_to_idx
-
 =head2 new
+
+Constructer
 
 =head2 set
 
 =head2 retrieve
 
+Retrieves command parts so that you can recycle them or even modify them.
+
+    sub append_field {
+        my ($select, $new_field) = @_;
+        $select->set(
+            fields => SQL::OOP->id_array(
+                $select->retrieve('fields'),
+                $new_field,
+            ),
+        );
+        return $select;
+    }
+    
+    append_field($select, 'col34');
+
 =head1 Constants
 
 =head2 KEYS
 
+Returns well ordered key array. The method must be overridden by sub classes.
+
 =head2 PREFIXES
+
+Returns prefixes for each clause. The method must be overridden by sub classes.
+
+=head2 keys_to_idx
+
+Get clause names and array index in array
 
 =head1 SEE ALSO
 

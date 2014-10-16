@@ -49,17 +49,11 @@ SQL::OOP::IDArray - ID arrays for SQL
 
 =head1 SYNOPSIS
     
-    ### field
-    my $field = SQL::OOP::ID->new(@path_to_field);
-    $field->to_string # e.g. "tbl"."col"
-    
-    ### from
-    my $from = SQL::OOP::ID->new(@path_to_table);
-    $from->to_string # e.g. "schema"."tbl"
-    
-    ### IDArray
+    my $sql = SQL::OOP->new;
+    my $field1 = $sql->id(@path_to_field); # e.g. "tbl"."col1"
+    my $field2 = $sql->id(@path_to_table); # e.g. "tbl"."col2"
     my $fields = SQL::OOP::IDArray->new($field1, $field2);
-    $fields->to_string # e.g. "schema"."tbl1", "schema"."tbl2"
+    $fields->to_string # e.g. "tbl"."col1", "tbl"."col2"
 
 =head1 DESCRIPTION
 
@@ -80,9 +74,10 @@ in FROM clause. This class inherits SQL::OOP::Array class.
 
 Here is some examples.
     
-    my $id_obj1 = SQL::OOP::ID->new('public', 'tbl1');
-    my $id_obj2 = SQL::OOP::ID->new('public', 'tbl2');
-    my $id_obj3 = SQL::OOP::ID->new('public', 'tbl3');
+    my $sql = SQL::OOP->new;
+    my $id_obj1 = $sql->id('public', 'tbl1');
+    my $id_obj2 = $sql->id('public', 'tbl2');
+    my $id_obj3 = $sql->id('public', 'tbl3');
     
     my $id_list = SQL::OOP::IDArray->new($id_obj1, $id_obj2, $id_obj3);
     
@@ -94,8 +89,8 @@ Appends elements into existing instance.
 
 =head2 fix_element_in_list_context
 
-This method is internally called by generate method to parenthesizes the SQL
-on list context.
+Finalizing method on Stringify. For internal use. This is internally called by
+generate method to parenthesizes the SQL on list context.
 
 =head1 SEE ALSO
 
