@@ -81,6 +81,14 @@ sub generate {
     $self->{gen} =~ s/^ //;
 }
 
+### ---
+### retrieve partial object out of command
+### ---
+sub retrieve {
+    my ($self, $key) = @_;
+    return $self->{array}->[$self->keys_to_idx->{$key}];
+}
+
 1;
 
 __END__
@@ -107,6 +115,8 @@ SELECT, INSERT, UPDATE etc.
 =head2 new
 
 =head2 set
+
+=head2 retrieve
 
 =head1 Constants
 

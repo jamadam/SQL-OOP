@@ -14,6 +14,7 @@ my $sql = SQL::OOP->new;
         }
     );
     is($select->to_string, 'WHERE a, b, c');
+    is(ref $select->retrieve('where'), 'SQL::OOP::Array');
 }
 
 {
@@ -31,6 +32,9 @@ my $sql = SQL::OOP->new;
     );
     
     is($select->to_string, q(SELECT key1 FROM table1 WHERE some cond));
+    is(ref $select->retrieve('fields'), 'SQL::OOP::Base');
+    is(ref $select->retrieve('from'), 'SQL::OOP::Base');
+    is(ref $select->retrieve('where'), 'SQL::OOP::Base');
 }
 
 {
