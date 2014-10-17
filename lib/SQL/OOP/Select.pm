@@ -18,8 +18,7 @@ sub ARG_OFFSET()    {'offset'} ## no critic
 ### Get Names of set arguments in array ref
 ### ---
 sub KEYS {
-    return
-    [qw(fields from where groupby orderby limit offset)];
+    return [qw(fields from where groupby orderby limit offset)];
 }
 
 ### ---
@@ -95,7 +94,7 @@ SQL::OOP::Select
 
 =head1 SYNOPSIS
 
-    my $where = SQL::OOP::Where->new();
+    my $sql = SQL::OOP->new();
     my $select = SQL::OOP::Select->new();
     
     # set clause by plain text
@@ -110,11 +109,10 @@ SQL::OOP::Select
     );
 
     # reset clauses using objects
-    my $where = SQL::OOP::Where->new();
     $select->set(
         fields => SQL::OOP::ID->new('some_field'),
         from   => SQL::OOP::ID->new('some_table'),
-        where  => $where->cmp('=', "some_fileld", 'value')
+        where  => $sql->where->cmp('=', "some_fileld", 'value')
         orderby => SQL::OOP::Order->new('a', 'b'),
     );
     
@@ -122,10 +120,7 @@ SQL::OOP::Select
     $select->set(
         fields => '*',
         from   => 'some_table',
-        where  => sub {
-            my $where = SQL::OOP::Where->new();
-            return $where->cmp('=', "some_fileld", 'value');
-        }
+        where  => $sql->where->cmp('=', "some_fileld", 'value'),
     );
     
     # SQL::OOP::Select can be part of any SQL::OOP::Base sub classes
@@ -135,8 +130,7 @@ SQL::OOP::Select
         from   => $select,
     );
     
-    my $where = SQL::OOP::Where->new();
-    $where->cmp('=', q{some_field}, $select); # some_filed = (SELECT ..)
+    $sql->where->cmp('=', q{some_field}, $select); # some_filed = (SELECT ..)
     
     my $sql  = $select->to_string;
     my @bind = $select->bind;
@@ -209,17 +203,14 @@ argument key for OFFSET clause(='offset')
 Here is a comprehensive example for SELECT. You also can find some examples in
 test scripts.
 
-    my $select = SQL::OOP::Select->new();
-    $select->set(
+    $sql = SQL::OOP->new;
+    my $select = $sql->select->set(
         fields => '*',
         from   => 'table',
-        where  => sub {
-            my $where = SQL::OOP::Where->new;
-            return $where->and(
-                $where->cmp('=', 'a', 1),
-                $where->cmp('=', 'b', 1),
-            )
-        },
+        where  => $sql->where->and(
+            $where->cmp('=', 'a', 1),
+            $where->cmp('=', 'b', 1),
+        ),
     );
 
 =head1 SEE ALSO

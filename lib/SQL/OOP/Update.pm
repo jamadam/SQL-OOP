@@ -73,6 +73,7 @@ SQL::OOP::Update
 
 =head1 SYNOPSIS
 
+    my $sql = SQL::OOP->new;
     my $update = SQL::OOP::Update->new;
 
     # set clause by plain text
@@ -84,9 +85,9 @@ SQL::OOP::Update
     
     # reset clauses using objects
     $update->set(
-        table      => SQL::OOP::ID->new('some_table'),
-        dataset    => SQL::OOP::Dataset->new(@data),
-        where      => $where->cmp('=', "some_fileld", 'value')
+        table      => $sql->id('some_table'),
+        dataset    => $sql->dataset(@data),
+        where      => $sql->where->cmp('=', "some_fileld", 'value')
     );
     my $sql  = $update->to_string;
     my @bind = $update->bind;

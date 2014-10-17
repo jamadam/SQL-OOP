@@ -71,12 +71,13 @@ SQL::OOP::Insert
 
 =head1 SYNOPSIS
 
+    my $sql = SQL::OOP->new();
     my $insert = SQL::OOP::Insert->new();
     
     # set clause
     $insert->set(
-        table => SQL::OOP::ID->new('some_table'),
-        dataset => SQL::OOP::Dataset->new(@data),
+        table => $sql->id('some_table'),
+        dataset => $sql->dataset(@data),
     );
     
     # reset clause by plain text

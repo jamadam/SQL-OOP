@@ -1,6 +1,10 @@
 Revision history for SQL-OOP
 
-0.22 2014/05/29
+0.22 2014/10/16
+  - Added retrieve method to command.
+  - Added JoinArray class.
+  - Added factory various methods to SQL::OOP class.
+  - Improved API to accept string keys.
   - Improved IN and NOT IN clause generator on handling sub queries.
   - REMOVED cmp_nested method which have been deprecated.
 

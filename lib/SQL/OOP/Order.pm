@@ -168,7 +168,7 @@ Append DESC entry
 
 =head2 $instance->fix_element_in_list_context
 
-Internal use.
+Finalizing method on Stringify. For internal use.
 
 =head1 SEE ALSO
 

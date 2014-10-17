@@ -121,9 +121,10 @@ directly.
 
 Arguments can be SQL::OOP::Base instances.
 
-    my $elem1 = SQL::OOP::Base->new('elem1');
-    my $elem2 = SQL::OOP::Base->new('elem2');
-    my $elem3 = SQL::OOP::Base->new('elem3');
+    my $sql = SQL::OOP->new;
+    my $elem1 = $sql->base('elem1');
+    my $elem2 = $sql->base('elem2');
+    my $elem3 = $sql->base('elem3');
     
     SQL::OOP::Array->new($elem1, $elem2, $elem3); # elem1 elem2 elem3
 
@@ -134,7 +135,8 @@ takes same arguments as new constructor.
 
 =head2 $instance->set_sepa($string)
 
-This sets separator string such as ' AND ', ' OR '.
+This sets separator string such as ' AND ' or ' OR ' for where clause, comma for
+identifiers.
 
 =head2 $instance->bind;
 
@@ -152,8 +154,8 @@ Retrieve values into array.
 
 =head2 $instance->fix_element_in_list_context
 
-This method is internally called by generate method to parenthesizes the SQL
-on list context.
+Finalizing method on Stringify. For internal use. This is internally called by
+generate method to parenthesizes the SQL on list context.
 
 =head1 SEE ALSO
 
