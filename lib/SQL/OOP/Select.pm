@@ -54,6 +54,22 @@ sub set {
 }
 
 ### ---
+### "field AS foo" syntax
+### ---
+sub as {
+    my ($self, $as) = (@_);
+    $self->{as} = $as;
+    return $self;
+}
+
+sub generate {
+    my ($self) = @_;
+    $self->SUPER::generate;
+    $self->{gen} =
+        '('. $self->{gen}. ') '. $self->quote($self->{as}) if ($self->{as})
+}
+
+### ---
 ### Get SQL snippet
 ### ---
 sub to_string {
